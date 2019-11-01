@@ -1,30 +1,30 @@
 ;(function () {
-    var template = '<div class="fdatepick--time">' +
-        '<div class="fdatepick--time-current">' +
-        '   <span class="fdatepick--time-current-hours">#{hourVisible}</span>' +
-        '   <span class="fdatepick--time-current-colon">:</span>' +
-        '   <span class="fdatepick--time-current-minutes">#{minValue}</span>' +
+    var template = '<div class="fdatepicker--time">' +
+        '<div class="fdatepicker--time-current">' +
+        '   <span class="fdatepicker--time-current-hours">#{hourVisible}</span>' +
+        '   <span class="fdatepicker--time-current-colon">:</span>' +
+        '   <span class="fdatepicker--time-current-minutes">#{minValue}</span>' +
         '</div>' +
-        '<div class="fdatepick--time-sliders">' +
-        '   <div class="fdatepick--time-row">' +
+        '<div class="fdatepicker--time-sliders">' +
+        '   <div class="fdatepicker--time-row">' +
         '      <input type="range" name="hours" value="#{hourValue}" min="#{hourMin}" max="#{hourMax}" step="#{hourStep}"/>' +
         '   </div>' +
-        '   <div class="fdatepick--time-row">' +
+        '   <div class="fdatepicker--time-row">' +
         '      <input type="range" name="minutes" value="#{minValue}" min="#{minMin}" max="#{minMax}" step="#{minStep}"/>' +
         '   </div>' +
         '</div>' +
         '</div>',
-        fdatepick = $.fn.fdatepick,
-        dp = fdatepick.Constructor;
+        fdatepicker = $.fn.fdatepicker,
+        dp = fdatepicker.Constructor;
 
-    fdatepick.Timepicker = function (inst, opts) {
+    fdatepicker.Timepicker = function (inst, opts) {
         this.d = inst;
         this.opts = opts;
 
         this.init();
     };
 
-    fdatepick.Timepicker.prototype = {
+    fdatepicker.Timepicker.prototype = {
         init: function () {
             var input = 'input';
             this._setTime(this.d.date);
@@ -124,16 +124,16 @@
                 },
                 _template = dp.template(template, data);
 
-            this.$timepicker = $(_template).appendTo(this.d.$fdatepick);
+            this.$timepicker = $(_template).appendTo(this.d.$fdatepicker);
             this.$ranges = $('[type="range"]', this.$timepicker);
             this.$hours = $('[name="hours"]', this.$timepicker);
             this.$minutes = $('[name="minutes"]', this.$timepicker);
-            this.$hoursText = $('.fdatepick--time-current-hours', this.$timepicker);
-            this.$minutesText = $('.fdatepick--time-current-minutes', this.$timepicker);
+            this.$hoursText = $('.fdatepicker--time-current-hours', this.$timepicker);
+            this.$minutesText = $('.fdatepicker--time-current-minutes', this.$timepicker);
 
             if (this.d.ampm) {
-                this.$ampm = $('<span class="fdatepick--time-current-ampm">')
-                    .appendTo($('.fdatepick--time-current', this.$timepicker))
+                this.$ampm = $('<span class="fdatepicker--time-current-ampm">')
+                    .appendTo($('.fdatepicker--time-current', this.$timepicker))
                     .html(this.dayPeriod);
 
                 this.$timepicker.addClass('-am-pm-');
@@ -189,7 +189,7 @@
         },
 
         /**
-         * Calculates valid hour value to display in text input and fdatepick's body.
+         * Calculates valid hour value to display in text input and fdatepicker's body.
          * @param date {Date|Number} - date or hours
          * @param [ampm] {Boolean} - 12 hours mode
          * @returns {{hours: *, dayPeriod: string}}
@@ -267,13 +267,13 @@
 
         _onMouseEnterRange: function (e) {
             var name = $(e.target).attr('name');
-            $('.fdatepick--time-current-' + name, this.$timepicker).addClass('-focus-');
+            $('.fdatepicker--time-current-' + name, this.$timepicker).addClass('-focus-');
         },
 
         _onMouseOutRange: function (e) {
             var name = $(e.target).attr('name');
             if (this.d.inFocus) return; // Prevent removing focus when mouse out of range slider
-            $('.fdatepick--time-current-' + name, this.$timepicker).removeClass('-focus-');
+            $('.fdatepicker--time-current-' + name, this.$timepicker).removeClass('-focus-');
         },
 
         _onMouseUpRange: function (e) {

@@ -1,36 +1,36 @@
-@import "fdatepick-config";
+@import "fdatepicker-config";
 
 /* -------------------------------------------------
     Navigation
    ------------------------------------------------- */
 
-.fdatepick--nav {
+.fdatepicker--nav {
   display: flex;
   justify-content: space-between;
-  border-bottom: 1px solid map_get($fdatepickBorderColor, nav);
-  min-height: $fdatepickNavigationHeight;
-  padding: $fdatepickPadding;
+  border-bottom: 1px solid map_get($fdatepickerBorderColor, nav);
+  min-height: $fdatepickerNavigationHeight;
+  padding: $fdatepickerPadding;
 
   .-only-timepicker- & {
     display: none;
   }
 }
 
-.fdatepick--nav-title,
-.fdatepick--nav-action {
+.fdatepicker--nav-title,
+.fdatepicker--nav-action {
   display: flex;
   cursor: pointer;
   align-items: center;
   justify-content: center;
 }
 
-.fdatepick--nav-action {
-  width: $fdatepickDayCellSize;
-  border-radius: $fdatepickBorderRadius;
+.fdatepicker--nav-action {
+  width: $fdatepickerDayCellSize;
+  border-radius: $fdatepickerBorderRadius;
   user-select: none;
 
   &:hover {
-    background: map_get($fdatepickBG, hover);
+    background: map_get($fdatepickerBG, hover);
   }
 
   &.-disabled- {
@@ -44,23 +44,23 @@
 
   path {
     fill: none;
-    stroke: map_get($fdatepickTextColor, navArrows);
+    stroke: map_get($fdatepickerTextColor, navArrows);
     stroke-width: 2px;
   }
 }
 
-.fdatepick--nav-title {
-  border-radius: $fdatepickBorderRadius;
+.fdatepicker--nav-title {
+  border-radius: $fdatepickerBorderRadius;
   padding: 0 8px;
 
   i {
     font-style: normal;
-    color: map_get($fdatepickTextColor, navArrows);
+    color: map_get($fdatepickerTextColor, navArrows);
     margin-left: 5px;
   }
 
   &:hover {
-    background: map_get($fdatepickBG, hover);
+    background: map_get($fdatepickerBG, hover);
   }
 
   &.-disabled- {
@@ -72,16 +72,16 @@
 //  Buttons
 // -------------------------------------------------
 
-.fdatepick--buttons {
+.fdatepicker--buttons {
   display: flex;
-  padding: $fdatepickPadding;
-  border-top: 1px solid map_get($fdatepickBorderColor, nav);
+  padding: $fdatepickerPadding;
+  border-top: 1px solid map_get($fdatepickerBorderColor, nav);
 }
 
-.fdatepick--button {
-  color: map_get($fdatepickTextColor, currentDate);
+.fdatepicker--button {
+  color: map_get($fdatepickerTextColor, currentDate);
   cursor: pointer;
-  border-radius: $fdatepickBorderRadius;
+  border-radius: $fdatepickerBorderRadius;
   flex: 1;
   display: inline-flex;
   justify-content: center;
@@ -89,7 +89,7 @@
   height: 32px;
 
   &:hover {
-    color: map_get($fdatepickTextColor, common);
-    background: map_get($fdatepickBG, hover);
+    color: map_get($fdatepickerTextColor, common);
+    background: map_get($fdatepickerBG, hover);
   }
 }

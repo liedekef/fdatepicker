@@ -1,4 +1,4 @@
-@import "fdatepick-config";
+@import "fdatepicker-config";
 
 /* -------------------------------------------------
     Timepicker
@@ -57,16 +57,16 @@ $rangeThumbBg: #dedede;
   background: transparent;
 }
 
-.fdatepick--time {
-  border-top: 1px solid map_get($fdatepickBorderColor, nav);
+.fdatepicker--time {
+  border-top: 1px solid map_get($fdatepickerBorderColor, nav);
   display: flex;
   align-items: center;
 
-  padding: $fdatepickPadding;
+  padding: $fdatepickerPadding;
   position: relative;
 
   &.-am-pm- {
-    .fdatepick--time-sliders {
+    .fdatepicker--time-sliders {
       flex: 0 1 168px;
       max-width: 168px;
     }
@@ -77,18 +77,18 @@ $rangeThumbBg: #dedede;
   }
 }
 
-.fdatepick--time-sliders {
+.fdatepicker--time-sliders {
   flex: 0 1 183px;
   margin-right: 10px;
   max-width: 183px;
 }
 
-.fdatepick--time-label {
+.fdatepicker--time-label {
   display: none;
   font-size: 12px;
 }
 
-.fdatepick--time-current {
+.fdatepicker--time-current {
   display: flex;
   align-items: center;
   flex: 1;
@@ -97,13 +97,13 @@ $rangeThumbBg: #dedede;
   margin: 0 0 0 10px;
 }
 
-.fdatepick--time-current-colon {
+.fdatepicker--time-current-colon {
   margin: 0 2px 3px;
   line-height: 1;
 }
 
-.fdatepick--time-current-hours,
-.fdatepick--time-current-minutes {
+.fdatepicker--time-current-hours,
+.fdatepicker--time-current-minutes {
   line-height: 1;
   font-size: 19px;
   font-family: "Century Gothic", CenturyGothic, AppleGothic, sans-serif;
@@ -112,8 +112,8 @@ $rangeThumbBg: #dedede;
 
   &:after {
     content: '';
-    background: map_get($fdatepickBG, hover);
-    border-radius: $fdatepickBorderRadius;
+    background: map_get($fdatepickerBG, hover);
+    border-radius: $fdatepickerBorderRadius;
     position: absolute;
     left: -2px;
     top: -3px;
@@ -130,16 +130,16 @@ $rangeThumbBg: #dedede;
   }
 }
 
-.fdatepick--time-current-ampm {
+.fdatepicker--time-current-ampm {
   text-transform: uppercase;
   align-self: flex-end;
-  color: map_get($fdatepickTextColor, navArrows);
+  color: map_get($fdatepickerTextColor, navArrows);
   margin-left: 6px;
   font-size: 11px;
   margin-bottom: 1px;
 }
 
-.fdatepick--time-row {
+.fdatepicker--time-row {
   display: flex;
   align-items: center;
   font-size: 11px;
@@ -177,8 +177,8 @@ $rangeThumbBg: #dedede;
       outline: none;
 
       @include thumbSelector() {
-        background: map_get($fdatepickBG, selected);
-        border-color: map_get($fdatepickBG, selected);
+        background: map_get($fdatepickerBG, selected);
+        border-color: map_get($fdatepickerBG, selected);
       }
     }
 
@@ -217,8 +217,8 @@ $rangeThumbBg: #dedede;
   }
 }
 
-.fdatepick--time-icon {
-  color: map_get($fdatepickTextColor, navArrows);
+.fdatepicker--time-icon {
+  color: map_get($fdatepickerTextColor, navArrows);
   border: 1px solid;
   border-radius: 50%;
   font-size: 16px;

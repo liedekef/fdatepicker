@@ -1,10 +1,10 @@
-@import "fdatepick-config";
+@import "fdatepicker-config";
 
 /* -------------------------------------------------
-    fDatepick
+    fDatepicker
    ------------------------------------------------- */
 
-.fdatepicks-container {
+.fdatepickers-container {
   position: absolute;
   left: 0;
   top: 0;
@@ -14,46 +14,46 @@
   }
 }
 
-.fdatepick {
+.fdatepicker {
   background: #fff;
-  border: 1px solid map_get($fdatepickBorderColor, default);
+  border: 1px solid map_get($fdatepickerBorderColor, default);
   box-shadow: 0 4px 12px rgba(0, 0, 0, .15);
-  border-radius: $fdatepickBorderRadius;
+  border-radius: $fdatepickerBorderRadius;
   box-sizing: content-box;
-  font-family: $fdatepickFontFamily, sans-serif;
-  font-size: $fdatepickFontSize;
-  color: map_get($fdatepickTextColor, common);
-  width: $fdatepickWidth;
+  font-family: $fdatepickerFontFamily, sans-serif;
+  font-size: $fdatepickerFontSize;
+  color: map_get($fdatepickerTextColor, common);
+  width: $fdatepickerWidth;
   position: absolute;
   left: -100000px;
   opacity: 0;
-  transition: opacity $fdatepickTransitionSpeed $fdatepickTransitionEase, transform $fdatepickTransitionSpeed $fdatepickTransitionEase, left 0s $fdatepickTransitionSpeed;
-  z-index: $fdatepickZIndex;
+  transition: opacity $fdatepickerTransitionSpeed $fdatepickerTransitionEase, transform $fdatepickerTransitionSpeed $fdatepickerTransitionEase, left 0s $fdatepickerTransitionSpeed;
+  z-index: $fdatepickerZIndex;
 
   &.-from-top- {
-    transform: translateY(-$fdatepickTransitionOffset);
+    transform: translateY(-$fdatepickerTransitionOffset);
   }
   &.-from-right- {
-    transform: translateX($fdatepickTransitionOffset);
+    transform: translateX($fdatepickerTransitionOffset);
   }
   &.-from-bottom- {
-    transform: translateY($fdatepickTransitionOffset);
+    transform: translateY($fdatepickerTransitionOffset);
   }
   &.-from-left- {
-    transform: translateX(-$fdatepickTransitionOffset);
+    transform: translateX(-$fdatepickerTransitionOffset);
   }
 
 
   &.active {
     opacity: 1;
     transform: translate(0);
-    transition: opacity $fdatepickTransitionSpeed $fdatepickTransitionEase, transform $fdatepickTransitionSpeed $fdatepickTransitionEase, left 0s 0s;
+    transition: opacity $fdatepickerTransitionSpeed $fdatepickerTransitionEase, transform $fdatepickerTransitionSpeed $fdatepickerTransitionEase, left 0s 0s;
   }
 }
 
-.fdatepick-inline {
-  .fdatepick {
-    border-color: map-get($fdatepickBorderColor, inline);
+.fdatepicker-inline {
+  .fdatepicker {
+    border-color: map-get($fdatepickerBorderColor, inline);
     box-shadow: none;
     position: static;
     left: auto;
@@ -62,14 +62,14 @@
     transform: none;
   }
 
-  .fdatepick--pointer {
+  .fdatepicker--pointer {
     display: none;
   }
 }
 
-.fdatepick--content {
+.fdatepicker--content {
   box-sizing: content-box;
-  padding: $fdatepickPadding;
+  padding: $fdatepickerPadding;
 
   .-only-timepicker- & {
     display: none;
@@ -78,15 +78,15 @@
 
 //  Pointer
 // -------------------------------------------------
-$pointerHalfSize: $fdatepickPointerSize / 2 - 1;
+$pointerHalfSize: $fdatepickerPointerSize / 2 - 1;
 
-.fdatepick--pointer {
+.fdatepicker--pointer {
   position: absolute;
   background: #fff;
-  border-top: 1px solid map-get($fdatepickBorderColor, default);
-  border-right: 1px solid map-get($fdatepickBorderColor, default);
-  width: $fdatepickPointerSize;
-  height: $fdatepickPointerSize;
+  border-top: 1px solid map-get($fdatepickerBorderColor, default);
+  border-right: 1px solid map-get($fdatepickerBorderColor, default);
+  width: $fdatepickerPointerSize;
+  height: $fdatepickerPointerSize;
   z-index: -1;
 
   //  Main axis
@@ -116,23 +116,23 @@ $pointerHalfSize: $fdatepickPointerSize / 2 - 1;
   // -------------------------
 
   .-top-left- &, .-bottom-left- & {
-    left: $fdatepickPointerOffset;
+    left: $fdatepickerPointerOffset;
   }
   .-top-right- &, .-bottom-right- & {
-    right: $fdatepickPointerOffset;
+    right: $fdatepickerPointerOffset;
   }
   .-top-center- &, .-bottom-center- & {
-    left: calc(50% - #{$fdatepickPointerSize} / 2);
+    left: calc(50% - #{$fdatepickerPointerSize} / 2);
   }
 
   .-left-top- &, .-right-top- & {
-    top: $fdatepickPointerOffset;
+    top: $fdatepickerPointerOffset;
   }
   .-left-bottom- &, .-right-bottom- & {
-    bottom: $fdatepickPointerOffset;
+    bottom: $fdatepickerPointerOffset;
   }
   .-left-center- &, .-right-center- & {
-    top: calc(50% - #{$fdatepickPointerSize} / 2);
+    top: calc(50% - #{$fdatepickerPointerSize} / 2);
   }
 
 }
@@ -140,7 +140,7 @@ $pointerHalfSize: $fdatepickPointerSize / 2 - 1;
 //  Body
 // -------------------------------------------------
 
-.fdatepick--body {
+.fdatepicker--body {
   display: none;
 
   &.active {

@@ -1,4 +1,4 @@
-;(function ($) { $.fn.fdatepick.language['pl'] = {
+;(function ($) { $.fn.fdatepicker.language['pl'] = {
     days: ['Niedziela', 'Poniedziałek', 'Wtorek', 'Środa', 'Czwartek', 'Piątek', 'Sobota'],
     daysShort: ['Nie', 'Pon', 'Wto', 'Śro', 'Czw', 'Pią', 'Sob'],
     daysMin: ['Nd', 'Pn', 'Wt', 'Śr', 'Czw', 'Pt', 'So'],

@@ -1,4 +1,4 @@
-;(function ($) { ;(function ($) { $.fn.fdatepick.language['hu'] = {
+;(function ($) { ;(function ($) { $.fn.fdatepicker.language['hu'] = {
     days: ['Vasárnap', 'Hétfő', 'Kedd', 'Szerda', 'Csütörtök', 'Péntek', 'Szombat'],
     daysShort: ['Va', 'Hé', 'Ke', 'Sze', 'Cs', 'Pé', 'Szo'],
     daysMin: ['V', 'H', 'K', 'Sz', 'Cs', 'P', 'Sz'],

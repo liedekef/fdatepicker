@@ -1,4 +1,4 @@
-$.fn.fdatepick.language['sk'] = {
+$.fn.fdatepicker.language['sk'] = {
     days: ['Nedeľa', 'Pondelok', 'Utorok', 'Streda', 'Štvrtok', 'Piatok', 'Sobota'],
     daysShort: ['Ned', 'Pon', 'Uto', 'Str', 'Štv', 'Pia', 'Sob'],
     daysMin: ['Ne', 'Po', 'Ut', 'St', 'Št', 'Pi', 'So'],

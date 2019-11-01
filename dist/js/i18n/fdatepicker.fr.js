@@ -1,4 +1,4 @@
-;(function ($) { $.fn.fdatepick.language['fr'] = {
+;(function ($) { $.fn.fdatepicker.language['fr'] = {
     days: ['Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi'],
     daysShort: ['Dim', 'Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam'],
     daysMin: ['Di', 'Lu', 'Ma', 'Me', 'Je', 'Ve', 'Sa'],

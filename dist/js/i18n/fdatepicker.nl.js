@@ -1,4 +1,4 @@
-;(function ($) { $.fn.fdatepick.language['nl'] = {
+;(function ($) { $.fn.fdatepicker.language['nl'] = {
     days: ['zondag', 'maandag', 'dinsdag', 'woensdag', 'donderdag', 'vrijdag', 'zaterdag'],
     daysShort: ['zo', 'ma', 'di', 'wo', 'do', 'vr', 'za'],
     daysMin: ['zo', 'ma', 'di', 'wo', 'do', 'vr', 'za'],

@@ -1,4 +1,4 @@
-$.fn.fdatepick.language['fi'] = {
+$.fn.fdatepicker.language['fi'] = {
     days: ['Sunnuntai', 'Maanantai', 'Tiistai', 'Keskiviikko', 'Torstai', 'Perjantai', 'Lauantai'],
     daysShort: ['Su', 'Ma', 'Ti', 'Ke', 'To', 'Pe', 'La'],
     daysMin: ['Su', 'Ma', 'Ti', 'Ke', 'To', 'Pe', 'La'],

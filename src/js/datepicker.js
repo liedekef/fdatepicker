@@ -1,19 +1,19 @@
 ;(function () {
     var VERSION = '2.2.3',
-        pluginName = 'fdatepick',
-        autoInitSelector = '.fdatepick-here',
-        $body, $fdatepicksContainer,
+        pluginName = 'fdatepicker',
+        autoInitSelector = '.fdatepicker-here',
+        $body, $fdatepickersContainer,
         containerBuilt = false,
         baseTemplate = '' +
-            '<div class="fdatepick">' +
-            '<i class="fdatepick--pointer"></i>' +
-            '<nav class="fdatepick--nav"></nav>' +
-            '<div class="fdatepick--content"></div>' +
+            '<div class="fdatepicker">' +
+            '<i class="fdatepicker--pointer"></i>' +
+            '<nav class="fdatepicker--nav"></nav>' +
+            '<div class="fdatepicker--content"></div>' +
             '</div>',
         defaults = {
             classes: '',
             inline: false,
-            language: 'ru',
+            language: 'en',
             startDate: new Date(),
             firstDay: '',
             weekends: [6, 0],
@@ -98,9 +98,9 @@
             'altDown': [18, 40],
             'ctrlShiftUp': [16, 17, 38]
         },
-        fdatepick;
+        fdatepicker;
 
-    var fDatepick  = function (el, options) {
+    var fDatepicker  = function (el, options) {
         this.el = el;
         this.$el = $(el);
 
@@ -139,15 +139,15 @@
         this.init()
     };
 
-    fdatepick = fDatepick;
+    fdatepicker = fDatepicker;
 
-    fdatepick.prototype = {
+    fdatepicker.prototype = {
         VERSION: VERSION,
         viewIndexes: ['days', 'months', 'years'],
 
         init: function () {
             if (!containerBuilt && !this.opts.inline && this.elIsInput) {
-                this._buildfDatepicksContainer();
+                this._buildfDatepickersContainer();
             }
             this._buildBaseHtml();
             this._defineLocale(this.opts.language);
@@ -162,31 +162,31 @@
                 if (this.opts.keyboardNav && !this.opts.onlyTimepicker) {
                     this._bindKeyboardEvents();
                 }
-                this.$fdatepick.on('mousedown', this._onMouseDownfDatepick.bind(this));
-                this.$fdatepick.on('mouseup', this._onMouseUpfDatepick.bind(this));
+                this.$fdatepicker.on('mousedown', this._onMouseDownfDatepicker.bind(this));
+                this.$fdatepicker.on('mouseup', this._onMouseUpfDatepicker.bind(this));
             }
 
             if (this.opts.classes) {
-                this.$fdatepick.addClass(this.opts.classes)
+                this.$fdatepicker.addClass(this.opts.classes)
             }
 
             if (this.opts.timepicker) {
-                this.timepicker = new $.fn.fdatepick.Timepicker(this, this.opts);
+                this.timepicker = new $.fn.fdatepicker.Timepicker(this, this.opts);
                 this._bindTimepickerEvents();
             }
 
             if (this.opts.onlyTimepicker) {
-                this.$fdatepick.addClass('-only-timepicker-');
+                this.$fdatepicker.addClass('-only-timepicker-');
             }
 
-            this.views[this.currentView] = new $.fn.fdatepick.Body(this, this.currentView, this.opts);
+            this.views[this.currentView] = new $.fn.fdatepicker.Body(this, this.currentView, this.opts);
             this.views[this.currentView].show();
-            this.nav = new $.fn.fdatepick.Navigation(this, this.opts);
+            this.nav = new $.fn.fdatepicker.Navigation(this, this.opts);
             this.view = this.currentView;
 
             this.$el.on('clickCell.adp', this._onClickCell.bind(this));
-            this.$fdatepick.on('mouseenter', '.fdatepick--cell', this._onMouseEnterCell.bind(this));
-            this.$fdatepick.on('mouseleave', '.fdatepick--cell', this._onMouseLeaveCell.bind(this));
+            this.$fdatepicker.on('mouseenter', '.fdatepicker--cell', this._onMouseEnterCell.bind(this));
+            this.$fdatepicker.on('mouseleave', '.fdatepicker--cell', this._onMouseLeaveCell.bind(this));
 
             this.inited = true;
         },
@@ -221,15 +221,15 @@
 
         _defineLocale: function (lang) {
             if (typeof lang == 'string') {
-                this.loc = $.fn.fdatepick.language[lang];
+                this.loc = $.fn.fdatepicker.language[lang];
                 if (!this.loc) {
-                    console.warn('Can\'t find language "' + lang + '" in fDatepick.language, will use "ru" instead');
-                    this.loc = $.extend(true, {}, $.fn.fdatepick.language.ru)
+                    console.warn('Can\'t find language "' + lang + '" in fDatepicker.language, will use "en" instead');
+                    this.loc = $.extend(true, {}, $.fn.fdatepicker.language.en)
                 }
 
-                this.loc = $.extend(true, {}, $.fn.fdatepick.language.ru, $.fn.fdatepick.language[lang])
+                this.loc = $.extend(true, {}, $.fn.fdatepicker.language.en, $.fn.fdatepicker.language[lang])
             } else {
-                this.loc = $.extend(true, {}, $.fn.fdatepick.language.ru, lang)
+                this.loc = $.extend(true, {}, $.fn.fdatepicker.language.en, lang)
             }
 
             if (this.opts.dateFormat) {
@@ -260,19 +260,19 @@
             }
         },
 
-        _buildfDatepicksContainer: function () {
+        _buildfDatepickersContainer: function () {
             containerBuilt = true;
-            $body.append('<div class="fdatepicks-container" id="fdatepicks-container"></div>');
-            $fdatepicksContainer = $('#fdatepicks-container');
+            $body.append('<div class="fdatepickers-container" id="fdatepickers-container"></div>');
+            $fdatepickersContainer = $('#fdatepickers-container');
         },
 
         _buildBaseHtml: function () {
             var $appendTarget,
-                $inline = $('<div class="fdatepick-inline">');
+                $inline = $('<div class="fdatepicker-inline">');
 
             if(this.el.nodeName == 'INPUT') {
                 if (!this.opts.inline) {
-                    $appendTarget = $fdatepicksContainer;
+                    $appendTarget = $fdatepickersContainer;
                 } else {
                     $appendTarget = $inline.insertAfter(this.$el)
                 }
@@ -280,9 +280,9 @@
                 $appendTarget = $inline.appendTo(this.$el)
             }
 
-            this.$fdatepick = $(baseTemplate).appendTo($appendTarget);
-            this.$content = $('.fdatepick--content', this.$fdatepick);
-            this.$nav = $('.fdatepick--nav', this.$fdatepick);
+            this.$fdatepicker = $(baseTemplate).appendTo($appendTarget);
+            this.$content = $('.fdatepicker--content', this.$fdatepicker);
+            this.$nav = $('.fdatepicker--nav', this.$fdatepicker);
         },
 
         _triggerOnChange: function () {
@@ -294,7 +294,7 @@
             }
 
             var selectedDates = this.selectedDates,
-                parsedSelected = fdatepick.getParsedDate(selectedDates[0]),
+                parsedSelected = fdatepicker.getParsedDate(selectedDates[0]),
                 formattedDates,
                 _this = this,
                 dates = new Date(
@@ -312,7 +312,7 @@
             // Create new dates array, to separate it from original selectedDates
             if (this.opts.multipleDates || this.opts.range) {
                 dates = selectedDates.map(function(date) {
-                    var parsedDate = fdatepick.getParsedDate(date);
+                    var parsedDate = fdatepicker.getParsedDate(date);
                     return new Date(
                         parsedDate.year,
                         parsedDate.month,
@@ -370,9 +370,9 @@
             var result = string,
                 boundary = this._getWordBoundaryRegExp,
                 locale = this.loc,
-                leadingZero = fdatepick.getLeadingZeroNum,
-                decade = fdatepick.getDecade(date),
-                d = fdatepick.getParsedDate(date),
+                leadingZero = fdatepicker.getLeadingZeroNum,
+                decade = fdatepicker.getDecade(date),
+                d = fdatepicker.getParsedDate(date),
                 fullHours = d.fullHours,
                 hours = d.hours,
                 ampm = string.match(boundary('aa')) || string.match(boundary('AA')),
@@ -521,7 +521,7 @@
                         _this.minRange = date;
                     }
                     // Swap dates if they were selected via dp.selectDate() and second date was smaller then first
-                    if (fdatepick.bigger(_this.maxRange, _this.minRange)) {
+                    if (fdatepicker.bigger(_this.maxRange, _this.minRange)) {
                         _this.maxRange = _this.minRange;
                         _this.minRange = date;
                     }
@@ -559,7 +559,7 @@
             if (!(date instanceof Date)) return;
 
             return selected.some(function (curDate, i) {
-                if (fdatepick.isSame(curDate, date)) {
+                if (fdatepicker.isSame(curDate, date)) {
                     selected.splice(i, 1);
 
                     if (!_this.selectedDates.length) {
@@ -605,7 +605,7 @@
         },
 
         /**
-         * Updates fdatepick options
+         * Updates fdatepicker options
          * @param {String|Object} param - parameter's name to update. If object then it will extend current options
          * @param {String|Number|Object} [value] - new param value
          */
@@ -634,11 +634,11 @@
             }
 
             if (this.opts.classes) {
-                this.$fdatepick.addClass(this.opts.classes)
+                this.$fdatepicker.addClass(this.opts.classes)
             }
 
             if (this.opts.onlyTimepicker) {
-                this.$fdatepick.addClass('-only-timepicker-');
+                this.$fdatepicker.addClass('-only-timepicker-');
             }
 
             if (this.opts.timepicker) {
@@ -673,7 +673,7 @@
         _isSelected: function (checkDate, cellType) {
             var res = false;
             this.selectedDates.some(function (date) {
-                if (fdatepick.isSame(date, checkDate, cellType)) {
+                if (fdatepicker.isSame(date, checkDate, cellType)) {
                     res = date;
                     return true;
                 }
@@ -713,9 +713,9 @@
          */
         _isInRange: function (date, type) {
             var time = date.getTime(),
-                d = fdatepick.getParsedDate(date),
-                min = fdatepick.getParsedDate(this.minDate),
-                max = fdatepick.getParsedDate(this.maxDate),
+                d = fdatepicker.getParsedDate(date),
+                min = fdatepicker.getParsedDate(this.minDate),
+                max = fdatepicker.getParsedDate(this.maxDate),
                 dMinTime = new Date(d.year, d.month, min.date).getTime(),
                 dMaxTime = new Date(d.year, d.month, max.date).getTime(),
                 types = {
@@ -750,11 +750,11 @@
             pos = pos.split(' ');
             var main = pos[0],
                 sec = pos[1],
-                classes = 'fdatepick -' + main + '-' + sec + '- -from-' + main + '-';
+                classes = 'fdatepicker -' + main + '-' + sec + '- -from-' + main + '-';
 
             if (this.visible) classes += ' active';
 
-            this.$fdatepick
+            this.$fdatepicker
                 .removeAttr('class')
                 .addClass(classes);
         },
@@ -763,7 +763,7 @@
             position = position || this.opts.position;
 
             var dims = this._getDimensions(this.$el),
-                selfDims = this._getDimensions(this.$fdatepick),
+                selfDims = this._getDimensions(this.$fdatepicker),
                 pos = position.split(' '),
                 top, left,
                 offset = this.opts.offset,
@@ -806,7 +806,7 @@
                     }
             }
 
-            this.$fdatepick
+            this.$fdatepicker
                 .css({
                     left: left,
                     top: top
@@ -817,7 +817,7 @@
             var onShow = this.opts.onShow;
 
             this.setPosition(this.opts.position);
-            this.$fdatepick.addClass('active');
+            this.$fdatepicker.addClass('active');
             this.visible = true;
 
             if (onShow) {
@@ -828,7 +828,7 @@
         hide: function () {
             var onHide = this.opts.onHide;
 
-            this.$fdatepick
+            this.$fdatepicker
                 .removeClass('active')
                 .css({
                     left: '-100000px'
@@ -855,9 +855,9 @@
         },
 
         _bindVisionEvents: function (event) {
-            this.$fdatepick.off('transitionend.dp');
+            this.$fdatepicker.off('transitionend.dp');
             event(this, false);
-            this.$fdatepick.one('transitionend.dp', event.bind(this, this, true))
+            this.$fdatepicker.one('transitionend.dp', event.bind(this, this, true))
         },
 
         _changeView: function (date, dir) {
@@ -875,7 +875,7 @@
         },
 
         _handleHotKey: function (key) {
-            var date = fdatepick.getParsedDate(this._getFocusedDate()),
+            var date = fdatepicker.getParsedDate(this._getFocusedDate()),
                 focusedParsed,
                 o = this.opts,
                 newDate,
@@ -923,7 +923,7 @@
                     break;
             }
 
-            totalDaysInNextMonth = fdatepick.getDaysCount(new Date(y,m));
+            totalDaysInNextMonth = fdatepicker.getDaysCount(new Date(y,m));
             newDate = new Date(y,m,d);
 
             // If next month has less days than current, set date to total days in that month
@@ -938,7 +938,7 @@
 
             this.focused = newDate;
 
-            focusedParsed = fdatepick.getParsedDate(newDate);
+            focusedParsed = fdatepicker.getParsedDate(newDate);
             if (monthChanged && o.onChangeMonth) {
                 o.onChangeMonth(focusedParsed.month, focusedParsed.year)
             }
@@ -992,7 +992,7 @@
         _focusNextCell: function (keyCode, type) {
             type = type || this.cellType;
 
-            var date = fdatepick.getParsedDate(this._getFocusedDate()),
+            var date = fdatepicker.getParsedDate(this._getFocusedDate()),
                 y = date.year,
                 m = date.month,
                 d = date.date;
@@ -1059,8 +1059,8 @@
         _getCell: function (date, type) {
             type = type || this.cellType;
 
-            var d = fdatepick.getParsedDate(date),
-                selector = '.fdatepick--cell[data-year="' + d.year + '"]',
+            var d = fdatepicker.getParsedDate(date),
+                selector = '.fdatepicker--cell[data-year="' + d.year + '"]',
                 $cell;
 
             switch (type) {
@@ -1080,7 +1080,7 @@
             var _this = this;
             _this.$el
                 .off('.adp')
-                .data('fdatepick', '');
+                .data('fdatepicker', '');
 
             _this.selectedDates = [];
             _this.focused = '';
@@ -1090,9 +1090,9 @@
             _this.maxRange = '';
 
             if (_this.opts.inline || !_this.elIsInput) {
-                _this.$fdatepick.closest('.fdatepick-inline').remove();
+                _this.$fdatepicker.closest('.fdatepicker-inline').remove();
             } else {
-                _this.$fdatepick.remove();
+                _this.$fdatepicker.remove();
             }
         },
 
@@ -1132,11 +1132,11 @@
             }
         },
 
-        _onMouseDownfDatepick: function (e) {
+        _onMouseDownfDatepicker: function (e) {
             this.inFocus = true;
         },
 
-        _onMouseUpfDatepick: function (e) {
+        _onMouseUpfDatepicker: function (e) {
             this.inFocus = false;
             e.originalEvent.inFocus = true;
             if (!e.originalEvent.timepickerFocus) this.$el.trigger("focus");
@@ -1217,7 +1217,7 @@
         },
 
         _onMouseEnterCell: function (e) {
-            var $cell = $(e.target).closest('.fdatepick--cell'),
+            var $cell = $(e.target).closest('.fdatepicker--cell'),
                 date = this._getDateFromCell($cell);
 
             // Prevent from unnecessary rendering and setting new currentDate
@@ -1235,7 +1235,7 @@
             if (this.opts.range && this.selectedDates.length == 1) {
                 this.minRange = this.selectedDates[0];
                 this.maxRange = '';
-                if (fdatepick.less(this.minRange, this.focused)) {
+                if (fdatepicker.less(this.minRange, this.focused)) {
                     this.maxRange = this.minRange;
                     this.minRange = '';
                 }
@@ -1244,7 +1244,7 @@
         },
 
         _onMouseLeaveCell: function (e) {
-            var $cell = $(e.target).closest('.fdatepick--cell');
+            var $cell = $(e.target).closest('.fdatepicker--cell');
 
             $cell.removeClass('-focus-');
 
@@ -1296,7 +1296,7 @@
             if (this.opts.range && this.selectedDates.length == 1) {
                 this.minRange = this.selectedDates[0];
                 this.maxRange = '';
-                if (fdatepick.less(this.minRange, this._focused)) {
+                if (fdatepicker.less(this.minRange, this._focused)) {
                     this.maxRange = this.minRange;
                     this.minRange = '';
                 }
@@ -1310,7 +1310,7 @@
         },
 
         get parsedDate() {
-            return fdatepick.getParsedDate(this.date);
+            return fdatepicker.getParsedDate(this.date);
         },
 
         set date (val) {
@@ -1344,7 +1344,7 @@
 
             if (this.inited) {
                 if (!this.views[val]) {
-                    this.views[val] = new  $.fn.fdatepick.Body(this, val, this.opts)
+                    this.views[val] = new  $.fn.fdatepicker.Body(this, val, this.opts)
                 } else {
                     this.views[val]._render();
                 }
@@ -1371,28 +1371,28 @@
         },
 
         get minTime() {
-            var min = fdatepick.getParsedDate(this.minDate);
+            var min = fdatepicker.getParsedDate(this.minDate);
             return new Date(min.year, min.month, min.date).getTime()
         },
 
         get maxTime() {
-            var max = fdatepick.getParsedDate(this.maxDate);
+            var max = fdatepicker.getParsedDate(this.maxDate);
             return new Date(max.year, max.month, max.date).getTime()
         },
 
         get curDecade() {
-            return fdatepick.getDecade(this.date)
+            return fdatepicker.getDecade(this.date)
         }
     };
 
     //  Utils
     // -------------------------------------------------
 
-    fdatepick.getDaysCount = function (date) {
+    fdatepicker.getDaysCount = function (date) {
         return new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
     };
 
-    fdatepick.getParsedDate = function (date) {
+    fdatepicker.getParsedDate = function (date) {
         return {
             year: date.getFullYear(),
             month: date.getMonth(),
@@ -1407,13 +1407,13 @@
         }
     };
 
-    fdatepick.getDecade = function (date) {
+    fdatepicker.getDecade = function (date) {
         var firstYear = Math.floor(date.getFullYear() / 10) * 10;
 
         return [firstYear, firstYear + 9];
     };
 
-    fdatepick.template = function (str, data) {
+    fdatepicker.template = function (str, data) {
         return str.replace(/#\{([\w]+)\}/g, function (source, match) {
             if (data[match] || data[match] === 0) {
                 return data[match]
@@ -1421,10 +1421,10 @@
         });
     };
 
-    fdatepick.isSame = function (date1, date2, type) {
+    fdatepicker.isSame = function (date1, date2, type) {
         if (!date1 || !date2) return false;
-        var d1 = fdatepick.getParsedDate(date1),
-            d2 = fdatepick.getParsedDate(date2),
+        var d1 = fdatepicker.getParsedDate(date1),
+            d2 = fdatepicker.getParsedDate(date2),
             _type = type ? type : 'day',
 
             conditions = {
@@ -1436,17 +1436,17 @@
         return conditions[_type];
     };
 
-    fdatepick.less = function (dateCompareTo, date, type) {
+    fdatepicker.less = function (dateCompareTo, date, type) {
         if (!dateCompareTo || !date) return false;
         return date.getTime() < dateCompareTo.getTime();
     };
 
-    fdatepick.bigger = function (dateCompareTo, date, type) {
+    fdatepicker.bigger = function (dateCompareTo, date, type) {
         if (!dateCompareTo || !date) return false;
         return date.getTime() > dateCompareTo.getTime();
     };
 
-    fdatepick.getLeadingZeroNum = function (num) {
+    fdatepicker.getLeadingZeroNum = function (num) {
         return parseInt(num) < 10 ? '0' + num : num;
     };
 
@@ -1454,17 +1454,17 @@
      * Returns copy of date with hours and minutes equals to 0
      * @param date {Date}
      */
-    fdatepick.resetTime = function (date) {
+    fdatepicker.resetTime = function (date) {
         if (typeof date != 'object') return;
-        date = fdatepick.getParsedDate(date);
+        date = fdatepicker.getParsedDate(date);
         return new Date(date.year, date.month, date.date)
     };
 
-    $.fn.fdatepick = function ( options ) {
+    $.fn.fdatepicker = function ( options ) {
         return this.each(function () {
             if (!$.data(this, pluginName)) {
                 $.data(this,  pluginName,
-                    new fDatepick( this, options ));
+                    new fDatepicker( this, options ));
             } else {
                 var _this = $.data(this, pluginName);
 
@@ -1474,25 +1474,25 @@
         });
     };
 
-    $.fn.fdatepick.Constructor = fDatepick;
+    $.fn.fdatepicker.Constructor = fDatepicker;
 
-    $.fn.fdatepick.language = {
-        ru: {
-            days: ['Воскресенье', 'Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота'],
-            daysShort: ['Вос','Пон','Вто','Сре','Чет','Пят','Суб'],
-            daysMin: ['Вс','Пн','Вт','Ср','Чт','Пт','Сб'],
-            months: ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'],
-            monthsShort: ['Янв', 'Фев', 'Мар', 'Апр', 'Май', 'Июн', 'Июл', 'Авг', 'Сен', 'Окт', 'Ноя', 'Дек'],
-            today: 'Сегодня',
-            clear: 'Очистить',
-            dateFormat: 'dd.mm.yyyy',
-            timeFormat: 'hh:ii',
-            firstDay: 1
-        }
+    $.fn.fdatepicker.language = {
+            en: {
+                    days: [ 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday' ],
+                    daysShort: [ 'Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat' ],
+                    daysMin: [ 'Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa' ],
+                    months: [ 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December' ],
+                    monthsShort: [ 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec' ],
+                    today: 'Today',
+                    clear: 'Clear',
+                    dateFormat: 'mm/dd/yyyy',
+                    timeFormat: 'hh:ii aa',
+                    firstDay: 0
+            }
     };
 
     $(function () {
-        $(autoInitSelector).fdatepick();
+        $(autoInitSelector).fdatepicker();
     })
 
 })();

@@ -1,23 +1,23 @@
 ;(function () {
     var templates = {
         days:'' +
-        '<div class="fdatepick--days fdatepick--body">' +
-        '<div class="fdatepick--days-names"></div>' +
-        '<div class="fdatepick--cells fdatepick--cells-days"></div>' +
+        '<div class="fdatepicker--days fdatepicker--body">' +
+        '<div class="fdatepicker--days-names"></div>' +
+        '<div class="fdatepicker--cells fdatepicker--cells-days"></div>' +
         '</div>',
         months: '' +
-        '<div class="fdatepick--months fdatepick--body">' +
-        '<div class="fdatepick--cells fdatepick--cells-months"></div>' +
+        '<div class="fdatepicker--months fdatepicker--body">' +
+        '<div class="fdatepicker--cells fdatepicker--cells-months"></div>' +
         '</div>',
         years: '' +
-        '<div class="fdatepick--years fdatepick--body">' +
-        '<div class="fdatepick--cells fdatepick--cells-years"></div>' +
+        '<div class="fdatepicker--years fdatepicker--body">' +
+        '<div class="fdatepicker--cells fdatepicker--cells-years"></div>' +
         '</div>'
         },
-        fdatepick = $.fn.fdatepick,
-        dp = fdatepick.Constructor;
+        fdatepicker = $.fn.fdatepicker,
+        dp = fdatepicker.Constructor;
 
-    fdatepick.Body = function (d, type, opts) {
+    fdatepicker.Body = function (d, type, opts) {
         this.d = d;
         this.type = type;
         this.opts = opts;
@@ -27,7 +27,7 @@
         this.init();
     };
 
-    fdatepick.Body.prototype = {
+    fdatepicker.Body.prototype = {
         init: function () {
             this._buildBaseHtml();
             this._render();
@@ -36,13 +36,13 @@
         },
 
         _bindEvents: function () {
-            this.$el.on('click', '.fdatepick--cell', $.proxy(this._onClickCell, this));
+            this.$el.on('click', '.fdatepicker--cell', $.proxy(this._onClickCell, this));
         },
 
         _buildBaseHtml: function () {
             this.$el = $(templates[this.type]).appendTo(this.d.$content);
-            this.$names = $('.fdatepick--days-names', this.$el);
-            this.$cells = $('.fdatepick--cells', this.$el);
+            this.$names = $('.fdatepicker--days-names', this.$el);
+            this.$cells = $('.fdatepicker--cells', this.$el);
         },
 
         _getDayNamesHtml: function (firstDay, curDay, html, i) {
@@ -53,13 +53,13 @@
             if (i > 7) return html;
             if (curDay == 7) return this._getDayNamesHtml(firstDay, 0, html, ++i);
 
-            html += '<div class="fdatepick--day-name' + (this.d.isWeekend(curDay) ? " -weekend-" : "") + '">' + this.d.loc.daysMin[curDay] + '</div>';
+            html += '<div class="fdatepicker--day-name' + (this.d.isWeekend(curDay) ? " -weekend-" : "") + '">' + this.d.loc.daysMin[curDay] + '</div>';
 
             return this._getDayNamesHtml(firstDay, ++curDay, html, ++i);
         },
 
         _getCellContents: function (date, type) {
-            var classes = "fdatepick--cell fdatepick--cell-" + type,
+            var classes = "fdatepicker--cell fdatepicker--cell-" + type,
                 currentDate = new Date(),
                 parent = this.d,
                 minRange = dp.resetTime(parent.minRange),
@@ -250,7 +250,7 @@
         },
 
         _update: function () {
-            var $cells = $('.fdatepick--cell', this.$cells),
+            var $cells = $('.fdatepicker--cell', this.$cells),
                 _this = this,
                 classes,
                 $cell,
@@ -301,7 +301,7 @@
         },
 
         _onClickCell: function (e) {
-            var $el = $(e.target).closest('.fdatepick--cell');
+            var $el = $(e.target).closest('.fdatepicker--cell');
 
             if ($el.hasClass('-disabled-')) return;
 
