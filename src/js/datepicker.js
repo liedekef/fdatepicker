@@ -462,10 +462,14 @@
                     _this.selectDate(d)
                 });
                 return;
-            }
+	    }
 
-            if (!(date instanceof Date))
-		date = new Date(date);
+	    if (!(date instanceof Date)) {
+		if ((typeof date === 'string' || date instanceof String) && date !== '')
+                     date = new Date(date);
+                else
+                     date = new Date();
+            }
 
             this.lastSelectedDate = date;
 
