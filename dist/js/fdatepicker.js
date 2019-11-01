@@ -43,6 +43,7 @@
 
             multipleDates: false, // Boolean or Number
             multipleDatesSeparator: ',',
+            altFieldMultipleDatesSeparator: ',',
             range: false,
 
             todayButton: false,
@@ -695,7 +696,7 @@
                 altValues = this.selectedDates.map(function (date) {
                     return _this.formatDate(altFormat, date)
                 });
-                altValues = altValues.join(this.opts.multipleDatesSeparator);
+                altValues = altValues.join(this.opts.altFieldMultipleDatesSeparator);
                 this.$altField.val(altValues);
             }
 
