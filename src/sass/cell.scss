@@ -1,98 +1,98 @@
-@import "datepicker-config";
+@import "fdatepick-config";
 
 /* -------------------------------------------------
-    Datepicker cells
+    fDatepick cells
    ------------------------------------------------- */
 
-.datepicker--cells {
+.fdatepick--cells {
   display: flex;
   flex-wrap: wrap;
 }
 
-.datepicker--cell {
-  border-radius: $datepickerBorderRadius;
+.fdatepick--cell {
+  border-radius: $fdatepickBorderRadius;
   box-sizing: border-box;
   cursor: pointer;
   display: flex;
   position: relative;
   align-items: center;
   justify-content: center;
-  height: $datepickerDayCellSize;
+  height: $fdatepickDayCellSize;
   z-index: 1;
 
   &.-focus- {
-    background: map_get($datepickerBG, hover);
+    background: map_get($fdatepickBG, hover);
   }
 
   &.-current- {
-    color: map_get($datepickerTextColor, currentDate);
+    color: map_get($fdatepickTextColor, currentDate);
 
     &.-focus- {
-      color: map_get($datepickerTextColor, common);
+      color: map_get($fdatepickTextColor, common);
     }
 
     &.-in-range- {
-      color: map_get($datepickerTextColor, currentDate);
+      color: map_get($fdatepickTextColor, currentDate);
     }
   }
 
   &.-in-range- {
-    background: map_get($datepickerBG, inRange);
-    color: map_get($datepickerTextColor, common);
+    background: map_get($fdatepickBG, inRange);
+    color: map_get($fdatepickTextColor, common);
     border-radius: 0;
 
     &.-focus- {
-      background-color: rgba(map_get($datepickerBG, inRange), .2);
+      background-color: rgba(map_get($fdatepickBG, inRange), .2);
     }
   }
 
   &.-disabled- {
     cursor: default;
-    color: map_get($datepickerTextColor, disabled);
+    color: map_get($fdatepickTextColor, disabled);
 
     &.-focus- {
-      color: map_get($datepickerTextColor, disabled);
+      color: map_get($fdatepickTextColor, disabled);
     }
 
     &.-in-range- {
-      color: darken(map_get($datepickerTextColor, disabled), 5);
+      color: darken(map_get($fdatepickTextColor, disabled), 5);
     }
 
     &.-current- {
       &.-focus- {
-        color: map_get($datepickerTextColor, disabled);
+        color: map_get($fdatepickTextColor, disabled);
       }
     }
   }
 
   &.-range-from- {
-    border: 1px solid rgba(map_get($datepickerBG, selected), .5);
-    background-color: map_get($datepickerBG, inRange);
-    border-radius: $datepickerBorderRadius 0 0 $datepickerBorderRadius;
+    border: 1px solid rgba(map_get($fdatepickBG, selected), .5);
+    background-color: map_get($fdatepickBG, inRange);
+    border-radius: $fdatepickBorderRadius 0 0 $fdatepickBorderRadius;
   }
   &.-range-to- {
-    border: 1px solid rgba(map_get($datepickerBG, selected), .5);
-    background-color: map_get($datepickerBG, inRange);
-    border-radius:  0 $datepickerBorderRadius $datepickerBorderRadius 0;
+    border: 1px solid rgba(map_get($fdatepickBG, selected), .5);
+    background-color: map_get($fdatepickBG, inRange);
+    border-radius:  0 $fdatepickBorderRadius $fdatepickBorderRadius 0;
   }
 
   &.-range-from-.-range-to- {
-    border-radius: $datepickerBorderRadius;
+    border-radius: $fdatepickBorderRadius;
 
   }
 
   &.-selected- {
     color: #fff;
     border: none;
-    background: map_get($datepickerBG, selected);
+    background: map_get($fdatepickBG, selected);
 
     &.-current- {
       color: #fff;
-      background: map_get($datepickerBG, selected);
+      background: map_get($fdatepickBG, selected);
     }
 
     &.-focus- {
-      background: map_get($datepickerBG, selectedHover);
+      background: map_get($fdatepickBG, selectedHover);
     }
   }
 
@@ -104,14 +104,14 @@
 //  Day names
 // -------------------------------------------------
 
-.datepicker--days-names {
+.fdatepick--days-names {
   display: flex;
   flex-wrap: wrap;
   margin: 8px 0 3px;
 }
 
-.datepicker--day-name {
-  color: map_get($datepickerTextColor, dayNames);
+.fdatepick--day-name {
+  color: map_get($fdatepickTextColor, dayNames);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -124,7 +124,7 @@
 //  Day cell
 // -------------------------------------------------
 
-.datepicker--cell-day {
+.fdatepick--cell-day {
   width: (100/7)#{'%'};
 
   &.-other-month- {
@@ -136,16 +136,16 @@
 //  Months
 // -------------------------------------------------
 
-.datepicker--months {}
+.fdatepick--months {}
 
-.datepicker--cells-months {
-  height: $datepickerMinBodyHeight;
+.fdatepick--cells-months {
+  height: $fdatepickMinBodyHeight;
 }
 
 //  Month cell
 // -------------------------
 
-.datepicker--cell-month {
+.fdatepick--cell-month {
   width: 33.33%;
   height: 25%;
 }
@@ -153,18 +153,18 @@
 //  Years
 // -------------------------------------------------
 
-.datepicker--years {
-  height: $datepickerMinBodyHeight;
+.fdatepick--years {
+  height: $fdatepickMinBodyHeight;
 }
 
-.datepicker--cells-years {
-  height: $datepickerMinBodyHeight;
+.fdatepick--cells-years {
+  height: $fdatepickMinBodyHeight;
 }
 //  Year cell
 // -------------------------
 
-.datepicker--cell-year {
-  width: 100% / $datepickerYearsPerRow;
+.fdatepick--cell-year {
+  width: 100% / $fdatepickYearsPerRow;
   height: 33.33%;
 
   &.-other-decade- {

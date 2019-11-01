@@ -1,16 +1,16 @@
-$datepickerDayCellSize: 32px !default;
-$datepickerWidth: 250px !default;
-$datepickerMinBodyHeight: 170px !default;
-$datepickerBorderRadius: 4px !default;
-$datepickerPadding: 4px !default;
-$datepickerZIndex: 100 !default;
+$fdatepickDayCellSize: 32px !default;
+$fdatepickWidth: 280px !default;
+$fdatepickMinBodyHeight: 170px !default;
+$fdatepickBorderRadius: 4px !default;
+$fdatepickPadding: 4px !default;
+$fdatepickZIndex: 100 !default;
 
-$datepickerFontFamily: Tahoma !default;
-$datepickerFontSize: 14px !default;
+$fdatepickFontFamily: Tahoma !default;
+$fdatepickFontSize: 14px !default;
 
-$datepickerYearsPerRow: 4 !default;
+$fdatepickYearsPerRow: 4 !default;
 
-$datepickerTextColor: (
+$fdatepickTextColor: (
   button: #5cc4ef,
   otherMonth: #dedede,
   otherMonthInRange: #ccc,
@@ -21,58 +21,58 @@ $datepickerTextColor: (
   navArrows: #9c9c9c
 ) !default;
 
-$datepickerBG: (
+$fdatepickBG: (
   selected: #5cc4ef,
   selectedHover: darken(#5cc4ef, 5),
   inRange: rgba(#5cc4ef, .1),
   hover: #f0f0f0
 ) !default;
 
-$datepickerBorderColor: (
+$fdatepickBorderColor: (
   nav: #efefef,
   inline: #d7d7d7,
   default: #dbdbdb
 ) !default;
 
-$datepickerNavigationHeight: 32px !default;
-$datepickerNavigationButtonsOffset: 2px !default;
+$fdatepickNavigationHeight: 32px !default;
+$fdatepickNavigationButtonsOffset: 2px !default;
 
-$datepickerPointerSize: 10px !default;
-$datepickerPointerOffset: 10px !default;
+$fdatepickPointerSize: 10px !default;
+$fdatepickPointerOffset: 10px !default;
 
 // Transitions
-$datepickerTransitionSpeed: .3s !default;
-$datepickerTransitionEase: ease !default;
-$datepickerTransitionOffset: 8px !default;
+$fdatepickTransitionSpeed: .3s !default;
+$fdatepickTransitionEase: ease !default;
+$fdatepickTransitionOffset: 8px !default;
 
 // Objects
 %otherMonth {
-  color: map_get($datepickerTextColor, otherMonth);
+  color: map_get($fdatepickTextColor, otherMonth);
 
   &:hover {
-    color: darken(map_get($datepickerTextColor, otherMonth), 10);
+    color: darken(map_get($fdatepickTextColor, otherMonth), 10);
   }
 
   &.-disabled- {
     &.-focus- {
-      color: map_get($datepickerTextColor, otherMonth);
+      color: map_get($fdatepickTextColor, otherMonth);
     }
   }
 
   &.-selected- {
     color: #fff;
-    background: lighten(map_get($datepickerBG, selected), 15);
+    background: lighten(map_get($fdatepickBG, selected), 15);
     &.-focus- {
-      background: lighten(map_get($datepickerBG, selected), 10);
+      background: lighten(map_get($fdatepickBG, selected), 10);
     }
   }
   
   &.-in-range- {
-    background-color: map_get($datepickerBG, inRange);
-    color: darken(map_get($datepickerTextColor, otherMonth), 7);
+    background-color: map_get($fdatepickBG, inRange);
+    color: darken(map_get($fdatepickTextColor, otherMonth), 7);
 
     &.-focus- {
-      background-color: rgba(map_get($datepickerBG, inRange), .2);
+      background-color: rgba(map_get($fdatepickBG, inRange), .2);
     }
   }
 

@@ -1,14 +1,14 @@
 ;(function () {
     var template = '' +
-        '<div class="datepicker--nav-action" data-action="prev">#{prevHtml}</div>' +
-        '<div class="datepicker--nav-title">#{title}</div>' +
-        '<div class="datepicker--nav-action" data-action="next">#{nextHtml}</div>',
-        buttonsContainerTemplate = '<div class="datepicker--buttons"></div>',
-        button = '<span class="datepicker--button" data-action="#{action}">#{label}</span>',
-        datepicker = $.fn.datepicker,
-        dp = datepicker.Constructor;
+        '<div class="fdatepick--nav-action" data-action="prev">#{prevHtml}</div>' +
+        '<div class="fdatepick--nav-title">#{title}</div>' +
+        '<div class="fdatepick--nav-action" data-action="next">#{nextHtml}</div>',
+        buttonsContainerTemplate = '<div class="fdatepick--buttons"></div>',
+        button = '<span class="fdatepick--button" data-action="#{action}">#{label}</span>',
+        fdatepick = $.fn.fdatepick,
+        dp = fdatepick.Constructor;
 
-    datepicker.Navigation = function (d, opts) {
+    fdatepick.Navigation = function (d, opts) {
         this.d = d;
         this.opts = opts;
 
@@ -17,16 +17,16 @@
         this.init();
     };
 
-    datepicker.Navigation.prototype = {
+    fdatepick.Navigation.prototype = {
         init: function () {
             this._buildBaseHtml();
             this._bindEvents();
         },
 
         _bindEvents: function () {
-            this.d.$nav.on('click', '.datepicker--nav-action', $.proxy(this._onClickNavButton, this));
-            this.d.$nav.on('click', '.datepicker--nav-title', $.proxy(this._onClickNavTitle, this));
-            this.d.$datepicker.on('click', '.datepicker--button', $.proxy(this._onClickNavButton, this));
+            this.d.$nav.on('click', '.fdatepick--nav-action', $.proxy(this._onClickNavButton, this));
+            this.d.$nav.on('click', '.fdatepick--nav-title', $.proxy(this._onClickNavTitle, this));
+            this.d.$fdatepick.on('click', '.fdatepick--button', $.proxy(this._onClickNavButton, this));
         },
 
         _buildBaseHtml: function () {
@@ -50,7 +50,7 @@
                 html = dp.template(template, $.extend({title: title}, this.opts));
             this.d.$nav.html(html);
             if (this.d.view == 'years') {
-                $('.datepicker--nav-title', this.d.$nav).addClass('-disabled-');
+                $('.fdatepick--nav-title', this.d.$nav).addClass('-disabled-');
             }
             this.setNavStatus();
         },
@@ -75,8 +75,8 @@
         },
 
         _addButtonsContainer: function () {
-            this.d.$datepicker.append(buttonsContainerTemplate);
-            this.$buttonsContainer = $('.datepicker--buttons', this.d.$datepicker);
+            this.d.$fdatepick.append(buttonsContainerTemplate);
+            this.$buttonsContainer = $('.fdatepick--buttons', this.d.$fdatepick);
         },
 
         setNavStatus: function () {
