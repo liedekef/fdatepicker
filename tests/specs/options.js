@@ -665,7 +665,7 @@ describe('Options', function () {
 
             dp.date = date;
 
-            var $prev = $('.datepicker--nav-action[data-action="prev"]', dp.$datepicker);
+            var $prev = $('.datepicker--nav-action[data-fpicker-action="prev"]', dp.$datepicker);
 
             expect($prev.attr('class')).to.have.string('-disabled-')
         })
@@ -802,7 +802,7 @@ describe('Options', function () {
                 prevHtml: 'previous'
             }).data('datepicker');
 
-            var $prev = $('[data-action="prev"]', dp.$datepicker);
+            var $prev = $('[data-fpicker-action="prev"]', dp.$datepicker);
 
             expect($prev.html()).to.be.equal('previous');
         });
@@ -814,7 +814,7 @@ describe('Options', function () {
                 nextHtml: 'next'
             }).data('datepicker');
 
-            var $next = $('[data-action="next"]', dp.$datepicker);
+            var $next = $('[data-fpicker-action="next"]', dp.$datepicker);
 
             expect($next.html()).to.be.equal('next');
         });

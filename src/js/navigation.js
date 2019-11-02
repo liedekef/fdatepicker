@@ -1,10 +1,10 @@
 ;(function () {
     var template = '' +
-        '<div class="fdatepicker--nav-action" data-action="prev">#{prevHtml}</div>' +
+        '<div class="fdatepicker--nav-action" data-fpicker-action="prev">#{prevHtml}</div>' +
         '<div class="fdatepicker--nav-title">#{title}</div>' +
-        '<div class="fdatepicker--nav-action" data-action="next">#{nextHtml}</div>',
+        '<div class="fdatepicker--nav-action" data-fpicker-action="next">#{nextHtml}</div>',
         buttonsContainerTemplate = '<div class="fdatepicker--buttons"></div>',
-        button = '<span class="fdatepicker--button" data-action="#{action}">#{label}</span>',
+        button = '<span class="fdatepicker--button" data-fpicker-action="#{action}">#{label}</span>',
         fdatepicker = $.fn.fdatepicker,
         dp = fdatepicker.Constructor;
 
@@ -70,7 +70,7 @@
                 },
                 html = dp.template(button, data);
 
-            if ($('[data-action=' + type + ']', this.$buttonsContainer).length) return;
+            if ($('[data-fpicker-action=' + type + ']', this.$buttonsContainer).length) return;
             this.$buttonsContainer.append(html);
         },
 
@@ -117,15 +117,15 @@
         },
 
         _disableNav: function (nav) {
-            $('[data-action="' + nav + '"]', this.d.$nav).addClass('-disabled-')
+            $('[data-fpicker-action="' + nav + '"]', this.d.$nav).addClass('-disabled-')
         },
 
         _activateNav: function (nav) {
-            $('[data-action="' + nav + '"]', this.d.$nav).removeClass('-disabled-')
+            $('[data-fpicker-action="' + nav + '"]', this.d.$nav).removeClass('-disabled-')
         },
 
         _onClickNavButton: function (e) {
-            var $el = $(e.target).closest('[data-action]'),
+            var $el = $(e.target).closest('[data-fpicker-action]'),
                 action = $el.data('action');
 
             this.d[action]();
