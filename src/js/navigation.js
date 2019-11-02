@@ -126,7 +126,7 @@
 
         _onClickNavButton: function (e) {
             var $el = $(e.target).closest('[data-fpicker-action]'),
-                action = $el.data('action');
+                action = $el.data('fpicker-action');
 
             this.d[action]();
         },

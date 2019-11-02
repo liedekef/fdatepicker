@@ -1773,7 +1773,7 @@
         show: function () {
             if (this.opts.onlyTimepicker) return;
             this.$el.addClass('active');
-            this.acitve = true;
+            this.active = true;
         },
 
         hide: function () {
@@ -1945,7 +1945,7 @@
 
         _onClickNavButton: function (e) {
             var $el = $(e.target).closest('[data-fpicker-action]'),
-                action = $el.data('action');
+                action = $el.data('fpicker-action');
 
             this.d[action]();
         },
