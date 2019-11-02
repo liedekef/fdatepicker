@@ -1,4 +1,15 @@
-;(function () {
+(function (factory) {
+    if (typeof define === "function" && define.amd) {
+
+        // AMD. Register as an anonymous module.
+        define([
+            "jquery",
+        ], factory);
+    } else {
+        // Browser globals
+        factory(jQuery);
+    }
+}(function ($) {
     var templates = {
         days:'' +
         '<div class="fdatepicker--days fdatepicker--body">' +
@@ -308,4 +319,4 @@
             this._handleClick.bind(this)($el);
         }
     };
-})();
+}));

@@ -1,4 +1,15 @@
-;(function () {
+(function (factory) {
+    if (typeof define === "function" && define.amd) {
+
+        // AMD. Register as an anonymous module.
+        define([
+            "jquery",
+        ], factory);
+    } else {
+        // Browser globals
+        factory(jQuery);
+    }
+}(function ($) {
     var VERSION = '2.2.3',
         pluginName = 'fdatepicker',
         autoInitSelector = '.fdatepicker-here',
@@ -1502,5 +1513,4 @@
     $(function () {
         $(autoInitSelector).fdatepicker();
     })
-
-})();
+}));

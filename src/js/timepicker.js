@@ -1,4 +1,15 @@
-;(function () {
+(function (factory) {
+    if (typeof define === "function" && define.amd) {
+
+        // AMD. Register as an anonymous module.
+        define([
+            "jquery",
+        ], factory);
+    } else {
+        // Browser globals
+        factory(jQuery);
+    }
+}(function ($) {
     var template = '<div class="fdatepicker--time">' +
         '<div class="fdatepicker--time-current">' +
         '   <span class="fdatepicker--time-current-hours">#{hourVisible}</span>' +
@@ -280,4 +291,4 @@
             this.d.timepickerIsActive = false;
         }
     };
-})();
+}));

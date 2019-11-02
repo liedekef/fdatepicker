@@ -1,4 +1,12 @@
-;(function (window, $, undefined) { ;(function () {
+;(function (window, $, undefined) { (function (factory) {
+	if (typeof define === "function" && define.amd) {
+		// AMD. Register as an anonymous module.
+		define(["jquery"], factory);
+	} else {
+		// Browser globals
+		factory(jQuery);
+	}
+}(function ($) {
     var VERSION = '2.2.3',
         pluginName = 'fdatepicker',
         autoInitSelector = '.fdatepicker-here',
@@ -1503,9 +1511,18 @@
         $(autoInitSelector).fdatepicker();
     })
 
-})();
-
-;(function () {
+}));
+(function (factory) {
+	if (typeof define === "function" && define.amd) {
+		// AMD. Register as an anonymous module.
+		define([
+			"jquery",
+		], factory);
+	} else {
+		// Browser globals
+		factory(jQuery);
+	}
+}(function ($) {
     var templates = {
         days:'' +
         '<div class="fdatepicker--days fdatepicker--body">' +
@@ -1815,9 +1832,18 @@
             this._handleClick.bind(this)($el);
         }
     };
-})();
-
-;(function () {
+}));
+(function (factory) {
+    if (typeof define === "function" && define.amd) {
+        // AMD. Register as an anonymous module.
+        define([
+            "jquery",
+        ], factory);
+    } else {
+        // Browser globals
+        factory(jQuery);
+    }
+}(function ($) {
     var template = '' +
         '<div class="fdatepicker--nav-action" data-fpicker-action="prev">#{prevHtml}</div>' +
         '<div class="fdatepicker--nav-title">#{title}</div>' +
@@ -1961,9 +1987,19 @@
         }
     }
 
-})();
+}));
 
-;(function () {
+(function (factory) {
+    if (typeof define === "function" && define.amd) {
+        // AMD. Register as an anonymous module.
+        define([
+            "jquery",
+        ], factory);
+    } else {
+        // Browser globals
+        factory(jQuery);
+    }
+}(function ($) {
     var template = '<div class="fdatepicker--time">' +
         '<div class="fdatepicker--time-current">' +
         '   <span class="fdatepicker--time-current-hours">#{hourVisible}</span>' +
@@ -2245,5 +2281,5 @@
             this.d.timepickerIsActive = false;
         }
     };
-})();
- })(window, jQuery);
+}));
+})(window, jQuery);
