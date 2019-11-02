@@ -1398,6 +1398,9 @@
     };
 
     fdatepicker.getParsedDate = function (date) {
+	if (typeof date == 'string') {
+	    date = new Date(date);
+	}
         return {
             year: date.getFullYear(),
             month: date.getMonth(),
