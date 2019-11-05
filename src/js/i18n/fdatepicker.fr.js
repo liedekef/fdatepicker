@@ -18,7 +18,7 @@
 		today: "Aujourd'hui",
 		clear: 'Effacer',
 		dateFormat: 'd/m/Y',
-		timeFormat: 'G:i',
+		timeFormat: 'H:i',
 		firstDay: 1
 	};
 }));

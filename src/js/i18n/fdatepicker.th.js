@@ -18,7 +18,7 @@
 		today: 'วันนี้',
 		clear: 'ล้าง',
 		dateFormat: 'd/m/Y',
-		timeFormat: 'G:i',
+		timeFormat: 'H:i',
 		firstDay: 0
 	};
 }));

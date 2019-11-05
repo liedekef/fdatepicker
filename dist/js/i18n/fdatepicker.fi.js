@@ -18,7 +18,7 @@
 		today: 'Tänään',
 		clear: 'Tyhjennä',
 		dateFormat: 'd.m.Y',
-		timeFormat: 'G:i',
+		timeFormat: 'H:i',
 		firstDay: 1
 	};
 }));

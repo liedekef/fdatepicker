@@ -18,7 +18,7 @@
 		today: '今天',
 		clear: '清除',
 		dateFormat: 'Y-m-d',
-		timeFormat: 'G:i',
+		timeFormat: 'H:i',
 		firstDay: 1
 	};
 }));

@@ -18,7 +18,7 @@
 		today: 'Այսօր',
 		clear: 'Մաքրել',
 		dateFormat: 'm/d/Y',
-		timeFormat: 'G:i',
+		timeFormat: 'H:i',
 		firstDay: 1
 	};
 }));

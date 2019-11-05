@@ -18,7 +18,7 @@
 		today: 'I dag',
 		clear: 'Nulstil',
 		dateFormat: 'd/m/Y',
-		timeFormat: 'G:i',
+		timeFormat: 'H:i',
 		firstDay: 1
 	};
 }));

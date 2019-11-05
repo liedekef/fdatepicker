@@ -18,7 +18,7 @@
 		today: 'Idag',
 		clear: 'Rensa',
 		dateFormat: 'Y-m-d',
-		timeFormat: 'G:i',
+		timeFormat: 'H:i',
 		firstDay: 1
 	};
 }));

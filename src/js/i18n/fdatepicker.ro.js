@@ -18,7 +18,7 @@
 		today: 'Azi',
 		clear: 'Şterge',
 		dateFormat: 'd.m.Y',
-		timeFormat: 'G:i',
+		timeFormat: 'H:i',
 		firstDay: 1
 	};
 }));
