@@ -17,8 +17,8 @@
 		monthsShort: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
 		today: 'Hoje',
 		clear: 'Limpar',
-		dateFormat: 'dd/mm/yyyy',
-		timeFormat: 'hh:ii',
+		dateFormat: 'd/m/Y',
+		timeFormat: 'G:i',
 		firstDay: 0
 	};
 }));

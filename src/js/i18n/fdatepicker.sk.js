@@ -17,8 +17,8 @@
 		monthsShort: ['Jan', 'Feb', 'Mar', 'Apr', 'Máj', 'Jún', 'Jul', 'Aug', 'Sep', 'Okt', 'Nov', 'Dec'],
 		today: 'Dnes',
 		clear: 'Vymazať',
-		dateFormat: 'dd.mm.yyyy',
-		timeFormat: 'hh:ii',
+		dateFormat: 'd.m.Y',
+		timeFormat: 'G:i',
 		firstDay: 1
 	};
 }));

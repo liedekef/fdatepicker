@@ -17,8 +17,8 @@
 		monthsShort: ['იან', 'თებ', 'მარ', 'აპრ', 'მაი', 'ივნ', 'ივლ', 'აგვ', 'სექ', 'ოქტ', 'ნოე', 'დეკ'],
 		today: 'დღეს',
 		clear: 'Clear',
-		dateFormat: 'dd/mm/yyyy',
-		timeFormat: 'HH:ii',
+		dateFormat: 'd/m/Y',
+		timeFormat: 'G:i',
 		firstDay: 1
 	};
 }));

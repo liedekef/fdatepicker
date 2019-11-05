@@ -17,8 +17,8 @@
 		monthsShort: ['ม.ค.', 'ก.พ.', 'มี.ค.', 'เม.ย.', 'พ.ค.', 'มิ.ย.', 'ก.ค.', 'ส.ค.', 'ก.ย.', 'ต.ค.', 'พ.ย.', 'ธ.ค.'],
 		today: 'วันนี้',
 		clear: 'ล้าง',
-		dateFormat: 'dd/mm/yyyy',
-		timeFormat: 'hh:ii',
+		dateFormat: 'd/m/Y',
+		timeFormat: 'G:i',
 		firstDay: 0
 	};
 }));

@@ -17,8 +17,8 @@
 		monthsShort: ['Հունվ', 'Փետ', 'Մար', 'Ապր', 'Մայ', 'Հուն', 'Հուլ', 'Օգ', 'Սեպ', 'Հոկ', 'Նոյ', 'Դեկ'],
 		today: 'Այսօր',
 		clear: 'Մաքրել',
-		dateFormat: 'mm/dd/yyyy',
-		timeFormat: 'hh:ii',
+		dateFormat: 'm/d/Y',
+		timeFormat: 'G:i',
 		firstDay: 1
 	};
 }));

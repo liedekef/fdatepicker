@@ -17,8 +17,8 @@
 		monthsShort: ['Gen', 'Feb', 'Mar', 'Apr', 'Mag', 'Giu', 'Lug', 'Ago', 'Set', 'Ott', 'Nov', 'Dic'],
 		today: 'Oggi',
 		clear: 'Cancella',
-		dateFormat: 'dd/mm/yyyy',
-		timeFormat: 'hh:ii',
+		dateFormat: 'd/m/Y',
+		timeFormat: 'G:i',
 		firstDay: 1
 	};
 }));

@@ -17,8 +17,8 @@
 		monthsShort: ['Ian', 'Feb', 'Mar', 'Apr', 'Mai', 'Iun', 'Iul', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec'],
 		today: 'Azi',
 		clear: 'Şterge',
-		dateFormat: 'dd.mm.yyyy',
-		timeFormat: 'hh:ii',
+		dateFormat: 'd.m.Y',
+		timeFormat: 'G:i',
 		firstDay: 1
 	};
 }));

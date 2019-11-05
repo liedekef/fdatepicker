@@ -17,8 +17,8 @@
 		monthsShort: ['Sty', 'Lut', 'Mar', 'Kwi', 'Maj', 'Cze', 'Lip', 'Sie', 'Wrz', 'Paź', 'Lis', 'Gru'],
 		today: 'Dzisiaj',
 		clear: 'Wyczyść',
-		dateFormat: 'yyyy-mm-dd',
-		timeFormat: 'hh:ii:aa',
+		dateFormat: 'Y-m-d',
+		timeFormat: 'h:i:a',
 		firstDay: 1
 	};
 }));

@@ -17,8 +17,8 @@
 		monthsShort: ['Jan', 'Feb', 'Mrt', 'Apr', 'Mei', 'Jun', 'Jul', 'Aug', 'Sep', 'Okt', 'Nov', 'Dec'],
 		today: 'Vandaag',
 		clear: 'Legen',
-		dateFormat: 'dd-mm-yyyy',
-		timeFormat: 'hh:ii',
+		dateFormat: 'd-m-Y',
+		timeFormat: 'G:i',
 		firstDay: 1
 	};
 }));

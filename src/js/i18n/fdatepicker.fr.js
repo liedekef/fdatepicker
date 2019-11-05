@@ -17,8 +17,8 @@
 		monthsShort: ['Jan', 'Fév', 'Mar', 'Avr', 'Mai', 'Jun', 'Jul', 'Aoû', 'Sep', 'Oct', 'Nov', 'Déc'],
 		today: "Aujourd'hui",
 		clear: 'Effacer',
-		dateFormat: 'dd/mm/yyyy',
-		timeFormat: 'hh:ii',
+		dateFormat: 'd/m/Y',
+		timeFormat: 'G:i',
 		firstDay: 1
 	};
 }));

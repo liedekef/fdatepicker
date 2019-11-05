@@ -17,8 +17,8 @@
 		monthsShort: ['Янв', 'Фев', 'Мар', 'Апр', 'Май', 'Июнь', 'Июль', 'Авг', 'Сент', 'Окт', 'Нояб', 'Дек'],
 		today: 'Сегодня',
 		clear: 'Очистить',
-		dateFormat: 'dd.mm.yyyy',
-		timeFormat: 'hh:ii aa',
+		dateFormat: 'd.m.Y',
+		timeFormat: 'h:i a',
 		firstDay: 1
 	};
 }));

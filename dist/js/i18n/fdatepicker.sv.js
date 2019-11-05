@@ -17,8 +17,8 @@
 		monthsShort: ['Jan', 'Feb', 'Mar', 'Apr', 'Maj', 'Jun', 'Jul', 'Aug', 'Sep', 'Okt', 'Nov', 'Dec'],
 		today: 'Idag',
 		clear: 'Rensa',
-		dateFormat: 'yyyy-mm-dd',
-		timeFormat: 'hh:ii',
+		dateFormat: 'Y-m-d',
+		timeFormat: 'G:i',
 		firstDay: 1
 	};
 }));

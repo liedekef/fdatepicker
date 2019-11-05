@@ -17,8 +17,8 @@
 		monthsShort: ['Jan', 'Feb', 'Már', 'Ápr', 'Máj', 'Jún', 'Júl', 'Aug', 'Szep', 'Okt', 'Nov', 'Dec'],
 		today: 'Ma',
 		clear: 'Törlés',
-		dateFormat: 'yyyy-mm-dd',
-		timeFormat: 'hh:ii aa',
+		dateFormat: 'Y-m-d',
+		timeFormat: 'h:i a',
 		firstDay: 1
 	};
 }));

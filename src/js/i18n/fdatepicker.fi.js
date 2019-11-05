@@ -17,8 +17,8 @@
 		monthsShort: ['Tammi', 'Helmi', 'Maalis', 'Huhti', 'Touko', 'Kesä', 'Heinä', 'Elo', 'Syys', 'Loka', 'Marras', 'Joulu'],
 		today: 'Tänään',
 		clear: 'Tyhjennä',
-		dateFormat: 'dd.mm.yyyy',
-		timeFormat: 'hh:ii',
+		dateFormat: 'd.m.Y',
+		timeFormat: 'G:i',
 		firstDay: 1
 	};
 }));

@@ -17,8 +17,8 @@
 		monthsShort: ['Led', 'Úno', 'Bře', 'Dub', 'Kvě', 'Čvn', 'Čvc', 'Srp', 'Zář', 'Říj', 'Lis', 'Pro'],
 		today: 'Dnes',
 		clear: 'Vymazat',
-		dateFormat: 'dd.mm.yyyy',
-		timeFormat: 'hh:ii',
+		dateFormat: 'd.m.Y',
+		timeFormat: 'G:i',
 		firstDay: 1
 	};
 }));

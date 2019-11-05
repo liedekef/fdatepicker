@@ -17,8 +17,8 @@
 		monthsShort: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'],
 		today: '오늘',
 		clear: '없애기',
-		dateFormat: 'yyyy/mm/dd',
-		timeFormat: 'hh:ii aa',
+		dateFormat: 'Y/m/d',
+		timeFormat: 'h:i a',
 		firstDay: 0
 	};
 }));

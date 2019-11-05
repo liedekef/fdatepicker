@@ -17,8 +17,8 @@
 		monthsShort: ['Січ', 'Лют', 'Бер', 'Кві', 'Тра', 'Чер', 'Лип', 'Сер', 'Вер', 'Жов', 'Лис', 'Гру'],
 		today: 'Сьогодні',
 		clear: 'Очистити',
-		dateFormat: 'mm/dd/yyyy',
-		timeFormat: 'hh:ii aa',
+		dateFormat: 'm/d/Y',
+		timeFormat: 'h:i a',
 		firstDay: 1
 	};
 }));

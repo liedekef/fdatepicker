@@ -1,14 +1,11 @@
 (function (factory) {
-    if (typeof define === "function" && define.amd) {
-
-        // AMD. Register as an anonymous module.
-        define([
-            "jquery",
-        ], factory);
-    } else {
-        // Browser globals
-        factory(jQuery);
-    }
+	if (typeof define === "function" && define.amd) {
+		// AMD. Register as an anonymous module.
+		define(["jquery"], factory);
+	} else {
+		// Browser globals
+		factory(jQuery);
+	}
 }(function ($) {
     var VERSION = '2.2.3',
         pluginName = 'fdatepicker',
@@ -54,7 +51,7 @@
 
             multipleDates: false, // Boolean or Number
             multipleDatesSeparator: ',',
-	    altFieldMultipleDatesSeparator: ',',
+            altFieldMultipleDatesSeparator: ',',
             range: false,
 
             todayButton: false,
@@ -68,9 +65,9 @@
             prevHtml: '<svg><path d="M 17,12 l -5,5 l 5,5"></path></svg>',
             nextHtml: '<svg><path d="M 14,12 l 5,5 l -5,5"></path></svg>',
             navTitles: {
-                days: 'MM, <i>yyyy</i>',
-                months: 'yyyy',
-                years: 'yyyy1 - yyyy2'
+                days: 'M, <i>Y</i>',
+                months: 'Y',
+                years: 'Y1 - Y2'
             },
 
             // timepicker
@@ -264,10 +261,7 @@
                 this.loc.dateFormat = this.loc.timeFormat;
             }
 
-            var boundary = this._getWordBoundaryRegExp;
-            if (this.loc.timeFormat.match(boundary('aa')) ||
-                this.loc.timeFormat.match(boundary('AA'))
-            ) {
+            if (this.loc.timeFormat.match(/a/i)) {
                this.ampm = true;
             }
         },
@@ -377,19 +371,19 @@
             }
         },
 
-        formatDate: function (string, date) {
+        formatDate: function (format, date) {
             date = date || this.date;
-            var result = string,
-                boundary = this._getWordBoundaryRegExp,
+            var result = '',
                 locale = this.loc,
                 leadingZero = fdatepicker.getLeadingZeroNum,
                 decade = fdatepicker.getDecade(date),
                 d = fdatepicker.getParsedDate(date),
                 fullHours = d.fullHours,
                 hours = d.hours,
-                ampm = string.match(boundary('aa')) || string.match(boundary('AA')),
-                dayPeriod = 'am',
-                replacer = this._replacer,
+                ampm = format.match(/a/i),
+                dayPeriod = '',
+		escaping = false,
+                html = false,
                 validHours;
 
             if (this.opts.timepicker && this.timepicker && ampm) {
@@ -399,62 +393,109 @@
                 dayPeriod = validHours.dayPeriod;
             }
 
-            switch (true) {
-                case /@/.test(result):
-                    result = result.replace(/@/, date.getTime());
-                case /aa/.test(result):
-                    result = replacer(result, boundary('aa'), dayPeriod);
-                case /AA/.test(result):
-                    result = replacer(result, boundary('AA'), dayPeriod.toUpperCase());
-                case /dd/.test(result):
-                    result = replacer(result, boundary('dd'), d.fullDate);
-                case /d/.test(result):
-                    result = replacer(result, boundary('d'), d.date);
-                case /DD/.test(result):
-                    result = replacer(result, boundary('DD'), locale.days[d.day]);
-                case /D/.test(result):
-                    result = replacer(result, boundary('D'), locale.daysShort[d.day]);
-                case /mm/.test(result):
-                    result = replacer(result, boundary('mm'), d.fullMonth);
-                case /m/.test(result):
-                    result = replacer(result, boundary('m'), d.month + 1);
-                case /MM/.test(result):
-                    result = replacer(result, boundary('MM'), this.loc.months[d.month]);
-                case /M/.test(result):
-                    result = replacer(result, boundary('M'), locale.monthsShort[d.month]);
-                case /ii/.test(result):
-                    result = replacer(result, boundary('ii'), d.fullMinutes);
-                case /i/.test(result):
-                    result = replacer(result, boundary('i'), d.minutes);
-                case /hh/.test(result):
-                    result = replacer(result, boundary('hh'), fullHours);
-                case /h/.test(result):
-                    result = replacer(result, boundary('h'), hours);
-                case /yyyy/.test(result):
-                    result = replacer(result, boundary('yyyy'), d.year);
-                case /yyyy1/.test(result):
-                    result = replacer(result, boundary('yyyy1'), decade[0]);
-                case /yyyy2/.test(result):
-                    result = replacer(result, boundary('yyyy2'), decade[1]);
-                case /yy/.test(result):
-                    result = replacer(result, boundary('yy'), d.year.toString().slice(-2));
-            }
+	    format = format.replace('Y1', decade[0]);
+            format = format.replace('Y2', decade[1]);
 
+	    // iterate through the characters in the format
+	    for (i = 0; i < format.length; i++) {
+		    // extract the current character
+		    chr = format.charAt(i);
+		    if (escaping) {
+			    result += chr;
+			    escaping=false;
+			    continue;
+		    }
+		    if (html) {
+			    result += chr;
+			    if (chr==">") {
+				    html=false;
+			    }
+			    continue;
+		    }
+
+		    // see what character it is
+		    switch (chr) {
+				// escape char
+				case '\\': escaping=true; break;
+
+				// html char
+				case '<': result += chr; html=true; break;
+
+				// year as two digits
+				case 'y': result += d.year.toString().slice(-2); break;
+
+				// year as four digits
+				case 'Y': result += d.year; break;
+
+				// month number, prefixed with 0
+				case 'm': result += d.fullMonth; break; 
+
+				// month number, not prefixed with 0
+				case 'n': result += d.month + 1; break;
+
+				// month name, three letters
+				case 'M': result += locale.monthsShort[d.month]; break
+
+				// full month name
+				case 'F': result += this.loc.months[d.month]; break;
+
+				// day number, prefixed with 0
+				case 'd': result += d.fullDate; break;
+
+				// day number not prefixed with 0
+				case 'j': result += d.date; break;
+
+				// day name, three letters
+				case 'D': result += locale.daysShort[d.day]; break;
+
+				// full day name
+				case 'l': result += locale.days[d.day]; break;
+
+				// ISO-8601 numeric representation of the day of the week, 1 - 7
+				case 'N': result += d.day+1; break;
+
+				// day of the week, 0 - 6
+				case 'w': result += d.day; break;
+
+				// English ordinal suffix for the day of the month, 2 characters
+				// (st, nd, rd or th (works well with j))
+				case 'S':
+					if (d.date % 10 === 1 && d.date !== 11) result += 'st';
+					else if (d.date % 10 === 2 && d.date !== 12) result += 'nd';
+					else if (d.date % 10 === 3 && d.date !== 13) result += 'rd';
+					else result += 'th';
+					break;
+
+				// hour in 12 hours format, without leading zeros
+				case 'g': result += hours; break;
+
+				// hour in 12 hours format, with leading zeros
+				case 'h': result += fullHours; break;
+
+				// hour in 24 hours format, without leading zeros
+				case 'G': result += hours; break;
+
+				// hour in 24 hours format, with leading zeros
+				case 'H': result += d.fullHours; break;
+
+				// minutes, with leading zeros
+				case 'i': result += d.fullMinutes; break;
+
+				// seconds, with leading zeros
+				case 's': result += d.fullSeconds; break;
+
+				// am/pm, lowercase
+				case 'a': result += dayPeriod; break;
+
+				// am/pm, uppercase
+				case 'A': result += dayPeriod.toUpperCase(); break;
+
+				// this is probably the separator
+				default: result += chr;
+		    }
+	    }
             return result;
         },
-
-        _replacer: function (str, reg, data) {
-            return str.replace(reg, function (match, p1,p2,p3) {
-                return p1 + data + p3;
-            })
-        },
-
-        _getWordBoundaryRegExp: function (sign) {
-            var symbols = '\\s|\\.|-|/|\\\\|,|\\$|\\!|\\?|:|;';
-
-            return new RegExp('(^|>|' + symbols + ')(' + sign + ')($|<|' + symbols + ')', 'g');
-        },
-
 
         selectDate: function (date) {
             var _this = this,
@@ -464,19 +505,19 @@
                 len = selectedDates.length,
                 newDate = '';
 
-	    if ((typeof date === 'string' || date instanceof String) && date.indexOf(",") !== -1) {
-		date=date.split(",");
-	    }
+            if ((typeof date === 'string' || date instanceof String) && date.indexOf(",") !== -1) {
+                date=date.split(",");
+            }
 
             if (Array.isArray(date)) {
                 date.forEach(function (d) {
                     _this.selectDate(d)
                 });
                 return;
-	    }
+            }
 
-	    if (!(date instanceof Date)) {
-		if ((typeof date === 'string' || date instanceof String) && date !== '')
+            if (!(date instanceof Date)) {
+                if ((typeof date === 'string' || date instanceof String) && date !== '') 
                      date = new Date(date);
                 else
                      date = new Date();
@@ -1422,7 +1463,9 @@
             hours: date.getHours(),
             fullHours:  date.getHours() < 10 ? '0' + date.getHours() :  date.getHours() ,
             minutes: date.getMinutes(),
-            fullMinutes:  date.getMinutes() < 10 ? '0' + date.getMinutes() :  date.getMinutes()
+            fullMinutes:  date.getMinutes() < 10 ? '0' + date.getMinutes() :  date.getMinutes(),
+            seconds: date.getSeconds(),
+            fullSeconds:  date.getSeconds() < 10 ? '0' + date.getSeconds() :  date.getSeconds()
         }
     };
 
@@ -1496,21 +1539,22 @@
     $.fn.fdatepicker.Constructor = fDatepicker;
 
     $.fn.fdatepicker.language = {
-            en: {
-                    days: [ 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday' ],
-                    daysShort: [ 'Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat' ],
-                    daysMin: [ 'Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa' ],
-                    months: [ 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December' ],
-                    monthsShort: [ 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec' ],
-                    today: 'Today',
-                    clear: 'Clear',
-                    dateFormat: 'mm/dd/yyyy',
-                    timeFormat: 'hh:ii aa',
-                    firstDay: 0
-            }
+	    en: {
+		    days: [ 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday' ],
+		    daysShort: [ 'Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat' ],
+		    daysMin: [ 'Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa' ],
+		    months: [ 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December' ],
+		    monthsShort: [ 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec' ],
+		    today: 'Today',
+		    clear: 'Clear',
+		    dateFormat: 'm/d/Y',
+		    timeFormat: 'h:i a',
+		    firstDay: 0
+	    }
     };
 
     $(function () {
         $(autoInitSelector).fdatepicker();
     })
+
 }));

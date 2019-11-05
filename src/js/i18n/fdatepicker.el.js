@@ -17,8 +17,8 @@
 		monthsShort: ['Ιαν', 'Φεβ', 'Μαρ', 'Απρ', 'Μάι', 'Ιουν', 'Ιουλ', 'Αυγ', 'Σεπ', 'Οκτ', 'Νοέ', 'Δεκ'],
 		today: 'Σήμερα',
 		clear: 'Εκκαθάριση',
-		dateFormat: 'dd/mm/yyyy',
-		timeFormat: 'hh:ii aa',
+		dateFormat: 'd/m/Y',
+		timeFormat: 'h:i a',
 		firstDay: 0
 	};
 }));

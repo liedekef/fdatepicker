@@ -17,8 +17,8 @@
 		monthsShort: ['Jan', 'Feb', 'Mär', 'Apr', 'Mai', 'Jun', 'Jul', 'Aug', 'Sep', 'Okt', 'Nov', 'Dez'],
 		today: 'Heute',
 		clear: 'Aufräumen',
-		dateFormat: 'dd.mm.yyyy',
-		timeFormat: 'hh:ii',
+		dateFormat: 'd.m.Y',
+		timeFormat: 'G:i',
 		firstDay: 1
 	};
 }));
