@@ -45,8 +45,6 @@ $('#my-element').data('fdatepicker')
 
 ### Initialization with default options
 
-Example
-
 ```
 <input type='text' class='fdatepicker-here' data-language='en' />
 ```
@@ -54,7 +52,6 @@ Example
 ### Selecting multiple dates
 
 Pass parameter `{multipleDates: true}`for selection of multiple dates. If you want to limit the number of selected dates, pass the desired number `{multipleDates: 3}`.
-Example
 
 ```
 <input type="text"
@@ -68,15 +65,12 @@ Example
 ### Permanently visible calendar
 
 Initialize plugin on non text input element, such as `<div> ... </div>`,or pass the parameter `{inline: true}`.
-Example
 
 ```
 <div class="fdatepicker-here" data-language='en'></div>
 ```
 
 ### Month selection
-
-Example
 
 ```
 <input type="text"
@@ -90,7 +84,6 @@ Example
 ### Minimum and maximum dates
 
 To limit date selection, use `minDate`and `maxDate`, they must receive JavaScript Date object.
-Example
 
 ```
 $('#minMaxExample').fdatepicker({
@@ -104,7 +97,6 @@ $('#minMaxExample').fdatepicker({
 Use `{range: true}`for choosing range of dates. As dates separator `multipleDatesSeparator`will be used.
 
 For possibility to select same date two times, you should set `{toggleSelected: false}`.
-Example
 
 ```
 <input type="text"
@@ -118,7 +110,6 @@ Example
 ### Disable days of week
 
 For disabling days, use `onRenderCell`.
-Example
 
 ```
 // Make Sunday and Saturday disabled
@@ -143,7 +134,6 @@ $('#disabled-days').fdatepicker({
 
 Air Datepicker allows you to change contents of cells like you want. You could use `onRenderCell`for this purpose.
 Lets add extra elements to several dates, and show `lorem` text when selecting them.
-Example
 
 ```
 var eventDates = [1, 10, 12, 22],
@@ -182,7 +172,6 @@ $picker.data('fdatepicker').selectDate(new Date(currentDate.getFullYear(), curre
 ### Showing and hiding calendar
 
 For adding some actions while datepicker is showing or hiding, use `onShow`and `onHide`callbacks.
-Example
 
 ```
 $('#example-show-hide-callbacks').fdatepicker({
@@ -209,7 +198,6 @@ $('#example-show-hide-callbacks').fdatepicker({
 To enable timepicker use option `{timepicker: true}`- it will add current time and a couple of range sliders by which one can pick time.
 
 By default current user time will be set. This value can be changed by `startDate`parameter.
-Example
 
 ```
 <div class="fdatepicker-here" data-timepicker="true" data-language='en'></div>
@@ -231,8 +219,7 @@ As an example, lets use 24 hours mode in English language:
 
 For setting max/min hours or minutes values use `maxHours`, `minHours`, `maxMinutes`, `minMinutes`. You also could set time in `minDate`and `maxDate`. For setting hours you must use values between 0 and 23, event if 12 hours mode is on. Plugin will automatically transform given values to 12 hours format.
 
-Lets create calendar where user can choose time between 09:00 am and 06:00 pm on working days and on Saturday and Sunday between from 10:00 am to 04:00 pm.
-Example:
+Lets create a calendar where the user can choose the time between 09:00 am and 06:00 pm on working days and on Saturday and Sunday between 10:00 am and 04:00 pm.
 
 ```
 <input type='text' id='timepicker-actions-exmpl' />
