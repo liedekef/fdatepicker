@@ -314,7 +314,7 @@ $('.my-datepicker').fdatepicker({
 })
 ```
 
-If some fields are missing, they will be taken from default localization object ('Russian').
+If some fields are missing, they will be taken from default localization object ('English').
 
 ### Example of localization object
 
@@ -362,7 +362,7 @@ Defaults `"en"`
 Datepicker's language. If string is passed, then language will be searched in `Datepicker.language`object.
 If object is passed, then data will be taken from this object directly.
 
-If some fields are missing, they will be taken from default localization object ('Russian').
+If some fields are missing, they will be taken from default localization object ('English').
 
 ### startDate
 
