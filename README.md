@@ -6,9 +6,6 @@ Lightweight customizable cross-browser jQuery datepicker, built with es5 and css
 
 ![fdatepicker image](https://github.com/liedekef/fdatepicker/raw/master/docs/img/promo-img-time.png)
 
-Light (<i> **~36kb**minified js file and **~9kb**gziped</i>) customizable cross-browser calendar, built with `es5`and `css flexbox`.Works in all modern browsers:
-**IE 10+**, **Chrome**, **Firefox**, **Safari 8+**, **Opera 17+**.
-
 ## Installation
 
 Use one the releases on github or download files directly from [GitHub](https://github.com/liedekef/fdatepicker/tree/master/dist)
