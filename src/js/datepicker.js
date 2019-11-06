@@ -27,7 +27,7 @@
             weekends: [6, 0],
             dateFormat: '',
             altField: '',
-            altFieldDateFormat: '@',
+            altFieldDateFormat: 'u',
             toggleSelected: true,
             keyboardNav: true,
 
