@@ -8,7 +8,7 @@ Lightweight customizable cross-browser jQuery datepicker, built with es5 and css
 
 ## Installation
 
-Use one the releases on github or download files directly from [GitHub](https://github.com/liedekef/fdatepicker/tree/master/dist)
+Use one of the releases on github or download the files [directly](https://github.com/liedekef/fdatepicker/tree/master/dist)
 
 ## Usage
 
@@ -36,9 +36,9 @@ Datepicker will automatically initialize on elements with class `.fdatepicker-he
 
 ```
 // Initialization
-$('#my-element').fdatepicker([options])
+$('#my-element').fdatepicker([options]);
 // Access instance of plugin
-$('#my-element').data('fdatepicker')
+$('#my-element').data('fdatepicker');
 ```
 
 ## Examples
@@ -89,7 +89,7 @@ To limit date selection, use `minDate`and `maxDate`, they must receive JavaScrip
 $('#minMaxExample').fdatepicker({
     language: 'en',
     minDate: new Date() // Now can select only dates, which goes after today
-})
+});
 ```
 
 ### Range of dates
@@ -127,7 +127,7 @@ $('#disabled-days').fdatepicker({
             }
         }
     }
-})
+});
 ```
 
 ### Custom cells content
@@ -162,7 +162,7 @@ $picker.fdatepicker({
         $('strong', $content).html(title)
         $('p', $content).html(content)
     }
-})
+});
 
 // Select initial date from `eventDates`
 var currentDate = currentDate = new Date();
@@ -190,7 +190,7 @@ $('#example-show-hide-callbacks').fdatepicker({
             log('finished hiding')
         }
     }
-})
+});
 ```
 
 ## Timepicker
@@ -269,7 +269,7 @@ Lets create a calendar where the user can choose the time between 09:00 am and 0
                 })
             }
         }
-    })
+    });
 </script>
 ```
 
@@ -284,7 +284,7 @@ $.fn.fdatepicker.language['my-lang'] = {...}
 // Initialize datepicker with it
 $('.my-datepicker').fdatepicker({
     language: 'my-lang'
-})
+});
 ```
 
 You can also pass localization object directly in `language`
@@ -295,7 +295,7 @@ $('.my-datepicker').fdatepicker({
         days: [...]
         ...
     }
-})
+});
 ```
 
 If some fields are missing, they will be taken from default localization object ('English').
