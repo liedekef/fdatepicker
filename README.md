@@ -222,13 +222,12 @@ Example
 
 ### Time format
 
-Time format is defined in localization object or in `timeFormat`parameter. By default (in Russian language) 24 hours format is used. For enabling 12 hours mode you must add `a`or `A` symbol in `timeFormat`. After what 'AM' and 'PM' sings will appear in timepicker widget.
+Time format is defined in localization object or in `timeFormat`parameter. By default (in English language) 12 hours format is used. For enabling 12 hours mode you must add `a`or `A` symbol in `timeFormat`. After what 'AM' and 'PM' sings will appear in timepicker widget.
 
-Lets use 12 hours mode in Russian language:
-Example
+As an example, lets use 24 hours mode in English language:
 
 ```
-<div class="fdatepicker-here" data-timepicker="true" data-time-format='H:i A'></div>
+<div class="fdatepicker-here" data-timepicker="true" data-time-format='G:i'></div>
 ```
 
 ### Actions with time
@@ -236,7 +235,7 @@ Example
 For setting max/min hours or minutes values use `maxHours`, `minHours`, `maxMinutes`, `minMinutes`. You also could set time in `minDate`and `maxDate`. For setting hours you must use values between 0 and 23, event if 12 hours mode is on. Plugin will automatically transform given values to 12 hours format.
 
 Lets create calendar where user can choose time between 09:00 am and 06:00 pm on working days and on Saturday and Sunday between from 10:00 am to 04:00 pm.
-Example
+Example:
 
 ```
 <input type='text' id='timepicker-actions-exmpl' />
@@ -307,7 +306,7 @@ $('.my-datepicker').fdatepicker({
 You can also pass localization object directly in `language`
 
 ```
-$('.my-datepicker').datepicker({
+$('.my-datepicker').fdatepicker({
     language: {
         days: [...]
         ...
@@ -433,14 +432,14 @@ If true, then one can navigate through calendar by keyboard.
 
 Hot keys:
 
-* **Ctrl + → | ↑**- move one month forwards
-* **Ctrl + ← | ↓**- move one month backwards
-* **Shift + → | ↑**- move one year forwards
-* **Shift + ← | ↓**- move one year backwards
-* **Alt + → | ↑**- move 10 years forwards
-* **Alt + ← | ↓**- move 10 years backwards
-* **Ctrl + Shift + ↑**- move to next view
-* **Esc**- hides datepicker
+* **Ctrl + → | ↑** move one month forwards
+* **Ctrl + ← | ↓** move one month backwards
+* **Shift + → | ↑** move one year forwards
+* **Shift + ← | ↓** move one year backwards
+* **Alt + → | ↑** move 10 years forwards
+* **Alt + ← | ↓** move 10 years backwards
+* **Ctrl + Shift + ↑** move to next view
+* **Esc** hides datepicker
 
 ### position
 
@@ -467,9 +466,9 @@ Defaults `"days"`
 
 Start datepicker view. Possible values are:
 
-* `days`- display days of one month
-* `months`- display months of one year
-* `years`- display years of one decade
+* `days` display days of one month
+* `months` display months of one year
+* `years` display years of one decade
 
 ### minView
 
