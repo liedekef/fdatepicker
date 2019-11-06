@@ -20,28 +20,28 @@ Include styles and scripts from `/dist` directory:
 ```
 <html>
     <head>
-        <link href="dist/css/datepicker.min.css" rel="stylesheet" type="text/css">
-        <script src="dist/js/datepicker.min.js"></script>
+        <link href="dist/css/fdatepicker.min.css" rel="stylesheet" type="text/css">
+        <script src="dist/js/fdatepicker.min.js"></script>
 
         <!-- Include English language -->
-        <script src="dist/js/i18n/datepicker.en.js"></script>
+        <script src="dist/js/i18n/fdatepicker.en.js"></script>
     </head>
 </html>
 ```
 
-Datepicker will automatically initialize on elements with class `.datepicker-here`, options may be sent via `data`attributes.
+Datepicker will automatically initialize on elements with class `.fdatepicker-here`, options may be sent via `data` attributes.
 
 ```
-<input type='text' class="datepicker-here" data-position="right top" />
+<input type='text' class="fdatepicker-here" data-position="right top" />
 ```
 
 ### Manual initialization
 
 ```
 // Initialization
-$('#my-element').datepicker([options])
+$('#my-element').fdatepicker([options])
 // Access instance of plugin
-$('#my-element').data('datepicker')
+$('#my-element').data('fdatepicker')
 ```
 
 ## Examples
@@ -51,7 +51,7 @@ $('#my-element').data('datepicker')
 Example
 
 ```
-<input type='text' class='datepicker-here' data-language='en' />
+<input type='text' class='fdatepicker-here' data-language='en' />
 ```
 
 ### Selecting multiple dates
@@ -61,7 +61,7 @@ Example
 
 ```
 <input type="text"
-       class="datepicker-here"
+       class="fdatepicker-here"
        data-language='en'
        data-multiple-dates="3"
        data-multiple-dates-separator=", "
@@ -74,7 +74,7 @@ Initialize plugin on non text input element, such as `<div> &#x2026;  </div>`,or
 Example
 
 ```
-<div class="datepicker-here" data-language='en'></div>
+<div class="fdatepicker-here" data-language='en'></div>
 ```
 
 ### Month selection
@@ -83,11 +83,11 @@ Example
 
 ```
 <input type="text"
-       class="datepicker-here"
+       class="fdatepicker-here"
        data-language='en'
        data-min-view="months"
        data-view="months"
-       data-date-format="MM yyyy" />
+       data-date-format="M Y" />
 ```
 
 ### Minimum and maximum dates
@@ -96,7 +96,7 @@ To limit date selection, use `minDate`and `maxDate`, they must receive JavaScrip
 Example
 
 ```
-$('#minMaxExample').datepicker({
+$('#minMaxExample').fdatepicker({
     language: 'en',
     minDate: new Date() // Now can select only dates, which goes after today
 })
@@ -114,7 +114,7 @@ Example
     data-range="true"
     data-multiple-dates-separator=" - "
     data-language="en"
-    class="datepicker-here"/>
+    class="fdatepicker-here"/>
 
 ```
 
@@ -127,7 +127,7 @@ Example
 // Make Sunday and Saturday disabled
 var disabledDays = [0, 6];
 
-$('#disabled-days').datepicker({
+$('#disabled-days').fdatepicker({
     language: 'en',
     onRenderCell: function (date, cellType) {
         if (cellType == 'day') {
@@ -154,7 +154,7 @@ var eventDates = [1, 10, 12, 22],
     $content = $('#custom-cells-events'),
     sentences = [ &#x2026; ];
 
-$picker.datepicker({
+$picker.fdatepicker({
     language: 'en',
     onRenderCell: function (date, cellType) {
         var currentDate = date.getDate();
@@ -179,7 +179,7 @@ $picker.datepicker({
 
 // Select initial date from `eventDates`
 var currentDate = currentDate = new Date();
-$picker.data('datepicker').selectDate(new Date(currentDate.getFullYear(), currentDate.getMonth(), 10))
+$picker.data('fdatepicker').selectDate(new Date(currentDate.getFullYear(), currentDate.getMonth(), 10))
 ```
 
 ### Showing and hiding calendar
@@ -188,7 +188,7 @@ For adding some actions while datepicker is showing or hiding, use `onShow`and `
 Example
 
 ```
-$('#example-show-hide-callbacks').datepicker({
+$('#example-show-hide-callbacks').fdatepicker({
     language: 'en',
     onShow: function(dp, animationCompleted){
         if (!animationCompleted) {
@@ -215,7 +215,7 @@ By default current user time will be set. This value can be changed by `startDat
 Example
 
 ```
-<div class="datepicker-here" data-timepicker="true" data-language='en'></div>
+<div class="fdatepicker-here" data-timepicker="true" data-language='en'></div>
 ```
 
 <i>More detailed info about timepicker parameters you can find in [Options](#opts-timepicker).</i>
@@ -228,7 +228,7 @@ Lets use 12 hours mode in Russian language:
 Example
 
 ```
-<div class="datepicker-here" data-timepicker="true" data-time-format='H:i A'></div>
+<div class="fdatepicker-here" data-timepicker="true" data-time-format='H:i A'></div>
 ```
 
 ### Actions with time
@@ -256,7 +256,7 @@ Example
         startHours = 10
     }
 
-    $('#timepicker-actions-exmpl').datepicker({
+    $('#timepicker-actions-exmpl').fdatepicker({
         timepicker: true,
         language: 'en',
         startDate: start,
@@ -296,10 +296,10 @@ You can add your localization to object `$.fn.datepicker.language["my-lang"]`and
 
 ```
 // Add custom localization
-$.fn.datepicker.language['my-lang'] = {...}
+$.fn.fdatepicker.language['my-lang'] = {...}
 
 // Initialize datepicker with it
-$('.my-datepicker').datepicker({
+$('.my-datepicker').fdatepicker({
     language: 'my-lang'
 })
 ```
@@ -320,7 +320,7 @@ If some fields are missing, they will be taken from default localization object 
 ### Example of localization object
 
 ```
-$.fn.datepicker.language['en'] = {
+$.fn.fdatepicker.language['en'] = {
     days: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
     daysShort: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
     daysMin: ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'],
@@ -358,7 +358,7 @@ If true, then datepicker will be always visible.
 
 Type `string|object`
 
-Defaults `"ru"`
+Defaults `"en"`
 
 Datepicker's language. If string is passed, then language will be searched in `Datepicker.language`object.
 If object is passed, then data will be taken from this object directly.
@@ -586,7 +586,7 @@ If true, then button "Today" will be visible. If Date is passed then click event
 
 ```
 // Select today
-$('.datepicker').datepicker({
+$('.fdatepicker').fdatepicker({
     todayButton: new Date()
 })
 ```
@@ -639,18 +639,18 @@ Defaults
 
 ```
 navTitles = {
-      days: 'MM, <i>yyyy</i>',
-      months: 'yyyy',
-      years: 'yyyy1 - yyyy2'
+      days: 'M, <i>Y</i>',
+      months: 'Y',
+      years: 'Y1 - Y2'
   };
 ```
 
-Content of datepicker's title depending on current view, can use same notation as in parameter `dateFormat`. Missing fields will be taken from default values. Html tags are also possible.
+Content of datepicker's title depending on current view, can use same notation as in parameter `dateFormat`. Missing fields will be taken from default values. Html tags are also possible. The notation `Y1 - Y2` will show a decade selection (eg. `2010-2019`).
 
 ```
-$('#my-datepicker').datepicker({
+$('#my-datepicker').fdatepicker({
        navTitles: {
-           days: '<h3>Check in date:</h3> MM, yyyy'
+           days: '<h3>Check in date:</h3> M, Y'
        }
    })
 ```
@@ -745,9 +745,9 @@ Defaults `null`
 
 Callback when selecting date
 
-* **formattedDate**<i>string</i>- formatted date.
-* **date**<i>Date|array</i>- JavaScript Date objectif `{multipleDates: true}`, then it will be an array of js dates.
-* **inst**<i>object</i>- plugin instance.
+* **formattedDate** <i>string</i> - formatted date.
+* **date** <i>Date|array</i> - JavaScript Date objectif `{multipleDates: true}`, then it will be an array of js dates.
+* **inst** <i>object</i> - plugin instance.
 
 ### onShow(inst, animationCompleted)
 
@@ -757,8 +757,8 @@ Defaults `null`
 
 Callback when calendar is showing.
 
-* **inst**<i>Object</i>- plugin instance.
-* **animationCompleted**<i>boolean</i>- animation indicator.if its `false`, when animation has just begun, if `true`- already ended.
+* **inst** <i>Object</i> - plugin instance.
+* **animationCompleted** <i>boolean</i> - animation indicator. If its `false`, when animation has just begun, if `true`- already ended.
 
 ### onHide(inst, animationCompleted)
 
@@ -768,8 +768,8 @@ Defaults `null`
 
 Callback when calendar is hiding.
 
-* **inst**<i>Object</i>- plugin instance.
-* **animationCompleted**<i>boolean</i>- animation indicator.if its `false`, when animation has just begun, if `true`- already ended.
+* **inst** <i>Object</i> - plugin instance.
+* **animationCompleted** <i>boolean</i> - animation indicator. If its `false`, when animation has just begun, if `true`- already ended.
 
 ### onChangeMonth(month, year)
 
@@ -779,8 +779,8 @@ Defaults `null`
 
 Callback when months are changed.
 
-* **month**<i>number</i>- month number (from 0 to 12), to which transition is done.
-* **year**<i>number</i>- year, to which transition is done.
+* **month** <i>number</i> - month number (from 0 to 12), to which transition is done.
+* **year** <i>number</i> - year, to which transition is done.
 
 ### onChangeYear(year)
 
@@ -790,7 +790,7 @@ Defaults `null`
 
 Callback when year is changed
 
-* **year**<i>number</i>- year, to which transition is done.
+* **year** <i>number</i> - year, to which transition is done.
 
 ### onChangeDecade(decade)
 
@@ -800,7 +800,7 @@ Defaults `null`
 
 Callback when decade is changed
 
-* **decade**<i>array</i>- array which consists of two years: first year in decade and last year in decade.
+* **decade** <i>array</i> - array which consists of two years: first year in decade and last year in decade.
 
 ### onChangeView(view)
 
@@ -810,7 +810,7 @@ Defaults `null`
 
 Callback when datepicker's view is changed
 
-* **view**<i>string</i>- view name, to which transition is done (days, months, years).
+* **view** <i>string</i> - view name, to which transition is done (days, months, years).
 
 ### onRenderCell(date, cellType)
 
@@ -820,8 +820,8 @@ Defaults `null`
 
 Callback when datepicker's cell is rendered.
 
-* **date**<i>Date</i>- current cell date
-* **cellType**<i>string</i>- current cell type (day, month, year).
+* **date** <i>Date</i> - current cell date
+* **cellType** <i>string</i> - current cell type (day, month, year).
 
 The callback must return object which may consists of three fields:
 
@@ -836,7 +836,7 @@ The callback must return object which may consists of three fields:
 #### Example
 
 ```
-$('#my-datepicker').datepicker({
+$('#my-datepicker').fdatepicker({
     // Let's make a function which will add class 'my-class' to every 11 of the month
     // and make these cells disabled.
     onRenderCell: function(date, cellType) {
@@ -855,7 +855,7 @@ $('#my-datepicker').datepicker({
 Plugin instance is accessible through `data`attribute.
 
 ```
-var myDatepicker = $('#my-elem').datepicker().data('datepicker');
+var myDatepicker = $('#my-elem').fdatepicker().data('fdatepicker');
 myDatepicker.show();
 ```
 
@@ -881,13 +881,13 @@ Renders previous month, year or decade, depending on current view.
 
 ### selectDate(date)
 
-* **date**<i>Date|Array</i>- JavaScript `Date()`, or array of dates.
+* **date** <i>Date|Array|CSV</i> - JavaScript `Date()`, or array of dates, or CSV list of dates (easier than arrays).
 
 Activates passed date or multiple dates if array is passed. If `{multipleDates: false}`and date is already active, then it will be deactivated. If `{multipleDates: true}`then another active date will be added.
 
 ### removeDate(date)
 
-* **date**<i>Date</i>- JavaScript `Date()`
+* **date** <i>Date</i> - JavaScript `Date()`
 
 Removes selection from passed date.
 
@@ -897,18 +897,18 @@ Clears all selected dates.
 
 ### update(field[, value])
 
-* **field**<i>string|object</i>- field name which must be updated.
-* **field**<i>string|*</i>- new value.
+* **field** <i>string|object</i> - field name which must be updated.
+* **field** <i>string|*</i> - new value.
 
 This method updates datepicker's options. After calling this method, datepicker will be redrawn.
 You can update several parameters at one time, just pass in object with necessary fields.
 
 ```
-var datepicker = $('#my-elem').datepicker().data('datepicker');
+var mydatepicker = $('#my-elem').fdatepicker().data('fdatepicker');
 // Single parameter update
-datepicker.update('minDate', new Date())
+mydatepicker.update('minDate', new Date())
 // Multiple parameters
-datepicker.update({
+mydatepicker.update({
     position: "top right",
     maxDate: new Date(),
     todayButton: true
@@ -920,7 +920,7 @@ datepicker.update({
 Sets new view for datepicker.
 
 ```
-datepicker.view = 'months';
+fdatepicker.view = 'months';
 ```
 
 ### date
@@ -928,7 +928,7 @@ datepicker.view = 'months';
 Sets new viewing date for datepicker, must pass a JavaScript Date object `Date()`
 
 ```
-datepicker.date = new Date();
+fdatepicker.date = new Date();
 ```
 
 ### $el
