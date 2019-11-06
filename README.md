@@ -6,9 +6,6 @@ Lightweight customizable cross-browser jQuery datepicker, built with es5 and css
 
 ![fdatepicker image](https://github.com/t1m0n/air-datepicker/raw/master/docs/img/promo-img-time.png)
 
-[Star](https://github.com/t1m0n/air-datepicker)
-
-
 Light (<i> **~36kb**minified js file and **~9kb**gziped</i>) customizable cross-browser calendar, built with `es5`and `css flexbox`.Works in all modern browsers:
 **IE 10+**, **Chrome**, **Firefox**, **Safari 8+**, **Opera 17+**.
 
@@ -225,13 +222,13 @@ Example
 
 ### Time format
 
-Time format is defined in localization object or in `timeFormat`parameter. By default (in Russian language) 24 hours format is used. For enabling 12 hours mode you must add `aa`or `AA`symbol in `timeFormat`. After what 'AM' and 'PM' sings will appear in timepicker widget.
+Time format is defined in localization object or in `timeFormat`parameter. By default (in Russian language) 24 hours format is used. For enabling 12 hours mode you must add `a`or `A` symbol in `timeFormat`. After what 'AM' and 'PM' sings will appear in timepicker widget.
 
 Lets use 12 hours mode in Russian language:
 Example
 
 ```
-<div class="datepicker-here" data-timepicker="true" data-time-format='hh:ii aa'></div>
+<div class="datepicker-here" data-timepicker="true" data-time-format='H:i A'></div>
 ```
 
 ### Actions with time
@@ -331,13 +328,13 @@ $.fn.datepicker.language['en'] = {
     monthsShort: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
     today: 'Today',
     clear: 'Clear',
-    dateFormat: 'mm/dd/yyyy',
-    timeFormat: 'hh:ii aa'
+    dateFormat: 'm/d/Y',
+    timeFormat: 'H:i A'
     firstDay: 0
 };
 ```
 
-Available localizations located in `dist/js/i18n`directory.
+Available localizations located in `dist/js/i18n` directory.
 
 ## Options
 
@@ -400,21 +397,7 @@ Type `string`
 
 Defaults `""`
 
-Desirable date format. It's combination of d, m, yyyy, D, M, etc. By default value is taken from current localization, but if it passed here, then it will have higher priority.
-
-* **@**- time in milliseconds
-* **d**- date number
-* **dd**- date with leading zero
-* **D**- short day name
-* **DD**- full day name
-* **m**- month number
-* **mm**- month number with leading zero
-* **M**- short month name
-* **MM**- full month name
-* **yy**- two digit year number
-* **yyyy**- four digit year number
-* **yyyy1**- first year of decade, which included current year
-* **yyyy2**- last year of decade, which included current year
+Desirable date format. Use [php date format](https://www.php.net/manual/en/function.date.php) notation.
 
 ### altField
 
@@ -422,7 +405,7 @@ Type `string|jQuery`
 
 Defaults `""`
 
-Alternative text input. Use `altFieldDateFormat`for date formatting.
+Alternative text input. Use `altFieldDateFormat` for date formatting.
 
 ### altFieldDateFormat
 
@@ -702,15 +685,7 @@ Type `string`
 
 Defaults `null`
 
-Desirable time format. Taken from localization by default. If value passed here, then it will be used instead.
-For using 12 hours mode, add "aa" or "AA" to your `timeFormat`parameter, e.g. `{timeFormat: "hh:ii AA"}`Possible values are:
-
-* **h**- hours
-* **hh**- hours with leading zero
-* **i**- minutes
-* **ii**- minutes with leading zero
-* **aa**- day period - 'am' or 'pm'
-* **AA**- day period capitalized
+Desirable time format. Use [php date format](https://www.php.net/manual/en/function.date.php) notation.
 
 ### minHours
 
