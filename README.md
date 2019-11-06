@@ -1,111 +1,965 @@
 # fDatepicker
 
+## Description
+
 Lightweight customizable cross-browser jQuery datepicker, built with es5 and css-flexbox. Works in all modern desktop and mobile browsers (tested on Android 4.4+ and iOS8+).
 
 ![fdatepicker image](https://github.com/t1m0n/air-datepicker/raw/master/docs/img/promo-img-time.png)
 
-## Install
+[Star](https://github.com/t1m0n/air-datepicker)
 
-### bower
-```
-bower i --save fdatepicker
-```
-### npm
-```
-npm i --save fdatepicker
-```
+
+Light (<i> **~36kb**minified js file and **~9kb**gziped</i>) customizable cross-browser calendar, built with `es5`and `css flexbox`.Works in all modern browsers:
+**IE 10+**, **Chrome**, **Firefox**, **Safari 8+**, **Opera 17+**.
+
+## Installation
+
+Use one the releases on github or download files directly from [GitHub](https://github.com/liedekef/fdatepicker/tree/master/dist)
 
 ## Usage
-```javascript
-$('.my-datepicker').fdatepicker([options])
+
+Include styles and scripts from `/dist` directory:
+
+```
+<html>
+    <head>
+        <link href="dist/css/datepicker.min.css" rel="stylesheet" type="text/css">
+        <script src="dist/js/datepicker.min.js"></script>
+
+        <!-- Include English language -->
+        <script src="dist/js/i18n/datepicker.en.js"></script>
+    </head>
+</html>
 ```
 
-## Demo and docs
-* [In English](http://t1m0n.name/air-datepicker/docs/)
+Datepicker will automatically initialize on elements with class `.datepicker-here`, options may be sent via `data`attributes.
 
-## Change log
+```
+<input type='text' class="datepicker-here" data-position="right top" />
+```
 
-### v2.2.3
-* fixed min,max dates in decade mode
+### Manual initialization
 
-### v2.2.2
-* fixed min,max dates handling
+```
+// Initialization
+$('#my-element').datepicker([options])
+// Access instance of plugin
+$('#my-element').data('datepicker')
+```
 
-### v2.2.1
-* changed RegExp for recognizing date parts
-* changed jquery version dependency
+## Examples
 
-### v2.2.0
-* added `onlyTimepicker` option
-* added `onShow` and `onHide` callbacks
-* added `VERSION` field to plugin's prototype
-* now for selecting same date in `range` mode, you should set `{toggleSelected: false}`
-* fixed `dateFormat` method (fixed wrong month name in Hungarian language)
-* fixed second call of `onRenderCallback`
-* fixed `_getCell()` throwing exception
-* new language:
-    - `sk` thanks to [RobiNN1](https://github.com/RobiNN1)
+### Initialization with default options
 
+Example
 
-### v2.1.0
-* added possibility to select single date when `{range: true}`
-* added support of 12 hours mode in `altFieldDateFormat`
-* improved work with minDate and maxDate when `{timepicker: true}`
-* fixed wrong class adding when `{range: true}`
-* new languages:
-    - `es` thanks to [MarioAraque](https://github.com/MarioAraque)
-    - `cs` thanks to [liborm85](https://github.com/liborm85)
-    - `hu` thanks to [gergo85](https://github.com/gergo85)
-    - `fi` thanks to [joonaskaskisolaphz](https://github.com/joonaskaskisolaphz)
-    - `pl` thanks to [xiio](https://github.com/xiio)
-    - `fr` thanks to [nicooprat](https://github.com/nicooprat)
+```
+<input type='text' class='datepicker-here' data-language='en' />
+```
 
-### v2.0.2
-* fixed dates array in `onSelect` callback
+### Selecting multiple dates
 
-### v2.0.1
-* fixed version for npm
+Pass parameter `{multipleDates: true}`for selection of multiple dates. If you want to limit the number of selected dates, pass the desired number `{multipleDates: 3}`.
+Example
 
-### v2.0.0
-* added timepicker (see [docs](http://t1m0n.name/air-datepicker/docs#timepicker) for more info)
-* added possibility to set `Date` in `todayButton` 
-* global variable `Datepicker` has been removed, now all placed in `$.fn.datepicker`
-* improved `selectDate` method, now one can pass an array of dates to select
-* added `npm` package
-* fixed issue caused by `placeholder` on `readonly` inputs in IE
-* fixed issue when `range` is true and first selected date is bigger than second
-* added new languages:
-    - `da`  thanks to [bjarnef](https://github.com/bjarnef)
-    - `nl`  thanks to [JaZo](https://github.com/JaZo)
-    - `pt`  thanks to [cmpscabral](https://github.com/cmpscabral)
-    - `pt-BR`  thanks to [dowglaz](https://github.com/dowglaz)
-    - `ro`  thanks to [tourniquet](https://github.com/tourniquet)
+```
+<input type="text"
+       class="datepicker-here"
+       data-language='en'
+       data-multiple-dates="3"
+       data-multiple-dates-separator=", "
+       data-position='top left'/>
+```
 
-### v1.2.4
-* fixed '$ is not defined' problem. 
+### Permanently visible calendar
 
-### v1.2.3
-* fixed `dateFormat` method.
-* fixed typo in Russian docs, add ids in docs headers.
+Initialize plugin on non text input element, such as `<div> &#x2026;  </div>`,or pass the parameter `{inline: true}`.
+Example
 
-### v1.2.2
-* fixed typo in `monthsField`
-* added German language (thanks to [Ichag](https://github.com/Ichag))
+```
+<div class="datepicker-here" data-language='en'></div>
+```
 
-### v1.2.1
-* tests added
-* added Chinese language (thanks to [think2011](https://github.com/think2011))
-* fixed if '0' is passed to `firstDay`
-* fixed `showOtherYears` option
-* fixed `onSelect` event, when `range` is true
-* fixed case when `range` and `multipleDates` both set to true
+### Month selection
 
-### v1.2.0
-* add `range` feature
-* improve keyboard navigation (fixed two focused cells)
+Example
 
-### v1.1.0
-* add keyboard navigation
-* add `classes` option to add custom classes
-* add `altField` option
-* bug fixes
+```
+<input type="text"
+       class="datepicker-here"
+       data-language='en'
+       data-min-view="months"
+       data-view="months"
+       data-date-format="MM yyyy" />
+```
+
+### Minimum and maximum dates
+
+To limit date selection, use `minDate`and `maxDate`, they must receive JavaScript Date object.
+Example
+
+```
+$('#minMaxExample').datepicker({
+    language: 'en',
+    minDate: new Date() // Now can select only dates, which goes after today
+})
+```
+
+### Range of dates
+
+Use `{range: true}`for choosing range of dates. As dates separator `multipleDatesSeparator`will be used.
+
+For possibility to select same date two times, you should set `{toggleSelected: false}`.
+Example
+
+```
+<input type="text"
+    data-range="true"
+    data-multiple-dates-separator=" - "
+    data-language="en"
+    class="datepicker-here"/>
+
+```
+
+### Disable days of week
+
+For disabling days, use `onRenderCell`.
+Example
+
+```
+// Make Sunday and Saturday disabled
+var disabledDays = [0, 6];
+
+$('#disabled-days').datepicker({
+    language: 'en',
+    onRenderCell: function (date, cellType) {
+        if (cellType == 'day') {
+            var day = date.getDay(),
+                isDisabled = disabledDays.indexOf(day) != -1;
+
+            return {
+                disabled: isDisabled
+            }
+        }
+    }
+})
+```
+
+### Custom cells content
+
+Air Datepicker allows you to change contents of cells like you want. You could use `onRenderCell`for this purpose.
+Lets add extra elements to several dates, and show `lorem` text when selecting them.
+Example
+
+```
+var eventDates = [1, 10, 12, 22],
+    $picker = $('#custom-cells'),
+    $content = $('#custom-cells-events'),
+    sentences = [ &#x2026; ];
+
+$picker.datepicker({
+    language: 'en',
+    onRenderCell: function (date, cellType) {
+        var currentDate = date.getDate();
+        // Add extra element, if `eventDates` contains `currentDate`
+        if (cellType == 'day' && eventDates.indexOf(currentDate) != -1) {
+            return {
+                html: currentDate + '<span class="dp-note"></span>'
+            }
+        }
+    },
+    onSelect: function onSelect(fd, date) {
+        var title = '', content = ''
+        // If date with event is selected, show it
+        if (date && eventDates.indexOf(date.getDate()) != -1) {
+            title = fd;
+            content = sentences[Math.floor(Math.random() * eventDates.length)];
+        }
+        $('strong', $content).html(title)
+        $('p', $content).html(content)
+    }
+})
+
+// Select initial date from `eventDates`
+var currentDate = currentDate = new Date();
+$picker.data('datepicker').selectDate(new Date(currentDate.getFullYear(), currentDate.getMonth(), 10))
+```
+
+### Showing and hiding calendar
+
+For adding some actions while datepicker is showing or hiding, use `onShow`and `onHide`callbacks.
+Example
+
+```
+$('#example-show-hide-callbacks').datepicker({
+    language: 'en',
+    onShow: function(dp, animationCompleted){
+        if (!animationCompleted) {
+            log('start showing')
+        } else {
+            log('finished showing')
+        }
+    },
+    onHide: function(dp, animationCompleted){
+        if (!animationCompleted) {
+            log('start hiding')
+        } else {
+            log('finished hiding')
+        }
+    }
+})
+```
+
+## Timepicker
+
+To enable timepicker use option `{timepicker: true}`- it will add current time and a couple of range sliders by which one can pick time.
+
+By default current user time will be set. This value can be changed by `startDate`parameter.
+Example
+
+```
+<div class="datepicker-here" data-timepicker="true" data-language='en'></div>
+```
+
+<i>More detailed info about timepicker parameters you can find in [Options](#opts-timepicker).</i>
+
+### Time format
+
+Time format is defined in localization object or in `timeFormat`parameter. By default (in Russian language) 24 hours format is used. For enabling 12 hours mode you must add `aa`or `AA`symbol in `timeFormat`. After what 'AM' and 'PM' sings will appear in timepicker widget.
+
+Lets use 12 hours mode in Russian language:
+Example
+
+```
+<div class="datepicker-here" data-timepicker="true" data-time-format='hh:ii aa'></div>
+```
+
+### Actions with time
+
+For setting max/min hours or minutes values use `maxHours`, `minHours`, `maxMinutes`, `minMinutes`. You also could set time in `minDate`and `maxDate`. For setting hours you must use values between 0 and 23, event if 12 hours mode is on. Plugin will automatically transform given values to 12 hours format.
+
+Lets create calendar where user can choose time between 09:00 am and 06:00 pm on working days and on Saturday and Sunday between from 10:00 am to 04:00 pm.
+Example
+
+```
+<input type='text' id='timepicker-actions-exmpl' />
+<script>
+    // Create start date
+    var start = new Date(),
+        prevDay,
+        startHours = 9;
+
+    // 09:00 AM
+    start.setHours(9);
+    start.setMinutes(0);
+
+    // If today is Saturday or Sunday set 10:00 AM
+    if ([6, 0].indexOf(start.getDay()) != -1) {
+        start.setHours(10);
+        startHours = 10
+    }
+
+    $('#timepicker-actions-exmpl').datepicker({
+        timepicker: true,
+        language: 'en',
+        startDate: start,
+        minHours: startHours,
+        maxHours: 18,
+        onSelect: function (fd, d, picker) {
+            // Do nothing if selection was cleared
+            if (!d) return;
+
+            var day = d.getDay();
+
+            // Trigger only if date is changed
+            if (prevDay != undefined && prevDay == day) return;
+            prevDay = day;
+
+            // If chosen day is Saturday or Sunday when set
+            // hour value for weekends, else restore defaults
+            if (day == 6 || day == 0) {
+                picker.update({
+                    minHours: 10,
+                    maxHours: 16
+                })
+            } else {
+                picker.update({
+                    minHours: 9,
+                    maxHours: 18
+                })
+            }
+        }
+    })
+</script>
+```
+
+## Localization
+
+You can add your localization to object `$.fn.datepicker.language["my-lang"]`and pass it name to parameter `language`
+
+```
+// Add custom localization
+$.fn.datepicker.language['my-lang'] = {...}
+
+// Initialize datepicker with it
+$('.my-datepicker').datepicker({
+    language: 'my-lang'
+})
+```
+
+You can also pass localization object directly in `language`
+
+```
+$('.my-datepicker').datepicker({
+    language: {
+        days: [...]
+        ...
+    }
+})
+```
+
+If some fields are missing, they will be taken from default localization object ('Russian').
+
+### Example of localization object
+
+```
+$.fn.datepicker.language['en'] = {
+    days: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
+    daysShort: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
+    daysMin: ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'],
+    months: ['January','February','March','April','May','June', 'July','August','September','October','November','December'],
+    monthsShort: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+    today: 'Today',
+    clear: 'Clear',
+    dateFormat: 'mm/dd/yyyy',
+    timeFormat: 'hh:ii aa'
+    firstDay: 0
+};
+```
+
+Available localizations located in `dist/js/i18n`directory.
+
+## Options
+
+### classes
+
+Type `string`
+
+Defaults `""`
+
+Extra css classes for datepicker.
+
+### inline
+
+Type `boolean`
+
+Defaults `false`
+
+If true, then datepicker will be always visible.
+
+### language
+
+Type `string|object`
+
+Defaults `"ru"`
+
+Datepicker's language. If string is passed, then language will be searched in `Datepicker.language`object.
+If object is passed, then data will be taken from this object directly.
+
+If some fields are missing, they will be taken from default localization object ('Russian').
+
+### startDate
+
+Type `Date`
+
+Defaults `new Date()`
+
+This date will be shown at first initialization.
+
+### firstDay
+
+Type `number`
+
+Defaults `""`
+
+Day index from which week will be started. Possible values are from 0 to 6, where 0 - Sunday and 6 - Saturday.
+By default value is taken from current localization, but if it passed here then it will have higher priority.
+
+### weekends
+
+Type `array`
+
+Defaults `[6, 0]`
+
+Array of day's indexes which will be considered as weekends. Class `.-weekend-`will be added to relevant cells.
+. By default its Saturday and Sunday.
+
+### dateFormat
+
+Type `string`
+
+Defaults `""`
+
+Desirable date format. It's combination of d, m, yyyy, D, M, etc. By default value is taken from current localization, but if it passed here, then it will have higher priority.
+
+* **@**- time in milliseconds
+* **d**- date number
+* **dd**- date with leading zero
+* **D**- short day name
+* **DD**- full day name
+* **m**- month number
+* **mm**- month number with leading zero
+* **M**- short month name
+* **MM**- full month name
+* **yy**- two digit year number
+* **yyyy**- four digit year number
+* **yyyy1**- first year of decade, which included current year
+* **yyyy2**- last year of decade, which included current year
+
+### altField
+
+Type `string|jQuery`
+
+Defaults `""`
+
+Alternative text input. Use `altFieldDateFormat`for date formatting.
+
+### altFieldDateFormat
+
+Type `string`
+
+Defaults `"@"`
+
+Date format for alternative field.
+
+### toggleSelected
+
+Type `boolean`
+
+Defaults `true`
+
+If true, then clicking on selected cell will remove selection.
+
+### keyboardNav
+
+Type `boolean`
+
+Defaults `true`
+
+If true, then one can navigate through calendar by keyboard.
+
+Hot keys:
+
+* **Ctrl + → | ↑**- move one month forwards
+* **Ctrl + ← | ↓**- move one month backwards
+* **Shift + → | ↑**- move one year forwards
+* **Shift + ← | ↓**- move one year backwards
+* **Alt + → | ↑**- move 10 years forwards
+* **Alt + ← | ↓**- move 10 years backwards
+* **Ctrl + Shift + ↑**- move to next view
+* **Esc**- hides datepicker
+
+### position
+
+Type `string`
+
+Defaults `"bottom left"`
+
+Position of datepicker relative to text input. First value is name of main axis, and second is position on that axis.
+For example `{position: "right top"}`- will set datepicker's position from right side on top of text input.
+
+### offset
+
+Type `number`
+
+Defaults `12`
+
+Offset from the main positioning axes.
+
+### view
+
+Type `string`
+
+Defaults `"days"`
+
+Start datepicker view. Possible values are:
+
+* `days`- display days of one month
+* `months`- display months of one year
+* `years`- display years of one decade
+
+### minView
+
+Type `string`
+
+Defaults `"days"`
+
+Minimal datepicker's view, on that view selecting cells will not trigger rendering next view, instead it will activate it.
+Possible values are the same as in `view`.
+
+### showOtherMonths
+
+Type `boolean`
+
+Defaults `true`
+
+If true, then days from other months will be visible.
+
+### selectOtherMonths
+
+Type `boolean`
+
+Defaults `true`
+
+If true, then one can select days form other months.
+
+### moveToOtherMonthsOnSelect
+
+Type `boolean`
+
+Defaults `true`
+
+If true, then selecting days from other month, will cause transition to that month.
+
+### showOtherYears
+
+Type `boolean`
+
+Defaults `true`
+
+If true, then years from other decades will be visible.
+
+### selectOtherYears
+
+Type `boolean`
+
+Defaults `true`
+
+If true, then on can select years from other decades
+
+### moveToOtherYearsOnSelect
+
+Type `boolean`
+
+Defaults `true`
+
+If true, then selecting year from other decade, will cause transition to that decade.
+
+### minDate
+
+Type `Date`
+
+Defaults `""`
+
+The minimum date for selection. All dates, running before it can't be activated.
+
+### maxDate
+
+Type `Date`
+
+Defaults `""`
+
+The maximum date for selection. All dates which comes after it cannot be selected.
+
+### disableNavWhenOutOfRange
+
+Type `boolean`
+
+Defaults `true`
+
+If true, then at the date, which would be less than minimum possible or more then maximum possible, navigation buttons ('forward', 'back') will be deactivated.
+
+### multipleDates
+
+Type `boolean|number`
+
+Defaults `false`
+
+If true, then one can select unlimited dates. If number is passed, then amount of selected dates will be limited by it.
+
+### multipleDatesSeparator
+
+Type `string`
+
+Defaults `","`
+
+Dates separator, which will be used when concatenating dates to string.
+
+### range
+
+Type `boolean`
+
+Defaults `false`
+
+For selecting dates range, turn this option to true. `multipleDatesSeparator`will be used as dates separator.
+
+### todayButton
+
+Type `boolean|Date`
+
+Defaults `false`
+
+If true, then button "Today" will be visible. If Date is passed then click event will also select passed date.
+
+```
+// Select today
+$('.datepicker').datepicker({
+    todayButton: new Date()
+})
+```
+
+### clearButton
+
+Type `boolean`
+
+Defaults `false`
+
+If true, then button "Clear" will be visible.
+
+### showEvent
+
+Type `string`
+
+Defaults `"focus"`
+
+Event type, on which datepicker should be shown.
+
+### autoClose
+
+Type `boolean`
+
+Defaults `false`
+
+If true, then after date selection, datepicker will be closed.
+
+### prevHtml
+
+Type `string`
+
+Defaults `<svg><path d="M 17,12 l -5,5 l 5,5"></path></svg>`
+
+Contents of 'next' button.
+
+### nextHtml
+
+Type `string`
+
+Defaults `<svg><path d="M 14,12 l 5,5 l -5,5"></path></svg>`
+
+Contents of 'prev' button.
+
+### navTitles
+
+Type `object`
+
+Defaults
+
+```
+navTitles = {
+      days: 'MM, <i>yyyy</i>',
+      months: 'yyyy',
+      years: 'yyyy1 - yyyy2'
+  };
+```
+
+Content of datepicker's title depending on current view, can use same notation as in parameter `dateFormat`. Missing fields will be taken from default values. Html tags are also possible.
+
+```
+$('#my-datepicker').datepicker({
+       navTitles: {
+           days: '<h3>Check in date:</h3> MM, yyyy'
+       }
+   })
+```
+
+### monthsField
+
+Type `string`
+
+Defaults `"monthsShort"`
+
+Field name from localization object which should be used as months names, when view is 'months'.
+
+### timepicker
+
+Type `boolean`
+
+Defaults `false`
+
+If `true`, when timepicker widget will be added.
+
+### dateTimeSeparator
+
+Type `string`
+
+Defaults `" "`
+
+Separator between date and time
+
+### timeFormat
+
+Type `string`
+
+Defaults `null`
+
+Desirable time format. Taken from localization by default. If value passed here, then it will be used instead.
+For using 12 hours mode, add "aa" or "AA" to your `timeFormat`parameter, e.g. `{timeFormat: "hh:ii AA"}`Possible values are:
+
+* **h**- hours
+* **hh**- hours with leading zero
+* **i**- minutes
+* **ii**- minutes with leading zero
+* **aa**- day period - 'am' or 'pm'
+* **AA**- day period capitalized
+
+### minHours
+
+Type `number`
+
+Defaults `0`
+
+Minimal hours value, must be between 0 and 23. You will not be able to choose value lower than this.
+
+### maxHours
+
+Type `number`
+
+Defaults `23`
+
+Maximum hours value, must be between 0 and 23. You will not be able to choose value higher than this.
+
+### minMinutes
+
+Type `number`
+
+Defaults `0`
+
+Minimal minutes value, must be between 0 and 59. You will not be able to choose value lower than this.
+
+### maxMinutes
+
+Type `number`
+
+Defaults `59`
+
+Maximum minutes value, must be between 0 and 59. You will not be able to choose value higher than this.
+
+### hoursStep
+
+Type `number`
+
+Defaults `1`
+
+Hours step in slider.
+
+### minutesStep
+
+Type `number`
+
+Defaults `1`
+
+Minutes step in slider.
+
+## Events
+
+### onSelect(formattedDate, date, inst)
+
+Type `function`
+
+Defaults `null`
+
+Callback when selecting date
+
+* **formattedDate**<i>string</i>- formatted date.
+* **date**<i>Date|array</i>- JavaScript Date objectif `{multipleDates: true}`, then it will be an array of js dates.
+* **inst**<i>object</i>- plugin instance.
+
+### onShow(inst, animationCompleted)
+
+Type `function`
+
+Defaults `null`
+
+Callback when calendar is showing.
+
+* **inst**<i>Object</i>- plugin instance.
+* **animationCompleted**<i>boolean</i>- animation indicator.if its `false`, when animation has just begun, if `true`- already ended.
+
+### onHide(inst, animationCompleted)
+
+Type `function`
+
+Defaults `null`
+
+Callback when calendar is hiding.
+
+* **inst**<i>Object</i>- plugin instance.
+* **animationCompleted**<i>boolean</i>- animation indicator.if its `false`, when animation has just begun, if `true`- already ended.
+
+### onChangeMonth(month, year)
+
+Type `function`
+
+Defaults `null`
+
+Callback when months are changed.
+
+* **month**<i>number</i>- month number (from 0 to 12), to which transition is done.
+* **year**<i>number</i>- year, to which transition is done.
+
+### onChangeYear(year)
+
+Type `function`
+
+Defaults `null`
+
+Callback when year is changed
+
+* **year**<i>number</i>- year, to which transition is done.
+
+### onChangeDecade(decade)
+
+Type `function`
+
+Defaults `null`
+
+Callback when decade is changed
+
+* **decade**<i>array</i>- array which consists of two years: first year in decade and last year in decade.
+
+### onChangeView(view)
+
+Type `function`
+
+Defaults `null`
+
+Callback when datepicker's view is changed
+
+* **view**<i>string</i>- view name, to which transition is done (days, months, years).
+
+### onRenderCell(date, cellType)
+
+Type `function`
+
+Defaults `null`
+
+Callback when datepicker's cell is rendered.
+
+* **date**<i>Date</i>- current cell date
+* **cellType**<i>string</i>- current cell type (day, month, year).
+
+The callback must return object which may consists of three fields:
+
+```
+{
+    html: '', // Custom cell content
+    classes: '', // Extra css classes to cell
+    disabled: '' // true/false, if true, then cell will be disabled
+}
+```
+
+#### Example
+
+```
+$('#my-datepicker').datepicker({
+    // Let's make a function which will add class 'my-class' to every 11 of the month
+    // and make these cells disabled.
+    onRenderCell: function(date, cellType) {
+        if (cellType == 'day' && date.getDate() == 11) {
+            return {
+                classes: 'my-class',
+                disabled: true
+            }
+        }
+    }
+})
+```
+
+## API
+
+Plugin instance is accessible through `data`attribute.
+
+```
+var myDatepicker = $('#my-elem').datepicker().data('datepicker');
+myDatepicker.show();
+```
+
+### show()
+
+Shows datepicker.
+
+### hide()
+
+Hides datepicker.
+
+### destroy()
+
+Destroys datepicker.
+
+### next()
+
+Renders next month, year or decade, depending on current view.
+
+### prev()
+
+Renders previous month, year or decade, depending on current view.
+
+### selectDate(date)
+
+* **date**<i>Date|Array</i>- JavaScript `Date()`, or array of dates.
+
+Activates passed date or multiple dates if array is passed. If `{multipleDates: false}`and date is already active, then it will be deactivated. If `{multipleDates: true}`then another active date will be added.
+
+### removeDate(date)
+
+* **date**<i>Date</i>- JavaScript `Date()`
+
+Removes selection from passed date.
+
+### clear()
+
+Clears all selected dates.
+
+### update(field[, value])
+
+* **field**<i>string|object</i>- field name which must be updated.
+* **field**<i>string|*</i>- new value.
+
+This method updates datepicker's options. After calling this method, datepicker will be redrawn.
+You can update several parameters at one time, just pass in object with necessary fields.
+
+```
+var datepicker = $('#my-elem').datepicker().data('datepicker');
+// Single parameter update
+datepicker.update('minDate', new Date())
+// Multiple parameters
+datepicker.update({
+    position: "top right",
+    maxDate: new Date(),
+    todayButton: true
+})
+```
+
+### view
+
+Sets new view for datepicker.
+
+```
+datepicker.view = 'months';
+```
+
+### date
+
+Sets new viewing date for datepicker, must pass a JavaScript Date object `Date()`
+
+```
+datepicker.date = new Date();
+```
+
+### $el
+
+Datepicker's DOM element
+
+### selectedDates
+
+Array of selected dates
