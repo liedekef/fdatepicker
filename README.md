@@ -203,7 +203,7 @@ By default current user time will be set. This value can be changed by `startDat
 <div class="fdatepicker-here" data-timepicker="true" data-language='en'></div>
 ```
 
-<i>More detailed info about timepicker parameters you can find in [Options](#opts-timepicker).</i>
+<i>More detailed info about timepicker parameters you can find in [Options](#options).</i>
 
 ### Time format
 
