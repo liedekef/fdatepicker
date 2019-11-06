@@ -70,7 +70,7 @@ Example
 
 ### Permanently visible calendar
 
-Initialize plugin on non text input element, such as `<div> &#x2026;  </div>`,or pass the parameter `{inline: true}`.
+Initialize plugin on non text input element, such as `<div> ... </div>`,or pass the parameter `{inline: true}`.
 Example
 
 ```
