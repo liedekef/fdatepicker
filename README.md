@@ -321,72 +321,11 @@ Available localizations located in `dist/js/i18n` directory.
 
 ## Options
 
-### classes
-
-Type `string`
-
-Defaults `""`
-
-Extra css classes for datepicker.
-
-### inline
-
-Type `boolean`
-
-Defaults `false`
-
-If true, then datepicker will be always visible.
-
-### language
-
-Type `string|object`
-
-Defaults `"en"`
-
-Datepicker's language. If string is passed, then language will be searched in `Datepicker.language`object.
-If object is passed, then data will be taken from this object directly.
-
-If some fields are missing, they will be taken from default localization object ('English').
-
-### startDate
-
-Type `Date`
-
-Defaults `new Date()`
-
-This date will be shown at first initialization.
-
-### firstDay
-
-Type `number`
-
-Defaults `""`
-
-Day index from which week will be started. Possible values are from 0 to 6, where 0 - Sunday and 6 - Saturday.
-By default value is taken from current localization, but if it passed here then it will have higher priority.
-
-### weekends
-
-Type `array`
-
-Defaults `[6, 0]`
-
-Array of day's indexes which will be considered as weekends. Class `.-weekend-`will be added to relevant cells.
-. By default its Saturday and Sunday.
-
-### dateFormat
-
-Type `string`
-
-Defaults `""`
-
-Desirable date format. Use [php date format](https://www.php.net/manual/en/function.date.php) notation.
-
 ### altField
 
 Type `string|jQuery`
 
-Defaults `""`
+Default `""`
 
 Alternative text input. Use `altFieldDateFormat` for date formatting.
 
@@ -394,23 +333,88 @@ Alternative text input. Use `altFieldDateFormat` for date formatting.
 
 Type `string`
 
-Defaults `"@"`
+Default `"@"`
 
 Date format for alternative field.
 
-### toggleSelected
+### autoClose
 
 Type `boolean`
 
-Defaults `true`
+Default `false`
 
-If true, then clicking on selected cell will remove selection.
+If true, then after date selection, datepicker will be closed.
+
+### classes
+
+Type `string`
+
+Default `""`
+
+Extra css classes for datepicker.
+
+### clearButton
+
+Type `boolean`
+
+Default `false`
+
+If true, then button "Clear" will be visible.
+
+### dateFormat
+
+Type `string`
+
+Default `""`
+
+Desirable date format. Use [php date format](https://www.php.net/manual/en/function.date.php) notation.
+
+### dateTimeSeparator
+
+Type `string`
+
+Default `" "`
+
+Separator between date and time
+
+### disableNavWhenOutOfRange
+
+Type `boolean`
+
+Default `true`
+
+If true, then at the date, which would be less than minimum possible or more then maximum possible, navigation buttons ('forward', 'back') will be deactivated.
+
+### firstDay
+
+Type `number`
+
+Default `""`
+
+Day index from which week will be started. Possible values are from 0 to 6, where 0 - Sunday and 6 - Saturday.
+By default value is taken from current localization, but if it passed here then it will have higher priority.
+
+### hoursStep
+
+Type `number`
+
+Default `1`
+
+Hours step in slider.
+
+### inline
+
+Type `boolean`
+
+Default `false`
+
+If true, then datepicker will be always visible.
 
 ### keyboardNav
 
 Type `boolean`
 
-Defaults `true`
+Default `true`
 
 If true, then one can navigate through calendar by keyboard.
 
@@ -425,121 +429,111 @@ Hot keys:
 * **Ctrl + Shift + ↑** move to next view
 * **Esc** hides datepicker
 
-### position
+### language
 
-Type `string`
+Type `string|object`
 
-Defaults `"bottom left"`
+Default `"en"`
 
-Position of datepicker relative to text input. First value is name of main axis, and second is position on that axis.
-For example `{position: "right top"}`- will set datepicker's position from right side on top of text input.
+Datepicker's language. If string is passed, then language will be searched in `Datepicker.language`object.
+If object is passed, then data will be taken from this object directly.
 
-### offset
-
-Type `number`
-
-Defaults `12`
-
-Offset from the main positioning axes.
-
-### view
-
-Type `string`
-
-Defaults `"days"`
-
-Start datepicker view. Possible values are:
-
-* `days` display days of one month
-* `months` display months of one year
-* `years` display years of one decade
-
-### minView
-
-Type `string`
-
-Defaults `"days"`
-
-Minimal datepicker's view, on that view selecting cells will not trigger rendering next view, instead it will activate it.
-Possible values are the same as in `view`.
-
-### showOtherMonths
-
-Type `boolean`
-
-Defaults `true`
-
-If true, then days from other months will be visible.
-
-### selectOtherMonths
-
-Type `boolean`
-
-Defaults `true`
-
-If true, then one can select days form other months.
-
-### moveToOtherMonthsOnSelect
-
-Type `boolean`
-
-Defaults `true`
-
-If true, then selecting days from other month, will cause transition to that month.
-
-### showOtherYears
-
-Type `boolean`
-
-Defaults `true`
-
-If true, then years from other decades will be visible.
-
-### selectOtherYears
-
-Type `boolean`
-
-Defaults `true`
-
-If true, then on can select years from other decades
-
-### moveToOtherYearsOnSelect
-
-Type `boolean`
-
-Defaults `true`
-
-If true, then selecting year from other decade, will cause transition to that decade.
-
-### minDate
-
-Type `Date`
-
-Defaults `""`
-
-The minimum date for selection. All dates, running before it can't be activated.
+If some fields are missing, they will be taken from default localization object ('English').
 
 ### maxDate
 
 Type `Date`
 
-Defaults `""`
+Default `""`
 
 The maximum date for selection. All dates which comes after it cannot be selected.
 
-### disableNavWhenOutOfRange
+### maxHours
+
+Type `number`
+
+Default `23`
+
+Maximum hours value, must be between 0 and 23. You will not be able to choose value higher than this.
+
+### maxMinutes
+
+Type `number`
+
+Default `59`
+
+Maximum minutes value, must be between 0 and 59. You will not be able to choose value higher than this.
+
+### minDate
+
+Type `Date`
+
+Default `""`
+
+The minimum date for selection. All dates, running before it can't be activated.
+
+### minHours
+
+Type `number`
+
+Default `0`
+
+Minimal hours value, must be between 0 and 23. You will not be able to choose value lower than this.
+
+### minMinutes
+
+Type `number`
+
+Default `0`
+
+Minimal minutes value, must be between 0 and 59. You will not be able to choose value lower than this.
+
+### minView
+
+Type `string`
+
+Default `"days"`
+
+Minimal datepicker's view, on that view selecting cells will not trigger rendering next view, instead it will activate it.
+Possible values are the same as in `view`.
+
+### minutesStep
+
+Type `number`
+
+Default `1`
+
+Minutes step in slider.
+
+### monthsField
+
+Type `string`
+
+Default `"monthsShort"`
+
+Field name from localization object which should be used as months names, when view is 'months'.
+
+### moveToOtherMonthsOnSelect
 
 Type `boolean`
 
-Defaults `true`
+Default `true`
 
-If true, then at the date, which would be less than minimum possible or more then maximum possible, navigation buttons ('forward', 'back') will be deactivated.
+If true, then selecting days from other month, will cause transition to that month.
+
+### moveToOtherYearsOnSelect
+
+Type `boolean`
+
+Default `true`
+
+If true, then selecting year from other decade, will cause transition to that decade.
 
 ### multipleDates
 
 Type `boolean|number`
 
-Defaults `false`
+Default `false`
 
 If true, then one can select unlimited dates. If number is passed, then amount of selected dates will be limited by it.
 
@@ -547,78 +541,15 @@ If true, then one can select unlimited dates. If number is passed, then amount o
 
 Type `string`
 
-Defaults `","`
+Default `","`
 
 Dates separator, which will be used when concatenating dates to string.
-
-### range
-
-Type `boolean`
-
-Defaults `false`
-
-For selecting dates range, turn this option to true. `multipleDatesSeparator`will be used as dates separator.
-
-### todayButton
-
-Type `boolean|Date`
-
-Defaults `false`
-
-If true, then button "Today" will be visible. If Date is passed then click event will also select passed date.
-
-```
-// Select today
-$('.fdatepicker').fdatepicker({
-    todayButton: new Date()
-})
-```
-
-### clearButton
-
-Type `boolean`
-
-Defaults `false`
-
-If true, then button "Clear" will be visible.
-
-### showEvent
-
-Type `string`
-
-Defaults `"focus"`
-
-Event type, on which datepicker should be shown.
-
-### autoClose
-
-Type `boolean`
-
-Defaults `false`
-
-If true, then after date selection, datepicker will be closed.
-
-### prevHtml
-
-Type `string`
-
-Defaults `<svg><path d="M 17,12 l -5,5 l 5,5"></path></svg>`
-
-Contents of 'next' button.
-
-### nextHtml
-
-Type `string`
-
-Defaults `<svg><path d="M 14,12 l 5,5 l -5,5"></path></svg>`
-
-Contents of 'prev' button.
 
 ### navTitles
 
 Type `object`
 
-Defaults
+Default
 
 ```
 navTitles = {
@@ -638,85 +569,153 @@ $('#my-datepicker').fdatepicker({
    })
 ```
 
-### monthsField
+### nextHtml
 
 Type `string`
 
-Defaults `"monthsShort"`
+Default `<svg><path d="M 14,12 l 5,5 l -5,5"></path></svg>`
 
-Field name from localization object which should be used as months names, when view is 'months'.
+Contents of 'prev' button.
 
-### timepicker
+### offset
+
+Type `number`
+
+Default `12`
+
+Offset from the main positioning axes.
+
+### prevHtml
+
+Type `string`
+
+Default `<svg><path d="M 17,12 l -5,5 l 5,5"></path></svg>`
+
+Contents of 'next' button.
+
+### position
+
+Type `string`
+
+Default `"bottom left"`
+
+Position of datepicker relative to text input. First value is name of main axis, and second is position on that axis.
+For example `{position: "right top"}`- will set datepicker's position from right side on top of text input.
+
+### range
 
 Type `boolean`
 
-Defaults `false`
+Default `false`
 
-If `true`, when timepicker widget will be added.
+For selecting dates range, turn this option to true. `multipleDatesSeparator`will be used as dates separator.
 
-### dateTimeSeparator
+### selectOtherMonths
+
+Type `boolean`
+
+Default `true`
+
+If true, then one can select days form other months.
+
+### selectOtherYears
+
+Type `boolean`
+
+Default `true`
+
+If true, then on can select years from other decades
+
+### showEvent
 
 Type `string`
 
-Defaults `" "`
+Default `"focus"`
 
-Separator between date and time
+Event type on which the datepicker should be shown.
+
+### showOtherMonths
+
+Type `boolean`
+
+Default `true`
+
+If true, then days from other months will be visible.
+
+### showOtherYears
+
+Type `boolean`
+
+Default `true`
+
+If true, then years from other decades will be visible.
+
+### startDate
+
+Type `Date`
+
+Default `new Date()`
+
+This date will be shown at first initialization.
 
 ### timeFormat
 
 Type `string`
 
-Defaults `null`
+Default `null`
 
 Desirable time format. Use [php date format](https://www.php.net/manual/en/function.date.php) notation.
 
-### minHours
+### timepicker
 
-Type `number`
+Type `boolean`
 
-Defaults `0`
+Default `false`
 
-Minimal hours value, must be between 0 and 23. You will not be able to choose value lower than this.
+If `true`, when timepicker widget will be added.
 
-### maxHours
+### todayButton
 
-Type `number`
+Type `boolean|Date`
 
-Defaults `23`
+Default `false`
 
-Maximum hours value, must be between 0 and 23. You will not be able to choose value higher than this.
+If true, then button "Today" will be visible. If Date is passed then click event will also select passed date.
 
-### minMinutes
+```
+// Select today
+$('.fdatepicker').fdatepicker({
+    todayButton: new Date()
+})
+```
 
-Type `number`
+### toggleSelected
 
-Defaults `0`
+Type `boolean`
 
-Minimal minutes value, must be between 0 and 59. You will not be able to choose value lower than this.
+Default `true`
 
-### maxMinutes
+If true, then clicking on selected cell will remove selection.
 
-Type `number`
+### view
 
-Defaults `59`
+Type `string`
 
-Maximum minutes value, must be between 0 and 59. You will not be able to choose value higher than this.
+Default `"days"`
 
-### hoursStep
+Start datepicker view. Possible values are:
 
-Type `number`
+* `days` display days of one month
+* `months` display months of one year
+* `years` display years of one decade
 
-Defaults `1`
+### weekends
 
-Hours step in slider.
+Type `array`
 
-### minutesStep
+Default `[6, 0]` (Saturday and Sunday)
 
-Type `number`
-
-Defaults `1`
-
-Minutes step in slider.
+Array of day's indexes which will be considered as weekends. Class `.-weekend-` will be added to relevant cells.
 
 ## Events
 
@@ -724,7 +723,7 @@ Minutes step in slider.
 
 Type `function`
 
-Defaults `null`
+Default `null`
 
 Callback when selecting date
 
@@ -736,7 +735,7 @@ Callback when selecting date
 
 Type `function`
 
-Defaults `null`
+Default `null`
 
 Callback when calendar is showing.
 
@@ -747,7 +746,7 @@ Callback when calendar is showing.
 
 Type `function`
 
-Defaults `null`
+Default `null`
 
 Callback when calendar is hiding.
 
@@ -758,7 +757,7 @@ Callback when calendar is hiding.
 
 Type `function`
 
-Defaults `null`
+Default `null`
 
 Callback when months are changed.
 
@@ -769,7 +768,7 @@ Callback when months are changed.
 
 Type `function`
 
-Defaults `null`
+Default `null`
 
 Callback when year is changed
 
@@ -779,7 +778,7 @@ Callback when year is changed
 
 Type `function`
 
-Defaults `null`
+Default `null`
 
 Callback when decade is changed
 
@@ -789,7 +788,7 @@ Callback when decade is changed
 
 Type `function`
 
-Defaults `null`
+Default `null`
 
 Callback when datepicker's view is changed
 
@@ -799,7 +798,7 @@ Callback when datepicker's view is changed
 
 Type `function`
 
-Defaults `null`
+Default `null`
 
 Callback when datepicker's cell is rendered.
 
