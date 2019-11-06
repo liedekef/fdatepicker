@@ -333,9 +333,9 @@ Alternative text input field (example: `altField='#my-alt-field-id'`). Use `altF
 
 Type `string`
 
-Default `"@"`
+Default `"u"`
 
-Date format for alternative field.
+Date format for alternative field. Use [php date format](https://www.php.net/manual/en/function.date.php) notation.
 
 ### altFieldMultipleDatesSeparator
 
