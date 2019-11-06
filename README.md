@@ -4,7 +4,7 @@
 
 Lightweight customizable cross-browser jQuery datepicker, built with es5 and css-flexbox. Works in all modern desktop and mobile browsers (tested on Android 4.4+ and iOS8+).
 
-![fdatepicker image](https://github.com/t1m0n/air-datepicker/raw/master/docs/img/promo-img-time.png)
+![fdatepicker image](https://github.com/liedekef/fdatepicker/raw/master/docs/img/promo-img-time.png)
 
 Light (<i> **~36kb**minified js file and **~9kb**gziped</i>) customizable cross-browser calendar, built with `es5`and `css flexbox`.Works in all modern browsers:
 **IE 10+**, **Chrome**, **Firefox**, **Safari 8+**, **Opera 17+**.
