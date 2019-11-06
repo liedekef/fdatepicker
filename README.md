@@ -327,7 +327,7 @@ Type `string|jQuery`
 
 Default `""`
 
-Alternative text input. Use `altFieldDateFormat` for date formatting.
+Alternative text input field (example: `altField='#my-alt-field-id'`). Use `altFieldDateFormat` for date formatting.
 
 ### altFieldDateFormat
 
@@ -336,6 +336,14 @@ Type `string`
 Default `"@"`
 
 Date format for alternative field.
+
+### altFieldMultipleDatesSeparator
+
+Type `string`
+
+Default `","`
+
+Alternative field dates separator, which will be used when concatenating dates to string.
 
 ### autoClose
 
