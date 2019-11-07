@@ -506,21 +506,26 @@
                 newDate = '';
 
             if ((typeof date === 'string' || date instanceof String) && date.indexOf(",") !== -1) {
-                date=date.split(",");
-            }
-
-            if (Array.isArray(date)) {
-                date.forEach(function (d) {
-                    _this.selectDate(d)
+                var dates=date.split(",");
+                dates.forEach(function (mydate) {
+                    _this.selectDate(mydate)
                 });
                 return;
             }
 
             if (!(date instanceof Date)) {
-                if ((typeof date === 'string' || date instanceof String) && date !== '') 
+                if ((typeof date === 'string' || date instanceof String) && date !== '') {
+                     // in case the date is actually a string but mentions the microseconds, we convert it to int
+                     if (isNaN(date)) {
+                             date = new Date(date);
+                     } else {
+                             date = new Date(parseInt(date));
+                     }
+                } else if (typeof date === 'number' && date !== '') {
                      date = new Date(date);
-                else
+                } else {
                      date = new Date();
+                }
             }
 
             this.lastSelectedDate = date;
