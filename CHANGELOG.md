@@ -1,4 +1,4 @@
-### Tue Now 05 2019
+### Tue Nov 05 2019
 - Changed the supported format to PHP format
 
 ### Fri Nov 01 2019 
