@@ -1,7 +1,7 @@
-* Tue Now 05 2019
+### Tue Now 05 2019
 - Changed the supported format to PHP format
 
-* Fri Nov 01 2019 
+### Fri Nov 01 2019 
 - scope data-action to fdatapicker alone, to avoid conflict with other plugins
 - Renamed datepicker to fdatepicker
 - selectDate accepts a string now too (it will convert to Date internally if so)
