@@ -7,6 +7,29 @@
 		factory(jQuery);
 	}
 }(function ($) {
+
+    if ( !$.escapeSelector ) {
+	    $.escapeSelector = function( sel ) {
+		    var rcssescape = /([\0-\x1f\x7f]|^-?\d)|^-$|[^\x80-\uFFFF\w-]/g;
+		    var fcssescape = function( ch, asCodePoint ) {
+			    if ( asCodePoint ) {
+				    // U+0000 NULL becomes U+FFFD REPLACEMENT CHARACTER
+				    if ( ch === "\0" ) {
+					    return "\uFFFD";
+				    }
+
+				    // Control characters and (dependent upon position) numbers get escaped as code points
+				    return ch.slice( 0, -1 ) + "\\" + ch.charCodeAt( ch.length - 1 ).toString( 16 ) + " ";
+			    }
+
+			    // Other potentially-special ASCII characters get backslash-escaped
+			    return "\\" + ch;
+		    };
+
+		    return ( sel + "" ).replace( rcssescape, fcssescape );
+	    }
+    }
+
     var VERSION = '2.2.3',
         pluginName = 'fdatepicker',
         autoInitSelector = '.fdatepicker-here',
@@ -128,7 +151,14 @@
         }
 
         if (this.opts.altField) {
-            this.$altField = typeof this.opts.altField == 'string' ? $(this.opts.altField) : this.opts.altField;
+            if (typeof this.opts.altField == 'string') {
+		    if (this.opts.altField.match("^#")) {
+			    this.opts.altField = this.opts.altField.substring(1);
+		    }
+		    this.$altField = $("#"+$.escapeSelector(this.opts.altField));
+	    } else {
+		    this.$altField = this.opts.altField;
+	    }
         }
 
         this.inited = false;

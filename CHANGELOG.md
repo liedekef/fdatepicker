@@ -1,4 +1,7 @@
-* Tue Now 05 2019
+* Tue Nov 15 2019
+- Allow altField selector to be used without "#", and it will get escaped too
+
+* Tue Nov 05 2019
 - Changed the supported format to PHP format
 
 * Fri Nov 01 2019 
