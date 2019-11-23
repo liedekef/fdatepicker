@@ -544,18 +544,7 @@
             }
 
             if (!(date instanceof Date)) {
-                if ((typeof date === 'string' || date instanceof String) && date !== '') {
-                     // in case the date is actually a string but mentions the microseconds, we convert it to int
-                     if (isNaN(date)) {
-                             date = new Date(date);
-                     } else {
-                             date = new Date(parseInt(date));
-                     }
-                } else if (typeof date === 'number' && date !== '') {
-                     date = new Date(date);
-                } else {
-                     date = new Date();
-                }
+		date = fdatepicker.convertStringToDate(date);
             }
 
             this.lastSelectedDate = date;
@@ -1484,10 +1473,55 @@
         return new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
     };
 
+    fdatepicker.getTimeOffSetString = function () {
+	    var timezone_offset_min = new Date().getTimezoneOffset(),
+		    offset_hrs = parseInt(Math.abs(timezone_offset_min/60)),
+		    offset_min = Math.abs(timezone_offset_min%60),
+		    timezone_standard;
+
+	    if(offset_hrs < 10)
+		    offset_hrs = '0' + offset_hrs;
+
+	    if(offset_min < 10)
+		    offset_min = '0' + offset_min;
+
+	    // Add an opposite sign to the offset
+	    // If offset is 0, it means timezone is UTC
+	    if(timezone_offset_min < 0)
+		    timezone_standard = '+' + offset_hrs + ':' + offset_min;
+	    else if(timezone_offset_min > 0)
+		    timezone_standard = '-' + offset_hrs + ':' + offset_min;
+	    else if(timezone_offset_min == 0)
+		    timezone_standard = 'Z';
+	    return timezone_standard;
+    };
+
+    fdatepicker.convertStringToDate = function (datestring) {
+	    if ((typeof datestring === 'string' || datestring instanceof String) && datestring !== '') {
+		    if (isNaN(datestring)) {
+			    // if it is full ecmascript datetime, but without timezone: we add the local timezone to it
+			    var matches = datestring.match(/^(\d{4})\-(\d{2})\-(\d{2}).(\d{2}):(\d{2})(:(\d{2})?)$/);
+			    if (matches) {
+				    var tz_string=fdatepicker.getTimeOffSetString();
+				    datestring = datestring + tz_string;
+			    }
+			    date = new Date(datestring);
+		    } else {
+			    // in case the date is a string but mentions the microseconds, we convert it to int
+			    date = new Date(parseInt(datestring));
+		    }
+	    } else if (typeof datestring === 'number' && datestring !== '') {
+		    date = new Date(datestring);
+	    } else {
+		    date = new Date();
+	    }
+	    return date;
+    };
+
     fdatepicker.getParsedDate = function (date) {
-	if (typeof date == 'string') {
-	    date = new Date(date);
-	}
+        if (!(date instanceof Date)) {
+	    date = fdatepicker.convertStringToDate(date);
+        }
         return {
             year: date.getFullYear(),
             month: date.getMonth(),

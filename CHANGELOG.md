@@ -1,3 +1,8 @@
+### Tue Nov 23 2019
+- If a date is is set as a full ecma datestring (YYYY-MM-DDTHH:MM:SS) and
+  it doesn't include the timezone, add the local timezone to it
+  This results in a consistent datetime representation in all browsers
+
 ### Tue Nov 15 2019
 - Allow altField selector to be used without "#", and it will get escaped too
 
