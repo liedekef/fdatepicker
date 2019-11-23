@@ -1472,8 +1472,10 @@
         return new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
     };
 
-    fdatepicker.getTimeOffSetString = function () {
-            var timezone_offset_min = new Date().getTimezoneOffset(),
+    fdatepicker.getTimeOffSetString = function (datestring) {
+            // even if datestring doesn't contain the timezone, new Date will use the local timezone
+            // and by using the current datestring, it will also reflect summer/winter time
+            var timezone_offset_min = new Date(datestring).getTimezoneOffset(),
                     offset_hrs = parseInt(Math.abs(timezone_offset_min/60)),
                     offset_min = Math.abs(timezone_offset_min%60),
                     timezone_standard;
@@ -1496,12 +1498,13 @@
     };
 
     fdatepicker.convertStringToDate = function (datestring) {
+	    var date;
             if ((typeof datestring === 'string' || datestring instanceof String) && datestring !== '') {
                     if (isNaN(datestring)) {
                             // if it is full ecmascript datetime, but without timezone: we add the local timezone to it
                             var matches = datestring.match(/^(\d{4})\-(\d{2})\-(\d{2}).(\d{2}):(\d{2})(:(\d{2})?)$/);
                             if (matches) {
-                                    var tz_string=fdatepicker.getTimeOffSetString();
+                                    var tz_string=fdatepicker.getTimeOffSetString(datestring);
                                     datestring = datestring + tz_string;
                             }
                             date = new Date(datestring);
