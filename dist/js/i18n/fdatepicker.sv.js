@@ -9,7 +9,7 @@
                 factory(jQuery);
         }
 }(function ($) {
-	$.fn.datepicker.language['sv'] = {
+	$.fn.fdatepicker.language['sv'] = {
 		days: ['Söndag', 'Måndag', 'Tisdag', 'Onsdag', 'Torsdag', 'Fredag', 'Lördag'],
 		daysShort: ['Sön', 'Mån', 'Tis', 'Ons', 'Tor', 'Fre', 'Lör'],
 		daysMin: ['Sö', 'Må', 'Ti', 'On', 'To', 'Fr', 'Lö'],

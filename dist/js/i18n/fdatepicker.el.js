@@ -9,7 +9,7 @@
 		factory(jQuery);
 	}
 }(function ($) {
-	$.fn.datepicker.language['el'] = {
+	$.fn.fdatepicker.language['el'] = {
 		days: ['Κυριακή', 'Δευτέρα', 'Τρίτη', 'Τετάρτη', 'Πέμπτη', 'Παρασκευή', 'Σάββατο'],
 		daysShort: ['Κυρ', 'Δευ', 'Τρι', 'Τετ', 'Πεμ', 'Παρ', 'Σαβ'],
 		daysMin: ['Κ', 'Δ', 'Τ', 'Τ', 'Π', 'Π', 'Σ'],
