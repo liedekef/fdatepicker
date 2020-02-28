@@ -17,6 +17,7 @@
 		monthsShort: ['Jan', 'Feb', 'Mrt', 'Apr', 'Mei', 'Jun', 'Jul', 'Aug', 'Sep', 'Okt', 'Nov', 'Dec'],
 		today: 'Vandaag',
 		clear: 'Legen',
+		close: 'Sluiten',
 		dateFormat: 'd-m-Y',
 		timeFormat: 'H:i',
 		firstDay: 1

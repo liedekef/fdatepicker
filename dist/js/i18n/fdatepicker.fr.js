@@ -17,6 +17,7 @@
 		monthsShort: ['Jan', 'Fév', 'Mar', 'Avr', 'Mai', 'Jun', 'Jul', 'Aoû', 'Sep', 'Oct', 'Nov', 'Déc'],
 		today: "Aujourd'hui",
 		clear: 'Effacer',
+		close: 'Fermer',
 		dateFormat: 'd/m/Y',
 		timeFormat: 'H:i',
 		firstDay: 1
