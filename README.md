@@ -369,6 +369,14 @@ Default `false`
 
 If true, then button "Clear" will be visible.
 
+### closeButton
+
+Type `boolean`
+
+Default `false`
+
+If true, then button "Close" will be visible.
+
 ### dateFormat
 
 Type `string`

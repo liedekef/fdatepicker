@@ -1,3 +1,6 @@
+### Fri Feb 28 2020
+- Add a new closeButton option
+
 ### Tue Nov 23 2019
 - If a date is is set as a full ecma datestring (YYYY-MM-DDTHH:MM:SS) and
   it doesn't include the timezone, add the local timezone to it

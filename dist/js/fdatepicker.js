@@ -79,6 +79,7 @@
 
             todayButton: false,
             clearButton: false,
+            closeButton: false,
 
             showEvent: 'focus',
             autoClose: false,
@@ -672,6 +673,10 @@
             if (this.opts.todayButton instanceof Date) {
                 this.selectDate(this.opts.todayButton)
             }
+        },
+
+        clear: function () {
+            this.hide();
         },
 
         clear: function () {
@@ -1619,6 +1624,7 @@
 		    monthsShort: [ 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec' ],
 		    today: 'Today',
 		    clear: 'Clear',
+		    close: 'Close',
 		    dateFormat: 'm/d/Y',
 		    timeFormat: 'h:i a',
 		    firstDay: 0
