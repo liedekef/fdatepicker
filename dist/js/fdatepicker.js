@@ -675,7 +675,7 @@
             }
         },
 
-        clear: function () {
+        close: function () {
             this.hide();
         },
 
@@ -2010,6 +2010,9 @@
             }
             if (this.opts.clearButton) {
                 this._addButton('clear')
+            }
+            if (this.opts.closeButton) {
+                this._addButton('close')
             }
         },
 

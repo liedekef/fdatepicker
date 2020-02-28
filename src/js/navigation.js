@@ -54,6 +54,9 @@
             if (this.opts.clearButton) {
                 this._addButton('clear')
             }
+            if (this.opts.closeButton) {
+                this._addButton('close')
+            }
         },
 
         _render: function () {
