@@ -1,3 +1,7 @@
+### Wed 15 Jan 2025
+- Add a new fieldSizing option, allowing firefox to act as if field-sizing=content was set and supported
+  On a browser where field-sizing=content is set and supported, this option will not do anything
+
 ### Fri Feb 28 2020
 - Add a new closeButton option
 
