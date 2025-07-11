@@ -1,3 +1,8 @@
+### 2025-07-11
+- the datepicker field is readonly, input is not working (currently)
+- exposed formatDate: $.fn.fdatepicker.formatDate(date, displayFormat);
+- close a memory leak
+
 ### Wed 15 Jan 2025
 - Add a new fieldSizing option, allowing firefox to act as if CSS field-sizing=content was set and supported
   On a browser where CSS field-sizing=content is supported, this option will use the css-method
