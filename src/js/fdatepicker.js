@@ -305,30 +305,31 @@
         },
 
         _buildBaseHtml: function () {
-		// Use input's ID or generate a stable unique key
-		const inputId = this.$el.attr('id') || 
-			'fdatepicker-' + (this.$el[0].uniqueID || 
-				Math.random().toString(36).substr(2, 9));
+            // Get or assign a stable ID to the input element
+            let inputId = this.$el.attr('id');
+            if (!inputId) {
+                inputId = 'fdatepicker-' + Math.random().toString(36).substr(2, 9);
+                this.$el.attr('id', inputId); // Set the ID on the input element
+            }
 
-		// Check if DOM already exists for this input
-		const existingPicker = $fdatepickersContainer.find(`[data-fpicker-input="${inputId}"]`);
+            // Check if DOM already exists for this input
+            const existingPicker = $fdatepickersContainer.find(`[data-fpicker-input="${inputId}"]`);
 
-		if (existingPicker.length) {
-			// Reuse existing DOM
-			this.$fdatepicker = existingPicker;
-		} else {
-			// Build new DOM and mark it with the input reference
-			var $appendTarget = this.opts.inline ? 
-				$('<div class="fdatepicker-inline">').insertAfter(this.$el) : 
-				$fdatepickersContainer;
+            if (existingPicker.length) {
+                // Reuse existing DOM
+                this.$fdatepicker = existingPicker;
+            } else {
+                // Build new DOM and mark it with the input reference
+                var $appendTarget = this.opts.inline ? 
+                    $('<div class="fdatepicker-inline">').insertAfter(this.$el) : 
+                    $fdatepickersContainer;
 
-			this.$fdatepicker = $(baseTemplate)
-				.attr('data-fpicker-input', inputId)
-				.appendTo($appendTarget);
-		}
-		this.$content = this.$fdatepicker.find('.fdatepicker--content');
-		this.$nav = this.$fdatepicker.find('.fdatepicker--nav');
-
+                this.$fdatepicker = $(baseTemplate)
+                    .attr('data-fpicker-input', inputId)
+                    .appendTo($appendTarget);
+            }
+            this.$content = this.$fdatepicker.find('.fdatepicker--content');
+            this.$nav = this.$fdatepicker.find('.fdatepicker--nav');
         },
 
         _triggerOnChange: function () {
