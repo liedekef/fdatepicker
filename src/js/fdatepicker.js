@@ -328,8 +328,9 @@
                     .attr('data-fpicker-input', inputId)
                     .appendTo($appendTarget);
             }
-            this.$content = this.$fdatepicker.find('.fdatepicker--content');
-            this.$nav = this.$fdatepicker.find('.fdatepicker--nav');
+            this.$content = this.$fdatepicker.find('.fdatepicker--content').empty();
+            this.$nav = this.$fdatepicker.find('.fdatepicker--nav').empty();
+            this.$fdatepicker.find('.fdatepicker--buttons').remove();
         },
 
         _triggerOnChange: function () {
@@ -671,11 +672,11 @@
                     return _this.formatDate(altFormat, date)
                 });
                 altValues = altValues.join(this.opts.altFieldMultipleDatesSeparator);
-		if (typeof opts.altField == 'string') {
-			$("#"+$.escapeSelector(opts.altField)).val(altValues);
-		} else {
-			opts.altField.val(altValues);
-		}
+                if (typeof opts.altField == 'string') {
+                    $("#"+$.escapeSelector(opts.altField)).val(altValues);
+                } else {
+                    opts.altField.val(altValues);
+                }
             }
 
             value = value.join(this.opts.multipleDatesSeparator);
