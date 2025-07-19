@@ -30,7 +30,7 @@
         }
     }
 
-    var VERSION = '2.2.4',
+    var VERSION = '2.2.5',
         pluginName = 'fdatepicker',
         autoInitSelector = '.fdatepicker-here',
         $body, $fdatepickersContainer,
