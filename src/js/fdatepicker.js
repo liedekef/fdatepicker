@@ -673,16 +673,27 @@
                 });
                 altValues = altValues.join(this.opts.altFieldMultipleDatesSeparator);
                 if (typeof opts.altField == 'string') {
+                    let oldValue = $("#"+$.escapeSelector(opts.altField)).val();
                     $("#"+$.escapeSelector(opts.altField)).val(altValues);
+                    if (oldValue != altValues) {
+                        $("#"+$.escapeSelector(opts.altField)).trigger('change');
+                    }
                 } else {
+                    let oldValue = $(opts.altField).val();
                     opts.altField.val(altValues);
+                    if (oldValue != altValues) {
+                        $(opts.altField).trigger('change');
+                    }
                 }
             }
 
             value = value.join(this.opts.multipleDatesSeparator);
 
+            let oldValue = this.$el.val();
             this.$el.val(value);
-            this.$el.trigger("change"); // always send out the change trigger so people can hook into this
+            if (oldValue != value) {
+                this.$el.trigger('change');
+            }
             this._resizeInput(this.$el);
         },
 
