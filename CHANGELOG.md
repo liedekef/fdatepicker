@@ -1,3 +1,6 @@
+### 2025-07-20
+- some DOM fixes and correct change triggering
+
 ### 2025-07-11
 - the datepicker field is readonly, input is not working (currently)
 - exposed formatDate: $.fn.fdatepicker.formatDate(date, displayFormat);
