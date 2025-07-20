@@ -263,6 +263,11 @@
         _defineLocale: function (lang) {
             if (typeof lang == 'string') {
                 this.loc = $.fn.fdatepicker.language[lang];
+                // no lang found and it contains a "-": try first part
+                if (!this.loc && lang.includes('-')) {
+                    lang = lang.split('-').shift();
+                    this.loc = $.fn.fdatepicker.language[lang];
+                }
                 if (!this.loc) {
                     console.warn('Can\'t find language "' + lang + '" in fDatepicker.language, will use "en" instead');
                     this.loc = $.extend(true, {}, $.fn.fdatepicker.language.en)
