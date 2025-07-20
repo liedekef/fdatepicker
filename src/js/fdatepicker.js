@@ -30,7 +30,7 @@
         }
     }
 
-    var VERSION = '2.2.6',
+    var VERSION = '2.2.5',
         pluginName = 'fdatepicker',
         autoInitSelector = '.fdatepicker-here',
         $body, $fdatepickersContainer,
@@ -795,52 +795,96 @@
             var dims = this._getDimensions(this.$el),
                 selfDims = this._getDimensions(this.$fdatepicker),
                 pos = position.split(' '),
+                viewportHeight = window.innerHeight,
+                viewportWidth = window.innerWidth,
+                scrollTop = window.pageYOffset,
+                scrollLeft = window.pageXOffset,
                 top, left,
                 offset = this.opts.offset,
                 main = pos[0],
                 secondary = pos[1];
 
-            switch (main) {
-                case 'top':
-                    top = dims.top - selfDims.height - offset;
-                    break;
-                case 'right':
-                    left = dims.left + dims.width + offset;
-                    break;
-                case 'bottom':
-                    top = dims.top + dims.height + offset;
-                    break;
-                case 'left':
-                    left = dims.left - selfDims.width - offset;
-                    break;
+            // Try preferred position first, then fallbacks
+            var positionsToTry = [position];
+
+            // Add fallback positions based on preferred direction
+            if (main === 'bottom') {
+                positionsToTry.push('top ' + secondary);
+            } else if (main === 'top') {
+                positionsToTry.push('bottom ' + secondary);
+            } else if (main === 'left') {
+                positionsToTry.push('right ' + secondary);
+            } else if (main === 'right') {
+                positionsToTry.push('left ' + secondary);
             }
 
-            switch(secondary) {
-                case 'top':
-                    top = dims.top;
+            // Try each position until we find one that fits
+            let fitPosition = position;
+            console.log(fitPosition);
+            console.log(positionsToTry);
+            for (i = 0; i < positionsToTry.length; i++) {
+                var currentPos = positionsToTry[i].split(' ');
+                main = currentPos[0];
+                secondary = currentPos[1];
+
+                // Calculate position
+                switch (main) {
+                    case 'top':
+                        top = dims.top - selfDims.height - offset;
+                        break;
+                    case 'right':
+                        left = dims.left + dims.width + offset;
+                        break;
+                    case 'bottom':
+                        top = dims.top + dims.height + offset;
+                        break;
+                    case 'left':
+                        left = dims.left - selfDims.width - offset;
+                        break;
+                }
+
+                switch(secondary) {
+                    case 'top':
+                        top = dims.top;
+                        break;
+                    case 'right':
+                        left = dims.left + dims.width - selfDims.width;
+                        break;
+                    case 'bottom':
+                        top = dims.top + dims.height - selfDims.height;
+                        break;
+                    case 'left':
+                        left = dims.left;
+                        break;
+                    case 'center':
+                        if (/left|right/.test(main)) {
+                            top = dims.top + dims.height/2 - selfDims.height/2;
+                        } else {
+                            left = dims.left + dims.width/2 - selfDims.width/2;
+                        }
+                }
+
+                // Check if position is within viewport
+                var bottomEdge = top + selfDims.height;
+                var rightEdge = left + selfDims.width;
+
+                if (bottomEdge <= (viewportHeight + scrollTop) && 
+                    top >= scrollTop &&
+                    rightEdge <= (viewportWidth + scrollLeft) && 
+                    left >= scrollLeft) {
+                    // Position fits, use it
+                    fitPosition = positionsToTry[i];
                     break;
-                case 'right':
-                    left = dims.left + dims.width - selfDims.width;
-                    break;
-                case 'bottom':
-                    top = dims.top + dims.height - selfDims.height;
-                    break;
-                case 'left':
-                    left = dims.left;
-                    break;
-                case 'center':
-                    if (/left|right/.test(main)) {
-                        top = dims.top + dims.height/2 - selfDims.height/2;
-                    } else {
-                        left = dims.left + dims.width/2 - selfDims.width/2;
-                    }
+                }
+
             }
 
-            this.$fdatepicker
-                .css({
-                    left: left,
-                    top: top
-                })
+            console.log(fitPosition);
+            this._setPositionClasses(fitPosition);
+            this.$fdatepicker.css({
+                left: left,
+                top: top
+            });
         },
 
         show: function () {
