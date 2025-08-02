@@ -8,7 +8,7 @@ SimpleDatepicker.setMessages({
     today: 'Vandaag',
     clear: 'Wissen',
     close: 'Sluiten',
-    format: 'd-m-Y H:i',
+    format: 'd/m/Y H:i',
     firstDayOfWeek: 1,
     noDatesSelected: 'Geen datums geselecteerd',
     datesSelected: 'Geselecteerde datums ({0}):'
