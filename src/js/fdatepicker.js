@@ -1,3 +1,5 @@
+// plain Vanilla rewrited datepicker
+
 const FDATEPICKER_DEFAULT_MESSAGES = {
     days: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
     daysShort: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
@@ -11,7 +13,7 @@ const FDATEPICKER_DEFAULT_MESSAGES = {
     firstDayOfWeek: 0,
     noDatesSelected: 'No dates selected',
     datesSelected: 'Selected dates ({0}):'
-}
+};
 
 class FDatepicker {
     static setMessages(customMessages) {
