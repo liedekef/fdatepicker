@@ -1,3 +1,6 @@
+### 2025-08-02
+- Total rewrite in plain Vanilla JS
+
 ### 2025-07-20
 - some DOM fixes and correct change triggering
 
