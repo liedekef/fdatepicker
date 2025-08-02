@@ -1,7 +1,6 @@
 #/bin/bash
 
-old_release=$1
-release=$2
+release=$1
 if [ -z "$release" ]; then
        echo "Usage: $0 <old version number> <new version number>"
        exit
@@ -18,7 +17,6 @@ $scriptdir/fdatepicker_minify.sh
 
 # Update version file, JS header, and package.json
 echo $release >$basedir/VERSION
-sed -i "s/VERSION = '$old_release'/VERSION = '$release'/" $basedir/src/js/fdatepicker.js
 
 # --- NPM: update version and publish ---
 ##if [ -f "$basedir/package.json" ]; then
