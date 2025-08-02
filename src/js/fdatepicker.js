@@ -13,7 +13,7 @@ const FDATEPICKER_DEFAULT_MESSAGES = {
     datesSelected: 'Selected dates ({0}):'
 }
 
-class SimpleDatepicker {
+class fDatepicker {
     static setMessages(customMessages) {
         Object.assign(FDATEPICKER_DEFAULT_MESSAGES, customMessages);
     }
@@ -43,17 +43,17 @@ class SimpleDatepicker {
             altField: input.dataset.altField || null,
             altFormat: input.dataset.altFormat || 'Y-m-d',
             range: input.dataset.range === 'true',
-            multipleDates: input.dataset.multipleDates === 'true',
-            multipleDatesSeparator: input.dataset.multipleDatesSeparator || ',',
+            multiple: input.dataset.multiple === 'true',
+            multipleSeparator: input.dataset.multipleSeparator || ',',
             altFieldMultipleDatesSeparator: input.dataset.altFieldMultipleDatesSeparator || ',',
-            multipleDatesDisplaySelector: input.dataset.multipleDatesDisplaySelector || '.selected-dates-display',
+            multipleDisplaySelector: input.dataset.multipleDisplaySelector || '.selected-dates-display',
             timepicker: input.dataset.timepicker === 'true',
             ampm: input.dataset.ampm === 'false',
             firstDayOfWeek: parseInt(input.dataset.firstDayOfWeek) || 0, // 0 = Sunday, 1 = Monday, etc.
             timepickerDefaultNow: input.dataset.timepickerDefaultNow !== 'false', // default true
-            todayButton: input.dataset.todayButton === 'true',
-            clearButton: input.dataset.clearButton === 'true',
-            closeButton: input.dataset.closeButton === 'true',
+            todayButton: input.dataset.todayButton !== 'false',
+            clearButton: input.dataset.clearButton !== 'false',
+            closeButton: input.dataset.closeButton !== 'false',
             ...options
         };
 
@@ -128,7 +128,7 @@ class SimpleDatepicker {
     }
 
     initializePrefilledDates() {
-        if (this.options.multipleDates && this.input.dataset.dates) {
+        if (this.options.multiple && this.input.dataset.dates) {
             // Multiple dates
             const dates = this.input.dataset.dates.split(',');
             this.selectedDates = dates.map(dateStr => new Date(dateStr.trim())).filter(date => !isNaN(date));
@@ -656,7 +656,7 @@ class SimpleDatepicker {
             return;
         }
 
-        if (this.options.multipleDates) {
+        if (this.options.multiple) {
             // Multiple selection
             const existingIndex = this.selectedDates.findIndex(date => 
                 date.toDateString() === selectedDate.toDateString()
@@ -729,7 +729,7 @@ class SimpleDatepicker {
     }
 
     updateSelectedTime() {
-        const targets = this.options.multipleDates ? this.selectedDates : 
+        const targets = this.options.multiple ? this.selectedDates : 
             (this.selectedEndDate ? [this.selectedDate, this.selectedEndDate] : 
                 this.selectedDate ? [this.selectedDate] : []);
 
@@ -755,8 +755,8 @@ class SimpleDatepicker {
     }
 
     updateMultipleDisplay() {
-        const display = document.querySelector(this.options.multipleDatesDisplaySelector);
-        if (display && this.options.multipleDates) {
+        const display = document.querySelector(this.options.multipleDisplaySelector);
+        if (display && this.options.multiple) {
             if (this.selectedDates.length === 0) {
                 display.textContent = this.locale.noDatesSelected || 'No dates selected';
             } else {
@@ -824,13 +824,13 @@ class SimpleDatepicker {
     updateInput() {
         let value = '';
 
-        if (this.options.multipleDates) {
+        if (this.options.multiple) {
             if (this.selectedDates.length > 0) {
                 if (this.options.altField) {
                     // we have an altField, so we can be pretty here
                     value = `${this.selectedDates.length} date${this.selectedDates.length !== 1 ? 's' : ''} selected`;
                 } else {
-                    value = this.selectedDates.map(date => this.formatDate(date)).join(this.options.multipleDatesSeparator);
+                    value = this.selectedDates.map(date => this.formatDate(date)).join(this.options.multipleSeparator);
                 }
             }
         } else if (this.options.range && this.selectedDate && this.selectedEndDate) {
@@ -838,7 +838,7 @@ class SimpleDatepicker {
                 // we have an altField, so we can be pretty here
                 value = `${this.formatDate(this.selectedDate)} - ${this.formatDate(this.selectedEndDate)}`;
             } else {
-                value = this.formatDate(this.selectedDate) + this.options.multipleDatesSeparator + this.formatDate(this.selectedEndDate);
+                value = this.formatDate(this.selectedDate) + this.options.multipleSeparator + this.formatDate(this.selectedEndDate);
             }
         } else if (this.selectedDate) {
             value = this.formatDate(this.selectedDate);
@@ -851,7 +851,7 @@ class SimpleDatepicker {
             const altField = document.getElementById(this.options.altField);
             if (altField) {
                 let altValue = '';
-                if (this.options.multipleDates) {
+                if (this.options.multiple) {
                     altValue = this.selectedDates.map(date => this.formatDate(date, this.options.altFormat)).join(this.options.altFieldMultipleDatesSeparator);
                 } else if (this.options.range && this.selectedDate && this.selectedEndDate) {
                     altValue = this.formatDate(this.selectedDate, this.options.altFormat) + this.options.altFieldMultipleDatesSeparator + this.formatDate(this.selectedEndDate, this.options.altFormat);
@@ -892,7 +892,7 @@ class SimpleDatepicker {
         }
 
         // Update multiple display
-        if (this.options.multipleDates) {
+        if (this.options.multiple) {
             this.updateMultipleDisplay();
         }
 
@@ -976,7 +976,7 @@ class SimpleDatepicker {
             }
 
             // Handle different selection modes
-            if (this.options.multipleDates) {
+            if (this.options.multiple) {
                 // Multiple selection
                 const isSelected = this.selectedDates.some(date => 
                     date.toDateString() === dayDate.toDateString()
