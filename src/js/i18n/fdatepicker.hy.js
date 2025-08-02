@@ -1,5 +1,5 @@
 // datepicker-hy.js
-SimpleDatepicker.setMessages({
+FDatepicker.setMessages({
     days: ['Կիրակի', 'Երկուշաբթի', 'Երեքշաբթի', 'Չորեքշաբթի', 'Հինգշաբթի', 'ՈՒրբաթ', 'Շաբաթ'],
     daysShort: ['Կիր', 'Երկ', 'Երեք', 'Չոր', 'Հին', 'ՈՒր', 'Շաբ'],
     daysMin: ['Կ', 'Ե', 'Ե', 'Չ', 'Հ', 'Ո', 'Շ'],

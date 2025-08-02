@@ -1,5 +1,5 @@
 // datepicker-da.js
-SimpleDatepicker.setMessages({
+FDatepicker.setMessages({
     days: ['Søndag', 'Mandag', 'Tirsdag', 'Onsdag', 'Torsdag', 'Fredag', 'Lørdag'],
     daysShort: ['Sø', 'Ma', 'Ti', 'On', 'To', 'Fr', 'Lø'],
     daysMin: ['Sø', 'Ma', 'Ti', 'On', 'To', 'Fr', 'Lø'],

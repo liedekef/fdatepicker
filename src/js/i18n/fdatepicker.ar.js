@@ -1,5 +1,5 @@
 // datepicker-ar.js
-SimpleDatepicker.setMessages({
+FDatepicker.setMessages({
     days: ['الأحد', 'الاثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت'],
     daysShort: ['أحد', 'اثنين', 'ثلاثاء', 'أربعاء', 'خميس', 'جمعة', 'سبت'],
     daysMin: ['ح', 'ن', 'ث', 'ع', 'خ', 'ج', 'س'],

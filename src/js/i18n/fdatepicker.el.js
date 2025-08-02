@@ -1,5 +1,5 @@
 // datepicker-el.js
-SimpleDatepicker.setMessages({
+FDatepicker.setMessages({
     days: ['Κυριακή', 'Δευτέρα', 'Τρίτη', 'Τετάρτη', 'Πέμπτη', 'Παρασκευή', 'Σάββατο'],
     daysShort: ['Κυ', 'Δε', 'Τρ', 'Τε', 'Πέ', 'Πα', 'Σά'],
     daysMin: ['Κ', 'Δ', 'Τ', 'Τ', 'Π', 'Π', 'Σ'],

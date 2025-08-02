@@ -1,5 +1,5 @@
 // datepicker-si.js
-SimpleDatepicker.setMessages({
+FDatepicker.setMessages({
     days: ['ඉරිදා', 'සඳුදා', 'අඟහරුවාදා', 'බදාදා', 'බ්‍රහස්පතින්දා', 'ෂනිහරිදා', 'සෙනසුරාදා'],
     daysShort: ['ඉරි', 'සඳු', 'අඟහ', 'බදා', 'බ්‍රහ', 'ෂනි', 'සෙන'],
     daysMin: ['ඉ', 'ස', 'අ', 'බ', 'බ්‍ර', 'ෂ', 'සෙ'],

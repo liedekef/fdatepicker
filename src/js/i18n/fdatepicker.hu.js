@@ -1,5 +1,5 @@
 // datepicker-hu.js
-SimpleDatepicker.setMessages({
+FDatepicker.setMessages({
     days: ['Vasárnap', 'Hétfő', 'Kedd', 'Szerda', 'Csütörtök', 'Péntek', 'Szombat'],
     daysShort: ['Vas', 'Hét', 'Ked', 'Sze', 'Csü', 'Pén', 'Szo'],
     daysMin: ['V', 'H', 'K', 'Sze', 'Cs', 'P', 'Szo'],

@@ -1,5 +1,5 @@
 // datepicker-tr.js
-SimpleDatepicker.setMessages({
+FDatepicker.setMessages({
     days: ['Pazar', 'Pazartesi', 'Salı', 'Çarşamba', 'Perşembe', 'Cuma', 'Cumartesi'],
     daysShort: ['Paz', 'Pzt', 'Sal', 'Çar', 'Per', 'Cum', 'Cmt'],
     daysMin: ['P', 'Pt', 'S', 'Ç', 'Pe', 'C', 'Ct'],

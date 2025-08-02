@@ -13,7 +13,7 @@ const FDATEPICKER_DEFAULT_MESSAGES = {
     datesSelected: 'Selected dates ({0}):'
 }
 
-class fDatepicker {
+class FDatepicker {
     static setMessages(customMessages) {
         Object.assign(FDATEPICKER_DEFAULT_MESSAGES, customMessages);
     }
@@ -770,7 +770,7 @@ class fDatepicker {
     formatDate(date, format = null) {
         if (!date) return '';
         format = format || this.options.format;
-        return fDatepicker.formatDate(date, format, this.locale);
+        return FDatepicker.formatDate(date, format, this.locale);
     }
 
     static formatDate(date, format = 'm/d/Y', locale = null) {
@@ -781,7 +781,7 @@ class fDatepicker {
             'j': date.getDate(),
             'l': loc.days[date.getDay()],
             'D': loc.daysShort[date.getDay()],
-            'S': fDatepicker.getOrdinalSuffix(date.getDate()),
+            'S': FDatepicker.getOrdinalSuffix(date.getDate()),
             'm': String(date.getMonth() + 1).padStart(2, '0'),
             'n': date.getMonth() + 1,
             'F': loc.months[date.getMonth()],

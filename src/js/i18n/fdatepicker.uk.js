@@ -1,5 +1,5 @@
 // datepicker-uk.js
-SimpleDatepicker.setMessages({
+FDatepicker.setMessages({
     days: ['Неділя', 'Понеділок', 'Вівторок', 'Середа', 'Четвер', 'П’ятниця', 'Субота'],
     daysShort: ['Нед', 'Пон', 'Вів', 'Сер', 'Чет', 'П’ят', 'Суб'],
     daysMin: ['Нд', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб'],

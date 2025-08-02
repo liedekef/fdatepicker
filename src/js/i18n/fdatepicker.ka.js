@@ -1,5 +1,5 @@
 // datepicker-ka.js
-SimpleDatepicker.setMessages({
+FDatepicker.setMessages({
     days: ['კვირა', 'ორშაბათი', 'სამშაბათი', 'ოთხშაბათი', 'ხუთშაბათი', 'პარასკევი', 'შაბათი'],
     daysShort: ['კვ', 'ორ', 'სა', 'ოთ', 'ხუ', 'პა', 'შა'],
     daysMin: ['კ', 'ო', 'ს', 'ო', 'ხ', 'პ', 'შ'],
