@@ -35,7 +35,7 @@ class FDatepicker {
 
         // Read options from input's dataset
         this.options = {
-            format: input.dataset.format || 'm/d/Y',
+            format: input.dataset.format || '',
             startView: input.dataset.startView || 'days',
             minDate: input.dataset.minDate ? new Date(input.dataset.minDate) : null,
             maxDate: input.dataset.maxDate ? new Date(input.dataset.maxDate) : null,
@@ -59,8 +59,8 @@ class FDatepicker {
 
         this.locale = FDATEPICKER_DEFAULT_MESSAGES;
 
-        if (!this.input.dataset.format) {
-            this.options.format = this.locale.format;
+        if (!this.input.dataset.format && !this.options.format) {
+            this.options.format = this.locale.format || 'm/d/Y';
         }
         if (this.options.format.includes('a') || this.options.format.includes('A')) {
             this.options.ampm = true;
