@@ -71,10 +71,10 @@ class FDatepicker {
         this.wrapper.appendChild(this.popup);
 
         // Now query elements inside popup
-        this.title = this.popup.querySelector('.datepicker-title');
-        this.content = this.popup.querySelector('.datepicker-content');
-        this.grid = this.popup.querySelector('.datepicker-grid');
-        this.timepicker = this.popup.querySelector('.datepicker-timepicker');
+        this.title = this.popup.querySelector('.fdatepicker-title');
+        this.content = this.popup.querySelector('.fdatepicker-content');
+        this.grid = this.popup.querySelector('.fdatepicker-grid');
+        this.timepicker = this.popup.querySelector('.fdatepicker-timepicker');
         this.hoursInput = this.popup.querySelector('[data-time="hours"]');
         this.minutesInput = this.popup.querySelector('[data-time="minutes"]');
 
@@ -174,16 +174,16 @@ class FDatepicker {
 
     createPopup() {
         const popup = document.createElement('div');
-        popup.className = 'datepicker-popup';
+        popup.className = 'fdatepicker-popup';
 
         popup.innerHTML = `
-        <div class="datepicker-header">
-            <button class="datepicker-nav" data-action="prev" tabindex="0">‹</button>
-            <div class="datepicker-title" tabindex="0"></div>
-            <button class="datepicker-nav" data-action="next" tabindex="0">›</button>
+        <div class="fdatepicker-header">
+            <button class="fdatepicker-nav" data-action="prev" tabindex="0">‹</button>
+            <div class="fdatepicker-title" tabindex="0"></div>
+            <button class="fdatepicker-nav" data-action="next" tabindex="0">›</button>
         </div>
-        <div class="datepicker-content">
-            <div class="datepicker-grid">
+        <div class="fdatepicker-content">
+            <div class="fdatepicker-grid">
                 <!-- Days headers will be added dynamically -->
             </div>
         </div>
@@ -195,20 +195,20 @@ class FDatepicker {
             const is24Hour = !this.options.ampm;
 
             const timeInputHtml = is24Hour ? `
-            <input type="number" class="time-input" data-time="hours" min="0" max="23" value="${String(initialTime.hours).padStart(2, '0')}">
+            <input type="number" class="fdatepicker-time-input" data-time="hours" min="0" max="23" value="${String(initialTime.hours).padStart(2, '0')}">
         ` : `
-            <input type="number" class="time-input" data-time="hours" min="1" max="12" value="${String(initialTime.hours).padStart(2, '0')}">
-            <div class="time-ampm ${initialTime.isAM ? 'active' : ''}" data-ampm="AM">AM</div>
-            <div class="time-ampm ${!initialTime.isAM ? 'active' : ''}" data-ampm="PM">PM</div>
+            <input type="number" class="fdatepicker-time-input" data-time="hours" min="1" max="12" value="${String(initialTime.hours).padStart(2, '0')}">
+            <div class="fdatepicker-time-ampm ${initialTime.isAM ? 'active' : ''}" data-ampm="AM">AM</div>
+            <div class="fdatepicker-time-ampm ${!initialTime.isAM ? 'active' : ''}" data-ampm="PM">PM</div>
             `;
 
             const timepicker = document.createElement('div');
-            timepicker.className = 'datepicker-timepicker';
+            timepicker.className = 'fdatepicker-timepicker';
             timepicker.innerHTML = `
-            <div class="time-inputs">
+            <div class="fdatepicker-time-inputs">
                 ${timeInputHtml}
-                <span class="time-separator">:</span>
-                <input type="number" class="time-input" data-time="minutes" min="0" max="59" value="${String(initialTime.minutes).padStart(2, '0')}">
+                <span class="fdatepicker-time-separator">:</span>
+                <input type="number" class="fdatepicker-time-input" data-time="minutes" min="0" max="59" value="${String(initialTime.minutes).padStart(2, '0')}">
             </div>
             `;
             popup.appendChild(timepicker);
@@ -216,12 +216,12 @@ class FDatepicker {
 
         if (this.options.todayButton || this.options.clearButton || this.options.closeButton) {
             const buttonRow = document.createElement('div');
-            buttonRow.className = 'datepicker-buttons';
+            buttonRow.className = 'fdatepicker-buttons';
 
             if (this.options.todayButton) {
                 const todayBtn = document.createElement('button');
                 todayBtn.type = 'button';
-                todayBtn.className = 'datepicker-button-text';
+                todayBtn.className = 'fdatepicker-button-text';
                 todayBtn.textContent = this.locale.today || 'Today';
                 todayBtn.addEventListener('click', (e) => {
                     e.stopPropagation();
@@ -236,7 +236,7 @@ class FDatepicker {
             if (this.options.clearButton) {
                 const clearBtn = document.createElement('button');
                 clearBtn.type = 'button';
-                clearBtn.className = 'datepicker-button-text';
+                clearBtn.className = 'fdatepicker-button-text';
                 clearBtn.textContent = this.locale.clear || 'Clear';
                 clearBtn.addEventListener('click', (e) => {
                     e.stopPropagation();
@@ -252,7 +252,7 @@ class FDatepicker {
             if (this.options.closeButton) {
                 const closeBtn = document.createElement('button');
                 closeBtn.type = 'button';
-                closeBtn.className = 'datepicker-button-text';
+                closeBtn.className = 'fdatepicker-button-text';
                 closeBtn.textContent = this.locale.close || 'Close';
                 closeBtn.addEventListener('click', (e) => {
                     e.stopPropagation();
@@ -448,17 +448,17 @@ class FDatepicker {
 
     handleSelection() {
         if (this.view === 'days') {
-            const focusedDay = this.popup.querySelector('.datepicker-day:focus, .datepicker-day.focus');
+            const focusedDay = this.popup.querySelector('.fdatepicker-day:focus, .fdatepicker-day.focus');
             if (focusedDay && !focusedDay.classList.contains('other-month') && !focusedDay.classList.contains('disabled')) {
                 this.selectDate(parseInt(focusedDay.textContent));
             }
         } else if (this.view === 'months') {
-            const focusedMonth = this.popup.querySelector('.datepicker-month:focus, .datepicker-month.focus');
+            const focusedMonth = this.popup.querySelector('.fdatepicker-month:focus, .fdatepicker-month.focus');
             if (focusedMonth) {
                 this.selectMonth(parseInt(focusedMonth.dataset.month));
             }
         } else if (this.view === 'years') {
-            const focusedYear = this.popup.querySelector('.datepicker-year:focus, .datepicker-year.focus');
+            const focusedYear = this.popup.querySelector('.fdatepicker-year:focus, .fdatepicker-year.focus');
             if (focusedYear) {
                 this.selectYear(parseInt(focusedYear.dataset.year));
             }
@@ -488,7 +488,7 @@ class FDatepicker {
         const day = this.currentDate.getDate();
 
         // Find the day element that matches current date and is not from other month
-        const dayElements = Array.from(this.popup.querySelectorAll('.datepicker-day:not(.other-month)'));
+        const dayElements = Array.from(this.popup.querySelectorAll('.fdatepicker-day:not(.other-month)'));
         const targetDay = dayElements.find(el => parseInt(el.textContent) === day);
 
         if (targetDay) {
@@ -535,7 +535,7 @@ class FDatepicker {
     }
 
     clearFocus() {
-        this.popup.querySelectorAll('.datepicker-day, .datepicker-month, .datepicker-year').forEach(el => {
+        this.popup.querySelectorAll('.fdatepicker-day, .fdatepicker-month, .fdatepicker-year').forEach(el => {
             el.classList.remove('focus');
             el.setAttribute('tabindex', '-1');
         });
@@ -548,11 +548,11 @@ class FDatepicker {
 
         // Mouse interactions
         this.popup.addEventListener('mouseover', (e) => {
-            if (e.target.classList.contains('datepicker-day') && !e.target.classList.contains('other-month')) {
+            if (e.target.classList.contains('fdatepicker-day') && !e.target.classList.contains('other-month')) {
                 this.setFocus(e.target);
-            } else if (e.target.classList.contains('datepicker-month')) {
+            } else if (e.target.classList.contains('fdatepicker-month')) {
                 this.setFocus(e.target);
-            } else if (e.target.classList.contains('datepicker-year')) {
+            } else if (e.target.classList.contains('fdatepicker-year')) {
                 this.setFocus(e.target);
             }
         });
@@ -575,15 +575,15 @@ class FDatepicker {
                 this.render();
                 this.setInitialFocus();
             }
-            if (e.target.classList.contains('datepicker-day') && !e.target.classList.contains('other-month')) {
+            if (e.target.classList.contains('fdatepicker-day') && !e.target.classList.contains('other-month')) {
                 this.selectDate(parseInt(e.target.textContent));
             }
 
-            if (e.target.classList.contains('datepicker-month')) {
+            if (e.target.classList.contains('fdatepicker-month')) {
                 this.selectMonth(parseInt(e.target.dataset.month));
             }
 
-            if (e.target.classList.contains('datepicker-year')) {
+            if (e.target.classList.contains('fdatepicker-year')) {
                 this.selectYear(parseInt(e.target.dataset.year));
             }
         });
@@ -630,7 +630,7 @@ class FDatepicker {
         this.setInitialFocus();
 
         // --- Smart Positioning ---
-        this.popup.classList.remove('datepicker-popup-top');
+        this.popup.classList.remove('fdatepicker-popup-top');
 
         const inputRect = this.input.getBoundingClientRect();
         const spaceBelow = window.innerHeight - inputRect.bottom;
@@ -638,7 +638,7 @@ class FDatepicker {
         const popupHeight = 350;
 
         if (spaceBelow < popupHeight && spaceAbove > spaceBelow) {
-            this.popup.classList.add('datepicker-popup-top');
+            this.popup.classList.add('fdatepicker-popup-top');
         }
 
     }
@@ -911,13 +911,13 @@ class FDatepicker {
     }
 
     renderDays() {
-        this.grid.className = 'datepicker-grid';
+        this.grid.className = 'fdatepicker-grid';
 
         // Build day headers based on first day of week
         let headerHtml = '';
         for (let i = 0; i < 7; i++) {
             const dayIndex = (this.options.firstDayOfWeek + i) % 7;
-            headerHtml += `<div class="datepicker-day-header">${this.locale.daysMin[dayIndex]}</div>`;
+            headerHtml += `<div class="fdatepicker-day-header">${this.locale.daysMin[dayIndex]}</div>`;
         }
         this.grid.innerHTML = headerHtml;
 
@@ -931,7 +931,7 @@ class FDatepicker {
 
         for (let i = prevMonthDays - 1; i >= 0; i--) {
             const day = document.createElement('div');
-            day.className = 'datepicker-day other-month';
+            day.className = 'fdatepicker-day other-month';
             day.textContent = prevMonth.getDate() - i;
             day.setAttribute('tabindex', '-1');
             this.grid.appendChild(day);
@@ -940,7 +940,7 @@ class FDatepicker {
         // Days of current month
         for (let day = 1; day <= lastDay.getDate(); day++) {
             const dayEl = document.createElement('div');
-            dayEl.className = 'datepicker-day';
+            dayEl.className = 'fdatepicker-day';
             dayEl.textContent = day;
             dayEl.setAttribute('tabindex', '-1');
 
@@ -996,7 +996,7 @@ class FDatepicker {
 
         for (let day = 1; day <= remainingCells; day++) {
             const dayEl = document.createElement('div');
-            dayEl.className = 'datepicker-day other-month';
+            dayEl.className = 'fdatepicker-day other-month';
             dayEl.textContent = day;
             dayEl.setAttribute('tabindex', '-1');
             this.grid.appendChild(dayEl);
@@ -1004,12 +1004,12 @@ class FDatepicker {
     }
 
     renderMonths() {
-        this.grid.className = 'datepicker-grid months';
+        this.grid.className = 'fdatepicker-grid months';
         this.grid.innerHTML = '';
 
         for (let month = 0; month < 12; month++) {
             const monthEl = document.createElement('div');
-            monthEl.className = 'datepicker-month';
+            monthEl.className = 'fdatepicker-month';
             monthEl.textContent = this.locale.monthsShort[month];
             monthEl.dataset.month = month;
             monthEl.setAttribute('tabindex', '-1');
@@ -1028,12 +1028,12 @@ class FDatepicker {
     }
 
     renderYears() {
-        this.grid.className = 'datepicker-grid years';
+        this.grid.className = 'fdatepicker-grid years';
         this.grid.innerHTML = '';
 
         for (let year = this.currentYear; year < this.currentYear + 12; year++) {
             const yearEl = document.createElement('div');
-            yearEl.className = 'datepicker-year';
+            yearEl.className = 'fdatepicker-year';
             yearEl.textContent = year;
             yearEl.dataset.year = year;
             yearEl.setAttribute('tabindex', '-1');
