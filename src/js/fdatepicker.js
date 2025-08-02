@@ -35,7 +35,7 @@ class fDatepicker {
 
         // Read options from input's dataset
         this.options = {
-            format: input.dataset.Format || 'm/d/Y',
+            format: input.dataset.format || 'm/d/Y',
             startView: input.dataset.startView || 'days',
             minDate: input.dataset.minDate ? new Date(input.dataset.minDate) : null,
             maxDate: input.dataset.maxDate ? new Date(input.dataset.maxDate) : null,
@@ -59,7 +59,7 @@ class fDatepicker {
 
         this.locale = FDATEPICKER_DEFAULT_MESSAGES;
 
-        if (this.locale.format) {
+        if (!this.input.dataset.format) {
             this.options.format = this.locale.format;
         }
         if (this.options.format.includes('a') || this.options.format.includes('A')) {
@@ -187,7 +187,32 @@ class fDatepicker {
                 <!-- Days headers will be added dynamically -->
             </div>
         </div>
-    `;
+        `;
+
+        // Add timepicker if needed
+        if (this.options.timepicker) {
+            const initialTime = this.getInitialTimeValues();
+            const is24Hour = !this.options.ampm;
+
+            const timeInputHtml = is24Hour ? `
+            <input type="number" class="time-input" data-time="hours" min="0" max="23" value="${String(initialTime.hours).padStart(2, '0')}">
+        ` : `
+            <input type="number" class="time-input" data-time="hours" min="1" max="12" value="${String(initialTime.hours).padStart(2, '0')}">
+            <div class="time-ampm ${initialTime.isAM ? 'active' : ''}" data-ampm="AM">AM</div>
+            <div class="time-ampm ${!initialTime.isAM ? 'active' : ''}" data-ampm="PM">PM</div>
+            `;
+
+            const timepicker = document.createElement('div');
+            timepicker.className = 'datepicker-timepicker';
+            timepicker.innerHTML = `
+            <div class="time-inputs">
+                ${timeInputHtml}
+                <span class="time-separator">:</span>
+                <input type="number" class="time-input" data-time="minutes" min="0" max="59" value="${String(initialTime.minutes).padStart(2, '0')}">
+            </div>
+            `;
+            popup.appendChild(timepicker);
+        }
 
         if (this.options.todayButton || this.options.clearButton || this.options.closeButton) {
             const buttonRow = document.createElement('div');
@@ -237,31 +262,6 @@ class fDatepicker {
             }
 
             popup.appendChild(buttonRow);
-        }
-
-        // Add timepicker if needed
-        if (this.options.timepicker) {
-            const initialTime = this.getInitialTimeValues();
-            const is24Hour = !this.options.ampm;
-
-            const timeInputHtml = is24Hour ? `
-            <input type="number" class="time-input" data-time="hours" min="0" max="23" value="${String(initialTime.hours).padStart(2, '0')}">
-        ` : `
-            <input type="number" class="time-input" data-time="hours" min="1" max="12" value="${String(initialTime.hours).padStart(2, '0')}">
-            <div class="time-ampm ${initialTime.isAM ? 'active' : ''}" data-ampm="AM">AM</div>
-            <div class="time-ampm ${!initialTime.isAM ? 'active' : ''}" data-ampm="PM">PM</div>
-        `;
-
-            const timepicker = document.createElement('div');
-            timepicker.className = 'datepicker-timepicker';
-            timepicker.innerHTML = `
-            <div class="time-inputs">
-                ${timeInputHtml}
-                <span class="time-separator">:</span>
-                <input type="number" class="time-input" data-time="minutes" min="0" max="59" value="${String(initialTime.minutes).padStart(2, '0')}">
-            </div>
-        `;
-            popup.appendChild(timepicker);
         }
 
         return popup;
@@ -769,49 +769,36 @@ class fDatepicker {
 
     formatDate(date, format = null) {
         if (!date) return '';
-
         format = format || this.options.format;
-
-        const d = date.getDate();
-        const m = date.getMonth();
-        const y = date.getFullYear();
-        const h = date.getHours();
-        const i = date.getMinutes();
-        const s = date.getSeconds();
-
-        const formatMap = {
-            // Day
-            'd': String(d).padStart(2, '0'),
-            'j': d,
-            'l': this.locale.days[date.getDay()],
-            'D': this.locale.daysShort[date.getDay()],
-            'S': this.getOrdinalSuffix(d),
-
-            // Month
-            'm': String(m + 1).padStart(2, '0'),
-            'n': m + 1,
-            'F': this.locale.months[m],
-            'M': this.locale.monthsShort[m],
-
-            // Year
-            'Y': y,
-            'y': String(y).slice(-2),
-
-            // Time
-            'H': String(h).padStart(2, '0'),
-            'G': h,
-            'h': String(h % 12 || 12).padStart(2, '0'),
-            'g': h % 12 || 12,
-            'i': String(i).padStart(2, '0'),
-            's': String(s).padStart(2, '0'),
-            'A': h >= 12 ? 'PM' : 'AM',
-            'a': h >= 12 ? 'pm' : 'am'
-        };
-
-        return format.replace(/[a-zA-Z]/g, char => formatMap[char] || char);
+        return fDatepicker.formatDate(date, format, this.locale);
     }
 
-    getOrdinalSuffix(day) {
+    static formatDate(date, format = 'm/d/Y', locale = null) {
+        if (!date) return '';
+        const loc = locale || DATEPICKER_DEFAULT_MESSAGES;
+        const formatMap = {
+            'd': String(date.getDate()).padStart(2, '0'),
+            'j': date.getDate(),
+            'l': loc.days[date.getDay()],
+            'D': loc.daysShort[date.getDay()],
+            'S': fDatepicker.getOrdinalSuffix(date.getDate()),
+            'm': String(date.getMonth() + 1).padStart(2, '0'),
+            'n': date.getMonth() + 1,
+            'F': loc.months[date.getMonth()],
+            'M': loc.monthsShort[date.getMonth()],
+            'Y': date.getFullYear(),
+            'y': String(date.getFullYear()).slice(-2),
+            'H': String(date.getHours()).padStart(2, '0'),
+            'G': date.getHours(),
+            'i': String(date.getMinutes()).padStart(2, '0'),
+            's': String(date.getSeconds()).padStart(2, '0'),
+            'A': date.getHours() >= 12 ? 'PM' : 'AM',
+            'a': date.getHours() >= 12 ? 'pm' : 'am'
+        };
+        return format.replace(/d|j|l|D|S|m|n|F|M|Y|y|H|G|i|s|A|a/g, match => formatMap[match] || '');
+    }
+
+    static getOrdinalSuffix(day) {
         if (day > 3 && day < 21) return 'th';
         switch (day % 10) {
             case 1: return 'st';
