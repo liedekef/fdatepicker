@@ -51,6 +51,7 @@ class FDatepicker {
             multipleSeparator: input.dataset.multipleSeparator || ',',
             altFieldMultipleDatesSeparator: input.dataset.altFieldMultipleDatesSeparator || ',',
             multipleDisplaySelector: input.dataset.multipleDisplaySelector || '.selected-dates-display',
+            autoClose: input.dataset.autoClose === 'true',
             timepicker: input.dataset.timepicker === 'true',
             ampm: input.dataset.ampm === 'false',
             firstDayOfWeek: parseInt(input.dataset.firstDayOfWeek) || 0, // 0 = Sunday, 1 = Monday, etc.
@@ -593,6 +594,9 @@ class FDatepicker {
             }
             if (e.target.classList.contains('fdatepicker-day') && !e.target.classList.contains('other-month')) {
                 this.selectDate(parseInt(e.target.textContent));
+                if (this.options.autoClose) {
+                    this.close();
+                }
             }
 
             if (e.target.classList.contains('fdatepicker-month')) {
@@ -673,9 +677,14 @@ class FDatepicker {
         let top, left;
 
         this.popup.classList.remove('fdatepicker-popup-top', 'fdatepicker-popup-bottom');
-        if (spaceAbove > spaceBelow && spaceAbove > 150) { // 150px minimum space
+        console.log(spaceAbove);
+        if (spaceAbove > spaceBelow && spaceAbove > 300) {
             // Position above
             this.popup.classList.add('fdatepicker-popup-top');
+            top = inputRect.top - offset;
+        } else if ((spaceAbove > spaceBelow && spaceAbove > 150) || spaceBelow<150) {
+            // Position above
+            this.popup.classList.add('fdatepicker-popup-middle');
             top = inputRect.top - offset;
         } else {
             // Position below (default)
