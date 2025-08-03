@@ -50,13 +50,19 @@ class FDatepicker {
             altFieldMultipleDatesSeparator: input.dataset.altFieldMultipleDatesSeparator || ',',
             multipleDisplaySelector: input.dataset.multipleDisplaySelector || '.selected-dates-display',
             autoClose: input.dataset.autoClose !== 'false', // default true
-            timepicker: input.dataset.timepicker === 'true', // default false, no timepicker
-            ampm: input.dataset.ampm === 'false',
             firstDayOfWeek: parseInt(input.dataset.firstDayOfWeek) || 0, // 0 = Sunday, 1 = Monday, etc.
             timepickerDefaultNow: input.dataset.timepickerDefaultNow !== 'false', // default true
             todayButton: input.dataset.todayButton !== 'false',
             clearButton: input.dataset.clearButton !== 'false',
             closeButton: input.dataset.closeButton !== 'false',
+            timepicker: input.dataset.timepicker === 'true', // default false, no timepicker
+            ampm: input.dataset.ampm === 'false',
+            hoursStep: parseInt(input.dataset.hoursStep) || 1,
+            minutesStep: parseInt(input.dataset.minutesStep) || 1,
+            minHours: input.dataset.minHours !== undefined ? parseInt(input.dataset.minHours) : null,
+            maxHours: input.dataset.maxHours !== undefined ? parseInt(input.dataset.maxHours) : null,
+            minMinutes: input.dataset.minMinutes !== undefined ? parseInt(input.dataset.minMinutes) : 0,
+            maxMinutes: input.dataset.maxMinutes !== undefined ? parseInt(input.dataset.maxMinutes) : 59,
             ...options
         };
 
@@ -207,22 +213,53 @@ class FDatepicker {
             const initialTime = this.getInitialTimeValues();
             const is24Hour = !this.options.ampm;
 
+            // Calculate min/max values for hours
+            let minHours, maxHours;
+            if (this.options.minHours !== null && this.options.maxHours !== null) {
+                minHours = this.options.minHours;
+                maxHours = this.options.maxHours;
+            } else if (is24Hour) {
+                minHours = this.options.minHours !== null ? this.options.minHours : 0;
+                maxHours = this.options.maxHours !== null ? this.options.maxHours : 23;
+            } else {
+                minHours = this.options.minHours !== null ? this.options.minHours : 1;
+                maxHours = this.options.maxHours !== null ? this.options.maxHours : 12;
+            }
+
             const timeInputHtml = is24Hour ? `
-            <input type="number" class="fdatepicker-time-input" data-time="hours" min="0" max="23" value="${String(initialTime.hours).padStart(2, '0')}">
-        ` : `
-            <input type="number" class="fdatepicker-time-input" data-time="hours" min="1" max="12" value="${String(initialTime.hours).padStart(2, '0')}">
-            <div class="fdatepicker-time-ampm ${initialTime.isAM ? 'active' : ''}" data-ampm="AM">AM</div>
-            <div class="fdatepicker-time-ampm ${!initialTime.isAM ? 'active' : ''}" data-ampm="PM">PM</div>
+                <input type="number"
+                    class="fdatepicker-time-input"
+                    data-time="hours"
+                    min="${minHours}"
+                    max="${maxHours}"
+                    step="${this.options.hoursStep}"
+                    value="${String(initialTime.hours).padStart(2, '0')}">
+            ` : `
+                <input type="number"
+                    class="fdatepicker-time-input"
+                    data-time="hours"
+                    min="${minHours}"
+                    max="${maxHours}"
+                    step="${this.options.hoursStep}"
+                    value="${String(initialTime.hours).padStart(2, '0')}">
+                <div class="fdatepicker-time-ampm ${initialTime.isAM ? 'active' : ''}" data-ampm="AM">AM</div>
+                <div class="fdatepicker-time-ampm ${!initialTime.isAM ? 'active' : ''}" data-ampm="PM">PM</div>
             `;
 
             const timepicker = document.createElement('div');
             timepicker.className = 'fdatepicker-timepicker';
             timepicker.innerHTML = `
-            <div class="fdatepicker-time-inputs">
-                ${timeInputHtml}
-                <span class="fdatepicker-time-separator">:</span>
-                <input type="number" class="fdatepicker-time-input" data-time="minutes" min="0" max="59" value="${String(initialTime.minutes).padStart(2, '0')}">
-            </div>
+                <div class="fdatepicker-time-inputs">
+                    ${timeInputHtml}
+                    <span class="fdatepicker-time-separator">:</span>
+                    <input type="number"
+                        class="fdatepicker-time-input"
+                        data-time="minutes"
+                        min="${this.options.minMinutes}"
+                        max="${this.options.maxMinutes}"
+                        step="${this.options.minutesStep}"
+                        value="${String(initialTime.minutes).padStart(2, '0')}">
+                </div>
             `;
             popup.appendChild(timepicker);
         }
@@ -617,6 +654,26 @@ class FDatepicker {
             [this.hoursInput, this.minutesInput].forEach(input => {
                 if (input) {
                     input.addEventListener('change', () => this.updateSelectedTime());
+
+                    // Add blur event for immediate validation
+                    input.addEventListener('blur', (e) => {
+                        const type = e.target.dataset.time;
+                        const value = parseInt(e.target.value) || 0;
+                        const validatedValue = this.validateTimeInput(type, value);
+                        e.target.value = String(validatedValue).padStart(2, '0');
+                    });
+
+                    // Add input event for real-time validation
+                    input.addEventListener('input', (e) => {
+                        const type = e.target.dataset.time;
+                        const value = parseInt(e.target.value);
+                        if (!isNaN(value)) {
+                            const validatedValue = this.validateTimeInput(type, value);
+                            if (validatedValue !== value) {
+                                e.target.value = String(validatedValue).padStart(2, '0');
+                            }
+                        }
+                    });
                 }
             });
         }
@@ -819,6 +876,37 @@ class FDatepicker {
         this.setInitialFocus();
     }
 
+    validateTimeInput(type, value) {
+        if (type === 'hours') {
+            const is24Hour = !this.options.ampm;
+            let min = is24Hour ? 0 : 1;
+            let max = is24Hour ? 23 : 12;
+
+            if (this.options.minHours !== null) min = this.options.minHours;
+            if (this.options.maxHours !== null) max = this.options.maxHours;
+
+            if (value < min) return min;
+            if (value > max) return max;
+
+            // Apply step constraint
+            const remainder = (value - min) % this.options.hoursStep;
+            if (remainder !== 0) {
+                return value - remainder;
+            }
+        } else if (type === 'minutes') {
+            if (value < this.options.minMinutes) return this.options.minMinutes;
+            if (value > this.options.maxMinutes) return this.options.maxMinutes;
+
+            // Apply step constraint
+            const remainder = (value - this.options.minMinutes) % this.options.minutesStep;
+            if (remainder !== 0) {
+                return value - remainder;
+            }
+        }
+
+        return value;
+    }
+
     updateSelectedTime() {
         const targets = this.options.multiple ? this.selectedDates : 
             (this.selectedEndDate ? [this.selectedDate, this.selectedEndDate] : 
@@ -827,7 +915,19 @@ class FDatepicker {
         if (targets.length === 0) return;
 
         let hours = parseInt(this.hoursInput?.value) || 0;
-        const minutes = parseInt(this.minutesInput?.value) || 0;
+        let minutes = parseInt(this.minutesInput?.value) || 0;
+
+        // Validate inputs
+        hours = this.validateTimeInput('hours', hours);
+        minutes = this.validateTimeInput('minutes', minutes);
+
+        // Update inputs with validated values
+        if (this.hoursInput) {
+            this.hoursInput.value = String(hours).padStart(2, '0');
+        }
+        if (this.minutesInput) {
+            this.minutesInput.value = String(minutes).padStart(2, '0');
+        }
 
         // Handle AM/PM conversion
         if (this.options.ampm) {
