@@ -1190,8 +1190,10 @@ class FDatepicker {
         }
 
         // Days from next month
-        const totalCells = this.grid.children.length - 7;
-        const remainingCells = 42 - totalCells;
+        const cellsWithoutHeaders = this.grid.children.length - 7; // Remove 7 header cells
+        const hasSixRows = cellsWithoutHeaders > 35;
+        const totalCellsNeeded = hasSixRows ? 42 : 35; // put 42 to always have 6 rows
+        const remainingCells = totalCellsNeeded - cellsWithoutHeaders;
 
         for (let day = 1; day <= remainingCells; day++) {
             const dayEl = document.createElement('div');
