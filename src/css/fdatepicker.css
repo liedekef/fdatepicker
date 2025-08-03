@@ -221,8 +221,8 @@
 
         .fdatepicker-timepicker {
             border-top: 1px solid #e5e7eb;
-            padding-top: 16px;
-            margin-top: 16px;
+            padding: 5px;
+            margin-top: 5px;
             display: none;
         }
 
