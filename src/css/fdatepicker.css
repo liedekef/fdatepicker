@@ -39,9 +39,13 @@
             margin-bottom: 4px;
         }
 
+        .fdatepicker-popup-middle {
+            margin-top: 0;
+            transform: translateY(-50%); /* Move 50% bove the calculated position */
+        }
+
         .fdatepicker-popup-top {
             margin-top: 0;
-            margin-bottom: 4px;
             transform: translateY(-100%); /* Move above the calculated position */
         }
 
@@ -125,13 +129,8 @@
             aspect-ratio: 2.5/1;
         }
 
-        .fdatepicker-day:hover, .fdatepicker-month:hover, .fdatepicker-year:hover {
-            background: #f3f4f6;
-        }
-
-        .fdatepicker-day:focus, .fdatepicker-month:focus, .fdatepicker-year:focus,
         .fdatepicker-day.focus, .fdatepicker-month.focus, .fdatepicker-year.focus {
-            background: #e0e7ff;
+            background: #e0e7ff !important;
             outline: 2px solid #3b82f6;
             outline-offset: 1px;
             z-index: 1;
@@ -139,6 +138,10 @@
 
         .fdatepicker-day.other-month {
             color: #d1d5db;
+        }
+
+        .fdatepicker-day.other-month:hover {
+            background: #f3f4f6;
         }
 
         .fdatepicker-day.today, .fdatepicker-month.current, .fdatepicker-year.current {

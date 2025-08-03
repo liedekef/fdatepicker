@@ -24,8 +24,6 @@ class FDatepicker {
         // Store a reference to this instance on the input for cleanup and easy reference
         this.input._fdatepicker = this;
 
-        // Wrap input so popup can be positioned correctly
-        //this.wrapper = this.wrapInput();
         this.container = this.getOrCreateGlobalContainer();
 
         this.currentDate = new Date();
@@ -51,8 +49,8 @@ class FDatepicker {
             multipleSeparator: input.dataset.multipleSeparator || ',',
             altFieldMultipleDatesSeparator: input.dataset.altFieldMultipleDatesSeparator || ',',
             multipleDisplaySelector: input.dataset.multipleDisplaySelector || '.selected-dates-display',
-            autoClose: input.dataset.autoClose === 'true',
-            timepicker: input.dataset.timepicker === 'true',
+            autoClose: input.dataset.autoClose !== 'false', // default true
+            timepicker: input.dataset.timepicker === 'true', // default false, no timepicker
             ampm: input.dataset.ampm === 'false',
             firstDayOfWeek: parseInt(input.dataset.firstDayOfWeek) || 0, // 0 = Sunday, 1 = Monday, etc.
             timepickerDefaultNow: input.dataset.timepickerDefaultNow !== 'false', // default true
@@ -73,7 +71,6 @@ class FDatepicker {
 
         // Create popup and attach it
         this.popup = this.createPopup();
-        //this.wrapper.appendChild(this.popup);
 
         // Now query elements inside popup
         this.title = this.popup.querySelector('.fdatepicker-title');
@@ -554,6 +551,7 @@ class FDatepicker {
     clearFocus() {
         this.popup.querySelectorAll('.fdatepicker-day, .fdatepicker-month, .fdatepicker-year').forEach(el => {
             el.classList.remove('focus');
+            el.classList.remove('hover');
             el.setAttribute('tabindex', '-1');
         });
         this.focusedElement = null;
@@ -565,13 +563,22 @@ class FDatepicker {
 
         // Mouse interactions
         this.popup.addEventListener('mouseover', (e) => {
-            if (e.target.classList.contains('fdatepicker-day') && !e.target.classList.contains('other-month')) {
-                this.setFocus(e.target);
+            if (e.target.classList.contains('fdatepicker-day')) {
+                if (e.target.classList.contains('other-month')) {
+                    e.target.classList.add('hover');
+                } else {
+                    this.setFocus(e.target);
+                }
             } else if (e.target.classList.contains('fdatepicker-month')) {
                 this.setFocus(e.target);
             } else if (e.target.classList.contains('fdatepicker-year')) {
                 this.setFocus(e.target);
             }
+        });
+
+        // Clear focus when mouse leaves the popup
+        this.popup.addEventListener('mouseleave', () => {
+            this.clearFocus();
         });
 
         this.popup.addEventListener('click', (e) => {
@@ -594,9 +601,6 @@ class FDatepicker {
             }
             if (e.target.classList.contains('fdatepicker-day') && !e.target.classList.contains('other-month')) {
                 this.selectDate(parseInt(e.target.textContent));
-                if (this.options.autoClose) {
-                    this.close();
-                }
             }
 
             if (e.target.classList.contains('fdatepicker-month')) {
@@ -641,6 +645,8 @@ class FDatepicker {
     }
 
     open() {
+        if (this.isOpen) return;
+
         this.isOpen = true;
         this.render();
 
@@ -649,23 +655,10 @@ class FDatepicker {
         // Set initial focus after render
         this.setInitialFocus();
 
-        /*
-        // --- Smart Positioning ---
-        this.popup.classList.remove('fdatepicker-popup-top');
-
-        const inputRect = this.input.getBoundingClientRect();
-        const spaceBelow = window.innerHeight - inputRect.bottom;
-        const spaceAbove = inputRect.top;
-        const popupHeight = 350;
-
-        if (spaceBelow < popupHeight && spaceAbove > spaceBelow) {
-            this.popup.classList.add('fdatepicker-popup-top');
-        }*/
         this.setPosition();
-
     }
 
-    // Ultra-simplified positioning - let CSS and browser handle most of it
+    // Simplified positioning - let CSS and browser handle most of it
     setPosition() {
         const inputRect = this.input.getBoundingClientRect();
         const offset = 4;
@@ -677,7 +670,6 @@ class FDatepicker {
         let top, left;
 
         this.popup.classList.remove('fdatepicker-popup-top', 'fdatepicker-popup-bottom');
-        console.log(spaceAbove);
         if (spaceAbove > spaceBelow && spaceAbove > 300) {
             // Position above
             this.popup.classList.add('fdatepicker-popup-top');
@@ -718,12 +710,6 @@ class FDatepicker {
         // Clean up popup from global container
         if (this.popup && this.popup.parentNode) {
             this.popup.parentNode.removeChild(this.popup);
-        }
-
-        // Clean up wrapper
-        if (this.wrapper && this.wrapper.parentNode) {
-            this.wrapper.parentNode.insertBefore(this.input, this.wrapper);
-            this.wrapper.parentNode.removeChild(this.wrapper);
         }
 
         // Clean up global container if no more popups
@@ -795,7 +781,9 @@ class FDatepicker {
                 }
                 this.updateInput();
                 if (!this.options.timepicker) {
-                    this.close();
+                    if (this.options.autoClose) {
+                        this.close();
+                    }
                 } else {
                     this.render();
                     this.focusCurrentDay();
@@ -806,7 +794,9 @@ class FDatepicker {
             this.selectedDate = selectedDate;
             this.updateInput();
             if (!this.options.timepicker) {
-                this.close();
+                if (this.options.autoClose) {
+                    this.close();
+                }
             } else {
                 this.render();
                 this.focusCurrentDay();
