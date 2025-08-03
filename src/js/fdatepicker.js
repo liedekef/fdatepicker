@@ -21,8 +21,12 @@ class FDatepicker {
     constructor(input, options = {}) {
         this.input = input;
 
+        // Store a reference to this instance on the input for cleanup and easy reference
+        this.input._fdatepicker = this;
+
         // Wrap input so popup can be positioned correctly
-        this.wrapper = this.wrapInput();
+        //this.wrapper = this.wrapInput();
+        this.container = this.getOrCreateGlobalContainer();
 
         this.currentDate = new Date();
         this.selectedDate = null;
@@ -68,7 +72,7 @@ class FDatepicker {
 
         // Create popup and attach it
         this.popup = this.createPopup();
-        this.wrapper.appendChild(this.popup);
+        //this.wrapper.appendChild(this.popup);
 
         // Now query elements inside popup
         this.title = this.popup.querySelector('.fdatepicker-title');
@@ -93,6 +97,17 @@ class FDatepicker {
         if (this.options.disabledDates.includes(dateString)) return true;
 
         return false;
+    }
+
+    getOrCreateGlobalContainer() {
+        let container = document.getElementById('fdatepicker-global-container');
+        if (!container) {
+            container = document.createElement('div');
+            container.id = 'fdatepicker-global-container';
+            container.className = 'fdatepicker-global-container';
+            document.body.appendChild(container);
+        }
+        return container;
     }
 
     wrapInput() {
@@ -264,6 +279,7 @@ class FDatepicker {
             popup.appendChild(buttonRow);
         }
 
+        this.container.appendChild(popup);
         return popup;
     }
 
@@ -629,6 +645,7 @@ class FDatepicker {
         // Set initial focus after render
         this.setInitialFocus();
 
+        /*
         // --- Smart Positioning ---
         this.popup.classList.remove('fdatepicker-popup-top');
 
@@ -639,14 +656,89 @@ class FDatepicker {
 
         if (spaceBelow < popupHeight && spaceAbove > spaceBelow) {
             this.popup.classList.add('fdatepicker-popup-top');
+        }*/
+        this.setPosition();
+
+    }
+
+    // Ultra-simplified positioning - let CSS and browser handle most of it
+    setPosition() {
+        const inputRect = this.input.getBoundingClientRect();
+        const offset = 4;
+
+        // Simple rule: if there's more space above, go up. Otherwise, go down.
+        const spaceBelow = window.innerHeight - inputRect.bottom;
+        const spaceAbove = inputRect.top;
+
+        let top, left;
+
+        this.popup.classList.remove('fdatepicker-popup-top', 'fdatepicker-popup-bottom');
+        if (spaceAbove > spaceBelow && spaceAbove > 150) { // 150px minimum space
+            // Position above
+            this.popup.classList.add('fdatepicker-popup-top');
+            top = inputRect.top - offset;
+        } else {
+            // Position below (default)
+            this.popup.classList.add('fdatepicker-popup-bottom');
+            top = inputRect.bottom + offset;
         }
 
+        // Horizontal: just align with input left edge
+        left = inputRect.left;
+
+        // Basic bounds checking - keep on screen
+        if (left < 10) left = 10;
+        if (left > window.innerWidth - 320) left = window.innerWidth - 320;
+        if (top < 10) top = 10;
+
+        // Apply position
+        this.popup.style.top = `${top}px`;
+        this.popup.style.left = `${left}px`;
     }
 
     close() {
         this.isOpen = false;
         this.popup.classList.remove('active');
         this.clearFocus();
+    }
+
+    destroy() {
+        // Close the popup first
+        this.close();
+
+        // Clean up popup from global container
+        if (this.popup && this.popup.parentNode) {
+            this.popup.parentNode.removeChild(this.popup);
+        }
+
+        // Clean up wrapper
+        if (this.wrapper && this.wrapper.parentNode) {
+            this.wrapper.parentNode.insertBefore(this.input, this.wrapper);
+            this.wrapper.parentNode.removeChild(this.wrapper);
+        }
+
+        // Clean up global container if no more popups
+        this.cleanupGlobalContainer();
+    }
+ 
+    // Static cleanup method for cleaning up all instances
+    static destroyAll() {
+        const inputs = document.querySelectorAll('input[data-fdatepicker]');
+        inputs.forEach(input => {
+            if (input._fdatepicker) {
+                input._fdatepicker.destroy();
+                delete input._fdatepicker;
+            }
+        });
+    }
+
+    // Add this helper method
+    cleanupGlobalContainer() {
+        const container = document.getElementById('fdatepicker-global-container');
+        if (container && container.children.length === 0) {
+            // No more popups, remove the container
+            container.parentNode.removeChild(container);
+        }
     }
 
     selectDate(day) {

@@ -34,11 +34,15 @@
             display: block;
         }
 
-        .fdatepicker-popup-top {
-            top: auto;
-            bottom: 100%;
+        .fdatepicker-popup-bottom {
             margin-top: 0;
             margin-bottom: 4px;
+        }
+
+        .fdatepicker-popup-top {
+            margin-top: 0;
+            margin-bottom: 4px;
+            transform: translateY(-100%); /* Move above the calculated position */
         }
 
         .fdatepicker-header {
