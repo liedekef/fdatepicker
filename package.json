@@ -1,0 +1,38 @@
+{
+  "name": "@liedekef/fdatepicker",
+  "version": "1.1.1",
+  "description": "Modern, lightweight, jQuery-free Lightweight customizable datepicker.",
+  "main": "fdatepicker.js",
+  "module": "fdatepicker.esm.js",
+  "types": "fdatepicker.d.ts",
+  "files": [
+    "*.js",
+    "fdatepicker.d.ts",
+    "src/js/i18n",
+    "CHANGES.md",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "npm run build:esmumd && npm run build:min",
+    "build:esmumd": "node build.mjs",
+    "build:min": "uglifyjs fdatepicker.js -o fdatepicker.min.js --compress --mangle",
+    "prepublishOnly": "npm run build"
+  },
+  "keywords": [
+      "fdatepicker",
+      "datepicker",
+      "timepicker",
+      "customizable",
+      "vanilla-js"
+  ],
+  "author": "Franky Van Liedekerke",
+  "license": "MIT",
+  "homepage": "https://github.com/liedekef/fdatepicker#readme",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/liedekef/fdatepicker.git"
+  },
+  "bugs": {
+    "url": "https://github.com/liedekef/fdatepicker/issues"
+  }
+}

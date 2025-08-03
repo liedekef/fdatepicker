@@ -11,6 +11,7 @@ scriptpath=$(realpath "$0")
 scriptdir=$(dirname $scriptpath)
 basedir=$(dirname $scriptdir)
 
+npm run build
 # Update/minify CSS and JS
 $scriptdir/update_css.sh
 $scriptdir/fdatepicker_minify.sh
