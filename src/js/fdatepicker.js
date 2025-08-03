@@ -848,7 +848,11 @@ class FDatepicker {
             }
         } else {
             // Single selection
-            this.selectedDate = selectedDate;
+            if (this.selectedDate && this.selectedDate.toDateString() === selectedDate.toDateString()) {
+                this.selectedDate = null; // selecting an already selected day: deselect it
+            } else {
+                this.selectedDate = selectedDate;
+            }
             this.updateInput();
             if (!this.options.timepicker) {
                 if (this.options.autoClose) {
