@@ -653,6 +653,10 @@ class FDatepicker {
         if (this.options.timepicker) {
             [this.hoursInput, this.minutesInput].forEach(input => {
                 if (input) {
+                    input.addEventListener('keydown', (e) => {
+                        // let's make sure that the global keydown listener won't take arrow up/down when in the timepicker
+                        e.stopPropagation(); 
+                    });
                     input.addEventListener('change', () => this.updateSelectedTime());
 
                     // Add blur event for immediate validation
