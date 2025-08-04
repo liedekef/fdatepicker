@@ -1375,9 +1375,6 @@ class FDatepicker {
             case 'timepickerDefaultNow':
                 // These don't require immediate DOM changes
                 break;
-
-            default:
-                console.warn(`FDatepicker: Option "${option}" may not have dynamic support.`);
         }
 
         // Refresh UI and input
