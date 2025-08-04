@@ -426,8 +426,8 @@ class FDatepicker {
             }
         });
 
-        // Handle keyboard navigation within popup - prevent event bubbling to avoid double handling
-        this.popup.addEventListener('keydown', (e) => {
+        // Handle keyboard navigation within grid - prevent event bubbling to avoid double handling
+        this.grid.addEventListener('keydown', (e) => {
             if (['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', 'PageUp', 'PageDown', 'Home', 'End', ' ', 'Enter', 'Escape'].includes(e.key)) {
                 e.preventDefault();
                 e.stopPropagation();
@@ -445,16 +445,16 @@ class FDatepicker {
             }
         });
 
-        // Prevent scrolling on document level when datepicker is open
-        document.addEventListener('keydown', (e) => {
+        // Store bound handlers for cleanup
+        this.boundDocumentKeydownHandler = (e) => {
             if (this.isOpen && ['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', 'PageUp', 'PageDown', 'Home', 'End', ' '].includes(e.key)) {
-                // Only prevent if the event target is within our datepicker
-                if (this.input === e.target || this.popup.contains(e.target)) {
+                if (this.grid === e.target || this.popup.contains(e.target)) {
                     e.preventDefault();
                     e.stopPropagation();
                 }
             }
-        });
+        };
+        document.addEventListener('keydown', this.boundDocumentKeydownHandler);
     }
 
     navigate(direction, orientation) {
@@ -659,7 +659,6 @@ class FDatepicker {
                     });
                     input.addEventListener('change', () => this.updateSelectedTime());
 
-                    /*
                     // Add blur event for immediate validation
                     input.addEventListener('blur', (e) => {
                         const type = e.target.dataset.time;
@@ -678,17 +677,18 @@ class FDatepicker {
                                 e.target.value = String(validatedValue).padStart(2, '0');
                             }
                         }
-                    }); */
+                    });
                 }
             });
         }
 
-        // Close on outside click
-        document.addEventListener('click', (e) => {
+        // Store bound handlers for cleanup
+        this.boundDocumentClickHandler = (e) => {
             if (e.target !== this.input && !this.popup.contains(e.target)) {
                 this.close();
             }
-        });
+        };
+        document.addEventListener('click', this.boundDocumentClickHandler);
     }
 
     navigateView(direction) {
@@ -776,6 +776,41 @@ class FDatepicker {
 
         // Clean up global container if no more popups
         this.cleanupGlobalContainer();
+
+        // Remove document-level event listeners that we specifically added
+        if (this.boundDocumentClickHandler) {
+            document.removeEventListener('click', this.boundDocumentClickHandler);
+        }
+
+        if (this.boundDocumentKeydownHandler) {
+            document.removeEventListener('keydown', this.boundDocumentKeydownHandler);
+        }
+
+        // Remove input event listeners by replacing with clean clone
+        if (this.input && this.input.parentNode) {
+            const newInput = this.input.cloneNode(true);
+            this.input.parentNode.replaceChild(newInput, this.input);
+            delete newInput._fdatepicker;
+        }
+
+        this.input = null;
+        this.popup = null;
+        this.container = null;
+        this.title = null;
+        this.content = null;
+        this.grid = null;
+        this.timepicker = null;
+        this.hoursInput = null;
+        this.minutesInput = null;
+        this.focusedElement = null;
+        this.selectedDate = null;
+        this.selectedEndDate = null;
+        this.selectedDates = [];
+        this.options = null;
+        this.locale = null;
+        this.boundDocumentClickHandler = null;
+        this.boundDocumentKeydownHandler = null;
+
     }
  
     // Static cleanup method for cleaning up all instances
