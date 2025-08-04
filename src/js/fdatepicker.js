@@ -26,7 +26,7 @@ class FDatepicker {
 
         this.container = this.getOrCreateGlobalContainer();
 
-        this.currentDate = new Date();
+        this.focusedDate = new Date();
         this.selectedDate = null;
         this.selectedEndDate = null;
         this.selectedDates = [];
@@ -152,14 +152,14 @@ class FDatepicker {
             const dates = this.input.dataset.dates.split(',');
             this.selectedDates = dates.map(dateStr => new Date(dateStr.trim())).filter(date => !isNaN(date));
             if (this.selectedDates.length > 0) {
-                this.currentDate = new Date(this.selectedDates[0]);
+                this.focusedDate = new Date(this.selectedDates[0]);
             }
         } else if (this.input.dataset.date) {
             // Single date
             const date = new Date(this.input.dataset.date);
             if (!isNaN(date)) {
                 this.selectedDate = date;
-                this.currentDate = new Date(date);
+                this.focusedDate = new Date(date);
             }
         }
     }
@@ -277,7 +277,7 @@ class FDatepicker {
                     e.stopPropagation();
                     const today = new Date();
                     this.selectDate(today.getDate());
-                    this.currentDate = new Date(today);
+                    this.focusedDate = new Date(today);
                     this.render();
                 });
                 buttonRow.appendChild(todayBtn);
@@ -381,9 +381,9 @@ class FDatepicker {
                 case 'PageUp':
                     if (this.view === 'days') {
                         if (e.shiftKey) {
-                            this.currentDate.setFullYear(this.currentDate.getFullYear() - 1);
+                            this.focusedDate.setFullYear(this.focusedDate.getFullYear() - 1);
                         } else {
-                            this.currentDate.setMonth(this.currentDate.getMonth() - 1);
+                            this.focusedDate.setMonth(this.focusedDate.getMonth() - 1);
                         }
                         this.render();
                         this.setInitialFocus();
@@ -393,9 +393,9 @@ class FDatepicker {
                 case 'PageDown':
                     if (this.view === 'days') {
                         if (e.shiftKey) {
-                            this.currentDate.setFullYear(this.currentDate.getFullYear() + 1);
+                            this.focusedDate.setFullYear(this.focusedDate.getFullYear() + 1);
                         } else {
-                            this.currentDate.setMonth(this.currentDate.getMonth() + 1);
+                            this.focusedDate.setMonth(this.focusedDate.getMonth() + 1);
                         }
                         this.render();
                         this.setInitialFocus();
@@ -404,7 +404,7 @@ class FDatepicker {
 
                 case 'Home':
                     if (this.view === 'days') {
-                        this.currentDate.setDate(1);
+                        this.focusedDate.setDate(1);
                         this.render();
                         this.focusCurrentDay();
                     }
@@ -412,8 +412,8 @@ class FDatepicker {
 
                 case 'End':
                     if (this.view === 'days') {
-                        const lastDay = new Date(this.currentDate.getFullYear(), this.currentDate.getMonth() + 1, 0).getDate();
-                        this.currentDate.setDate(lastDay);
+                        const lastDay = new Date(this.focusedDate.getFullYear(), this.focusedDate.getMonth() + 1, 0).getDate();
+                        this.focusedDate.setDate(lastDay);
                         this.render();
                         this.focusCurrentDay();
                     }
@@ -460,14 +460,14 @@ class FDatepicker {
     navigate(direction, orientation) {
         if (this.view === 'days') {
             if (orientation === 'horizontal') {
-                this.currentDate.setDate(this.currentDate.getDate() + direction);
+                this.focusedDate.setDate(this.focusedDate.getDate() + direction);
             } else {
-                this.currentDate.setDate(this.currentDate.getDate() + (direction * 7));
+                this.focusedDate.setDate(this.focusedDate.getDate() + (direction * 7));
             }
             this.render();
             this.focusCurrentDay();
         } else if (this.view === 'months') {
-            const currentMonth = this.currentDate.getMonth();
+            const currentMonth = this.focusedDate.getMonth();
             let newMonth;
             if (orientation === 'horizontal') {
                 newMonth = currentMonth + direction;
@@ -476,13 +476,13 @@ class FDatepicker {
             }
 
             if (newMonth < 0) {
-                this.currentDate.setFullYear(this.currentDate.getFullYear() - 1);
-                this.currentDate.setMonth(11 + newMonth + 1);
+                this.focusedDate.setFullYear(this.focusedDate.getFullYear() - 1);
+                this.focusedDate.setMonth(11 + newMonth + 1);
             } else if (newMonth > 11) {
-                this.currentDate.setFullYear(this.currentDate.getFullYear() + 1);
-                this.currentDate.setMonth(newMonth - 12);
+                this.focusedDate.setFullYear(this.focusedDate.getFullYear() + 1);
+                this.focusedDate.setMonth(newMonth - 12);
             } else {
-                this.currentDate.setMonth(newMonth);
+                this.focusedDate.setMonth(newMonth);
             }
             this.render();
             this.focusCurrentMonth();
@@ -534,9 +534,9 @@ class FDatepicker {
         // Remove existing focus
         this.clearFocus();
 
-        const year = this.currentDate.getFullYear();
-        const month = this.currentDate.getMonth();
-        const day = this.currentDate.getDate();
+        const year = this.focusedDate.getFullYear();
+        const month = this.focusedDate.getMonth();
+        const day = this.focusedDate.getDate();
 
         // Find the day element that matches current date and is not from other month
         const dayElements = Array.from(this.popup.querySelectorAll('.fdatepicker-day:not(.other-month)'));
@@ -552,7 +552,7 @@ class FDatepicker {
 
         this.clearFocus();
 
-        const month = this.currentDate.getMonth();
+        const month = this.focusedDate.getMonth();
         const monthElement = this.popup.querySelector(`[data-month="${month}"]`);
 
         if (monthElement) {
@@ -565,7 +565,7 @@ class FDatepicker {
 
         this.clearFocus();
 
-        const year = this.currentDate.getFullYear();
+        const year = this.focusedDate.getFullYear();
         const yearElement = this.popup.querySelector(`[data-year="${year}"]`);
 
         if (yearElement) {
@@ -693,9 +693,9 @@ class FDatepicker {
 
     navigateView(direction) {
         if (this.view === 'days') {
-            this.currentDate.setMonth(this.currentDate.getMonth() + direction);
+            this.focusedDate.setMonth(this.focusedDate.getMonth() + direction);
         } else if (this.view === 'months') {
-            this.currentDate.setFullYear(this.currentDate.getFullYear() + direction);
+            this.focusedDate.setFullYear(this.focusedDate.getFullYear() + direction);
         } else if (this.view === 'years') {
             this.currentYear += direction * 12;
         }
@@ -799,8 +799,8 @@ class FDatepicker {
     }
 
     selectDate(day) {
-        const year = this.currentDate.getFullYear();
-        const month = this.currentDate.getMonth();
+        const year = this.focusedDate.getFullYear();
+        const month = this.focusedDate.getMonth();
 
         let hours = 0, minutes = 0;
 
@@ -897,14 +897,14 @@ class FDatepicker {
     }
 
     selectMonth(month) {
-        this.currentDate.setMonth(month);
+        this.focusedDate.setMonth(month);
         this.view = 'days';
         this.render();
         this.setInitialFocus();
     }
 
     selectYear(year) {
-        this.currentDate.setFullYear(year);
+        this.focusedDate.setFullYear(year);
         this.currentYear = year;
         this.view = 'months';
         this.render();
@@ -1137,9 +1137,9 @@ class FDatepicker {
     renderTitle() {
         let title = '';
         if (this.view === 'days') {
-            title = `${this.locale.months[this.currentDate.getMonth()]} ${this.currentDate.getFullYear()}`;
+            title = `${this.locale.months[this.focusedDate.getMonth()]} ${this.focusedDate.getFullYear()}`;
         } else if (this.view === 'months') {
-            title = this.currentDate.getFullYear();
+            title = this.focusedDate.getFullYear();
         } else if (this.view === 'years') {
             title = `${this.currentYear} - ${this.currentYear + 11}`;
         }
@@ -1157,13 +1157,13 @@ class FDatepicker {
         }
         this.grid.innerHTML = headerHtml;
 
-        const firstDayOfWeek = new Date(this.currentDate.getFullYear(), this.currentDate.getMonth(), 1);
-        const lastDay = new Date(this.currentDate.getFullYear(), this.currentDate.getMonth() + 1, 0);
+        const firstDayOfWeek = new Date(this.focusedDate.getFullYear(), this.focusedDate.getMonth(), 1);
+        const lastDay = new Date(this.focusedDate.getFullYear(), this.focusedDate.getMonth() + 1, 0);
         const today = new Date();
 
         // Calculate days from previous month based on first day of week setting
         let prevMonthDays = (firstDayOfWeek.getDay() - this.options.firstDayOfWeek + 7) % 7;
-        const prevMonth = new Date(this.currentDate.getFullYear(), this.currentDate.getMonth() - 1, 0);
+        const prevMonth = new Date(this.focusedDate.getFullYear(), this.focusedDate.getMonth() - 1, 0);
 
         for (let i = prevMonthDays - 1; i >= 0; i--) {
             const day = document.createElement('div');
@@ -1180,7 +1180,7 @@ class FDatepicker {
             dayEl.textContent = day;
             dayEl.setAttribute('tabindex', '-1');
 
-            const dayDate = new Date(this.currentDate.getFullYear(), this.currentDate.getMonth(), day);
+            const dayDate = new Date(this.focusedDate.getFullYear(), this.focusedDate.getMonth(), day);
 
             // Add weekend class based on first day of week setting
             const dayOfWeek = dayDate.getDay();
@@ -1252,12 +1252,12 @@ class FDatepicker {
             monthEl.dataset.month = month;
             monthEl.setAttribute('tabindex', '-1');
 
-            if (month === new Date().getMonth() && this.currentDate.getFullYear() === new Date().getFullYear()) {
+            if (month === new Date().getMonth() && this.focusedDate.getFullYear() === new Date().getFullYear()) {
                 monthEl.classList.add('current');
             }
 
             if (this.selectedDate && month === this.selectedDate.getMonth() && 
-                this.currentDate.getFullYear() === this.selectedDate.getFullYear()) {
+                this.focusedDate.getFullYear() === this.selectedDate.getFullYear()) {
                 monthEl.classList.add('selected');
             }
 
