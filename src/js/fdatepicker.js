@@ -1322,4 +1322,67 @@ class FDatepicker {
             this.grid.appendChild(yearEl);
         }
     }
+
+    /* the next 2 function are there so you can call update via JS to change options */
+    update(options, value) {
+        if (typeof options === 'string') {
+            // Single option
+            this.setOption(options, value);
+        } else {
+            // Multiple options
+            Object.entries(options).forEach(([key, val]) => {
+                this.setOption(key, val);
+            });
+        }
+    }
+
+    setOption(option, value) {
+        const prevValue = this.options[option];
+        if (prevValue === value) return; // No change
+
+        this.options[option] = value;
+
+        // Handle special cases
+        switch (option) {
+            case 'multiple':
+                if (value) {
+                    // Switch to multiple mode
+                    this.selectedDates = this.selectedDate ? [this.selectedDate] : [];
+                    this.selectedDate = null;
+                    this.selectedEndDate = null;
+                } else {
+                    // Switch to single mode
+                    this.selectedDate = this.selectedDates.length > 0 ? this.selectedDates[0] : null;
+                    this.selectedDates = [];
+                }
+                break;
+
+            case 'range':
+                if (value) {
+                    // Ensure we don't conflict with multiple
+                    if (this.options.multiple) {
+                        this.options.multiple = false;
+                        this.selectedDates = [];
+                    }
+                }
+                break;
+            case 'format':
+            case 'altFormat':
+            case 'todayButton':
+            case 'clearButton':
+            case 'closeButton':
+            case 'firstDay':
+            case 'timepickerDefaultNow':
+                // These don't require immediate DOM changes
+                break;
+
+            default:
+                console.warn(`FDatepicker: Option "${option}" may not have dynamic support.`);
+        }
+
+        // Refresh UI and input
+        this.updateInput();
+        this.updateMultipleDisplay();
+        this.render();
+    }
 }
