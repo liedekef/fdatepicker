@@ -145,8 +145,8 @@
         }
 
         .fdatepicker-day.today, .fdatepicker-month.current, .fdatepicker-year.current {
-            background: #dbeafe;
             color: #1d4ed8;
+            outline: 2px solid #3b82f6;
             font-weight: 600;
         }
 
@@ -165,14 +165,14 @@
             color: white;
         }
 
-        .fdatepicker-day.range-end {
-            background: #3b82f6;
-            color: white;
-        }
-
         .fdatepicker-day.in-range {
             background: #dbeafe;
             color: #1d4ed8;
+        }
+
+        .fdatepicker-day.range-end {
+            background: #3b82f6;
+            color: white;
         }
 
         .fdatepicker-day.multi-selected {

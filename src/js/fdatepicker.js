@@ -583,6 +583,45 @@ class FDatepicker {
         element.setAttribute('tabindex', '0');
         element.classList.add('focus');
         element.focus();
+
+        // Range preview logic
+        if (this.options.range && this.selectedDate && !this.selectedEndDate) {
+            // Clear all 'in-range' classes first
+            this.popup.querySelectorAll('.fdatepicker-day.in-range').forEach(day => {
+                day.classList.remove('in-range');
+            });
+            const day = parseInt(element.textContent);
+            const month = this.focusedDate.getMonth();
+            const year = this.focusedDate.getFullYear();
+            const focusedDate = new Date(year, month, day);
+
+            // Make sure element is a valid day (not "other-month", disabled, etc.)
+            if (isNaN(focusedDate.getTime()) ||
+                element.classList.contains('other-month') ||
+                element.classList.contains('disabled')) {
+                return;
+            }
+
+            const startDate = this.selectedDate;
+            const endDate = focusedDate;
+
+            // Determine range bounds
+            const start = startDate < endDate ? startDate : endDate;
+            const end = startDate < endDate ? endDate : startDate;
+
+            // Get all day elements in the current view
+            const dayElements = Array.from(this.popup.querySelectorAll('.fdatepicker-day:not(.other-month)'));
+
+            dayElements.forEach(dayEl => {
+                const dayNum = parseInt(dayEl.textContent);
+                const dayDate = new Date(year, month, dayNum);
+
+                // Check if day is strictly between start and end
+                if (dayDate > start && dayDate < end) {
+                    dayEl.classList.add('in-range');
+                }
+            });
+        }
     }
 
     clearFocus() {
