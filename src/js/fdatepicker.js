@@ -598,8 +598,8 @@ class FDatepicker {
         // Input click to toggle
         this.input.addEventListener('click', () => this.toggle());
 
-        // Mouse interactions
-        this.popup.addEventListener('mouseover', (e) => {
+        // Mouse interactions on grid
+        this.grid.addEventListener('mouseover', (e) => {
             if (e.target.classList.contains('fdatepicker-day')) {
                 if (e.target.classList.contains('other-month')) {
                     e.target.classList.add('hover');
@@ -614,7 +614,7 @@ class FDatepicker {
         });
 
         // Clear focus when mouse leaves the popup
-        this.popup.addEventListener('mouseleave', () => {
+        this.grid.addEventListener('mouseleave', () => {
             this.clearFocus();
         });
 
@@ -659,6 +659,7 @@ class FDatepicker {
                     });
                     input.addEventListener('change', () => this.updateSelectedTime());
 
+                    /*
                     // Add blur event for immediate validation
                     input.addEventListener('blur', (e) => {
                         const type = e.target.dataset.time;
@@ -677,7 +678,7 @@ class FDatepicker {
                                 e.target.value = String(validatedValue).padStart(2, '0');
                             }
                         }
-                    });
+                    }); */
                 }
             });
         }
@@ -798,7 +799,33 @@ class FDatepicker {
     }
 
     selectDate(day) {
-        const selectedDate = new Date(this.currentDate.getFullYear(), this.currentDate.getMonth(), day);
+        const year = this.currentDate.getFullYear();
+        const month = this.currentDate.getMonth();
+
+        let hours = 0, minutes = 0;
+
+        // If there's already a selected date, use its time
+        if (this.selectedDate) {
+            hours = this.selectedDate.getHours();
+            minutes = this.selectedDate.getMinutes();
+        }
+        // Otherwise, try to get time from timepicker inputs
+        else if (this.options.timepicker) {
+            hours = parseInt(this.hoursInput?.value) || 0;
+            minutes = parseInt(this.minutesInput?.value) || 0;
+            // Handle AM/PM
+            if (this.options.ampm) {
+                const isAM = this.popup.querySelector('[data-ampm].active')?.dataset.ampm === 'AM';
+                if (!isAM && hours < 12) {
+                    hours += 12;
+                } else if (isAM && hours === 12) {
+                    hours = 0;
+                }
+            }
+        }
+
+        // Create new date with preserved time
+        const selectedDate = new Date(year, month, day, hours, minutes);
 
         if (this.isDateDisabled(selectedDate)) {
             return;
@@ -916,11 +943,11 @@ class FDatepicker {
     }
 
     updateSelectedTime() {
-        const targets = this.options.multiple ? this.selectedDates : 
-            (this.selectedEndDate ? [this.selectedDate, this.selectedEndDate] : 
-                this.selectedDate ? [this.selectedDate] : []);
+        const target = this.options.multiple ? this.selectedDates[this.selectedDates.length -1 ] :
+            this.selectedEndDate ? this.selectedEndDate :
+            this.selectedDate ? this.selectedDate : null;
 
-        if (targets.length === 0) return;
+        if (!target) return;
 
         let hours = parseInt(this.hoursInput?.value) || 0;
         let minutes = parseInt(this.minutesInput?.value) || 0;
@@ -944,11 +971,12 @@ class FDatepicker {
             else if (!isAM && hours !== 12) hours += 12;
         }
 
-        targets.forEach(date => {
+        /*targets.forEach(date => {
             if (date) {
                 date.setHours(hours, minutes);
             }
-        });
+        });*/
+        target.setHours(hours, minutes);
 
         this.updateInput();
     }
@@ -1053,7 +1081,11 @@ class FDatepicker {
         // Update time inputs
         if (this.options.timepicker && this.selectedDate) {
             let hours = this.selectedDate.getHours();
-            const minutes = this.selectedDate.getMinutes();
+            let minutes = this.selectedDate.getMinutes();
+            if (this.selectedEndDate) {
+                hours = this.selectedEndDate.getHours();
+                minutes = this.selectedEndDate.getMinutes();
+            }
 
             if (this.options.ampm) {
                 const isAM = hours < 12;
