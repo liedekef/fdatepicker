@@ -19,7 +19,16 @@ class FDatepicker {
     }
 
     constructor(input, options = {}) {
-        this.input = input;
+        this.input = typeof input === 'string' ?
+            document.querySelector(input) : input;
+
+        if (!this.input) {
+            return;
+        }
+        // Prevent double initialization
+        if (this.input._fdatepicker) {
+            return this.input._fdatepicker;
+        }
 
         // Store a reference to this instance on the input for cleanup and easy reference
         this.input._fdatepicker = this;
@@ -37,32 +46,32 @@ class FDatepicker {
 
         // Read options from input's dataset
         this.options = {
-            format: input.dataset.format || '',
-            startView: input.dataset.startView || 'days',
-            minDate: input.dataset.minDate ? new Date(input.dataset.minDate) : null,
-            maxDate: input.dataset.maxDate ? new Date(input.dataset.maxDate) : null,
-            disabledDates: input.dataset.disabledDates ?  input.dataset.disabledDates.split(',').map(d => d.trim()) : [],
-            altField: input.dataset.altField || null,
-            altFormat: input.dataset.altFormat || 'Y-m-d',
-            range: input.dataset.range === 'true',
-            multiple: input.dataset.multiple === 'true',
-            multipleSeparator: input.dataset.multipleSeparator || ',',
-            altFieldMultipleDatesSeparator: input.dataset.altFieldMultipleDatesSeparator || ',',
-            multipleDisplaySelector: input.dataset.multipleDisplaySelector || '.selected-dates-display',
-            autoClose: input.dataset.autoClose !== 'false', // default true
-            firstDayOfWeek: parseInt(input.dataset.firstDayOfWeek) || 0, // 0 = Sunday, 1 = Monday, etc.
-            timepickerDefaultNow: input.dataset.timepickerDefaultNow !== 'false', // default true
-            todayButton: input.dataset.todayButton !== 'false',
-            clearButton: input.dataset.clearButton !== 'false',
-            closeButton: input.dataset.closeButton !== 'false',
-            timepicker: input.dataset.timepicker === 'true', // default false, no timepicker
-            ampm: input.dataset.ampm === 'false',
-            hoursStep: parseInt(input.dataset.hoursStep) || 1,
-            minutesStep: parseInt(input.dataset.minutesStep) || 1,
-            minHours: input.dataset.minHours !== undefined ? parseInt(input.dataset.minHours) : null,
-            maxHours: input.dataset.maxHours !== undefined ? parseInt(input.dataset.maxHours) : null,
-            minMinutes: input.dataset.minMinutes !== undefined ? parseInt(input.dataset.minMinutes) : 0,
-            maxMinutes: input.dataset.maxMinutes !== undefined ? parseInt(input.dataset.maxMinutes) : 59,
+            format: this.input.dataset.format || '',
+            startView: this.input.dataset.startView || 'days',
+            minDate: this.input.dataset.minDate ? new Date(this.input.dataset.minDate) : null,
+            maxDate: this.input.dataset.maxDate ? new Date(this.input.dataset.maxDate) : null,
+            disabledDates: this.input.dataset.disabledDates ?  this.input.dataset.disabledDates.split(',').map(d => d.trim()) : [],
+            altField: this.input.dataset.altField || null,
+            altFormat: this.input.dataset.altFormat || 'Y-m-d',
+            range: this.input.dataset.range === 'true',
+            multiple: this.input.dataset.multiple === 'true',
+            multipleSeparator: this.input.dataset.multipleSeparator || ',',
+            altFieldMultipleDatesSeparator: this.input.dataset.altFieldMultipleDatesSeparator || ',',
+            multipleDisplaySelector: this.input.dataset.multipleDisplaySelector || '.selected-dates-display',
+            autoClose: this.input.dataset.autoClose !== 'false', // default true
+            firstDayOfWeek: parseInt(this.input.dataset.firstDayOfWeek) || 0, // 0 = Sunday, 1 = Monday, etc.
+            timepickerDefaultNow: this.input.dataset.timepickerDefaultNow !== 'false', // default true
+            todayButton: this.input.dataset.todayButton !== 'false',
+            clearButton: this.input.dataset.clearButton !== 'false',
+            closeButton: this.input.dataset.closeButton !== 'false',
+            timepicker: this.input.dataset.timepicker === 'true', // default false, no timepicker
+            ampm: this.input.dataset.ampm === 'false',
+            hoursStep: parseInt(this.input.dataset.hoursStep) || 1,
+            minutesStep: parseInt(this.input.dataset.minutesStep) || 1,
+            minHours: this.input.dataset.minHours !== undefined ? parseInt(this.input.dataset.minHours) : null,
+            maxHours: this.input.dataset.maxHours !== undefined ? parseInt(this.input.dataset.maxHours) : null,
+            minMinutes: this.input.dataset.minMinutes !== undefined ? parseInt(this.input.dataset.minMinutes) : 0,
+            maxMinutes: this.input.dataset.maxMinutes !== undefined ? parseInt(this.input.dataset.maxMinutes) : 59,
             ...options
         };
 
