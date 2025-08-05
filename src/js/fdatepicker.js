@@ -72,6 +72,7 @@ class FDatepicker {
             maxHours: this.input.dataset.maxHours !== undefined ? parseInt(this.input.dataset.maxHours) : null,
             minMinutes: this.input.dataset.minMinutes !== undefined ? parseInt(this.input.dataset.minMinutes) : 0,
             maxMinutes: this.input.dataset.maxMinutes !== undefined ? parseInt(this.input.dataset.maxMinutes) : 59,
+            onSelect: typeof this.input.dataset.onSelect === 'function' ? this.input.dataset.onSelect : null,
             ...options
         };
 
@@ -881,6 +882,79 @@ class FDatepicker {
         }
     }
 
+    triggerOnSelect() {
+        if (typeof this.options.onSelect !== 'function') return;
+
+        let date = null;
+        let formattedDate = '';
+
+        if (this.options.multiple) {
+            date = this.selectedDates;
+            formattedDate = this.selectedDates.map(d => this.formatDate(d, this.options.dateFormat)).join(this.options.multipleDatesSeparator);
+        } else if (this.options.range) {
+            date = [this.selectedDate, this.selectedEndDate].filter(Boolean);
+            formattedDate = date.map(d => this.formatDate(d, this.options.dateFormat)).join(' - ');
+        } else {
+            date = this.selectedDate;
+            formattedDate = this.selectedDate ? this.formatDate(this.selectedDate, this.options.dateFormat) : '';
+        }
+
+        // Call the onSelect callback
+        this.options.onSelect.call(this.input,formattedDate, date, this);
+    }
+
+    /**
+     * Public method to set the selected date(s)
+     * @param {Date|Date[]|Array<Date>} date - Single Date, array of Dates (multiple), or [start, end] (range)
+     */
+    setDate(date) {
+        if (!date) {
+            this.selectedDate = null;
+            this.selectedEndDate = null;
+            this.selectedDates = [];
+        } else if (this.options.multiple) {
+            if (Array.isArray(date)) {
+                this.selectedDates = date.map(d => d instanceof Date ? d : new Date(d));
+            } else {
+                // Single date in multiple mode
+                this.selectedDates = [date instanceof Date ? date : new Date(date)];
+            }
+            this.selectedDate = null;
+            this.selectedEndDate = null;
+        } else if (this.options.range) {
+            if (Array.isArray(date) && date.length >= 2) {
+                this.selectedDate = date[0] instanceof Date ? date[0] : new Date(date[0]);
+                this.selectedEndDate = date[1] instanceof Date ? date[1] : new Date(date[1]);
+            } else {
+                this.selectedDate = date instanceof Date ? date : new Date(date);
+                this.selectedEndDate = null;
+            }
+        } else {
+            this.selectedDate = date instanceof Date ? date : new Date(date);
+            this.selectedEndDate = null;
+            this.selectedDates = [];
+        }
+
+        // Ensure dates are valid
+        if (this.selectedDate && isNaN(this.selectedDate.getTime())) this.selectedDate = null;
+        if (this.selectedEndDate && isNaN(this.selectedEndDate.getTime())) this.selectedEndDate = null;
+        if (this.selectedDates) {
+            this.selectedDates = this.selectedDates.filter(d => d && !isNaN(d.getTime()));
+        }
+
+        // Update input, UI, and trigger onSelect
+        this.updateInput();
+        this.render();
+        this.focusCurrentDay();
+
+        // Auto-close if not using timepicker
+        if (this.options.autoClose && !this.options.timepicker) {
+            this.close();
+        }
+
+        this.triggerOnSelect();
+    }
+
     selectDate(day) {
         const year = this.focusedDate.getFullYear();
         const month = this.focusedDate.getMonth();
@@ -977,6 +1051,7 @@ class FDatepicker {
                 this.focusCurrentDay();
             }
         }
+        this.triggerOnSelect();
     }
 
     selectMonth(month) {
@@ -1086,6 +1161,14 @@ class FDatepicker {
     static formatDate(date, format = 'm/d/Y', locale = null) {
         if (!date) return '';
         const loc = locale || FDATEPICKER_DEFAULT_MESSAGES;
+        const hours = date.getHours();
+        const minutes = date.getMinutes();
+        const seconds = date.getSeconds();
+
+        // Compute 12-hour clock values
+        const isPM = hours >= 12;
+        const hour12 = hours % 12 === 0 ? 12 : hours % 12; // 12-hour clock: 1-12
+
         const formatMap = {
             'd': String(date.getDate()).padStart(2, '0'),
             'j': date.getDate(),
@@ -1098,14 +1181,25 @@ class FDatepicker {
             'M': loc.monthsShort[date.getMonth()],
             'Y': date.getFullYear(),
             'y': String(date.getFullYear()).slice(-2),
-            'H': String(date.getHours()).padStart(2, '0'),
-            'G': date.getHours(),
-            'i': String(date.getMinutes()).padStart(2, '0'),
-            's': String(date.getSeconds()).padStart(2, '0'),
-            'A': date.getHours() >= 12 ? 'PM' : 'AM',
-            'a': date.getHours() >= 12 ? 'pm' : 'am'
+
+            // 24-hour format
+            'H': String(hours).padStart(2, '0'),
+            'G': hours,
+
+            // 12-hour format (newly added)
+            'h': String(hour12).padStart(2, '0'),  // 12-hour with leading zero: 01-12
+            'g': hour12,                            // 12-hour without leading zero: 1-12
+
+            // Minutes and seconds
+            'i': String(minutes).padStart(2, '0'),
+            's': String(seconds).padStart(2, '0'),
+
+            // AM/PM
+            'A': isPM ? 'PM' : 'AM',
+            'a': isPM ? 'pm' : 'am'
         };
-        return format.replace(/d|j|l|D|S|m|n|F|M|Y|y|H|G|i|s|A|a/g, match => formatMap[match] || '');
+
+        return format.replace(/d|j|l|D|S|m|n|F|M|Y|y|H|G|h|g|i|s|A|a/g, match => formatMap[match] || '');
     }
 
     static getOrdinalSuffix(day) {
