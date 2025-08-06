@@ -60,11 +60,12 @@ class FDatepicker {
             multipleDisplaySelector: this.input.dataset.multipleDisplaySelector || '.selected-dates-display',
             autoClose: this.input.dataset.autoClose !== 'false', // default true
             firstDayOfWeek: parseInt(this.input.dataset.firstDayOfWeek) || 0, // 0 = Sunday, 1 = Monday, etc.
-            timepickerDefaultNow: this.input.dataset.timepickerDefaultNow !== 'false', // default true
             todayButton: this.input.dataset.todayButton !== 'false',
             clearButton: this.input.dataset.clearButton !== 'false',
             closeButton: this.input.dataset.closeButton !== 'false',
             timepicker: this.input.dataset.timepicker === 'true', // default false, no timepicker
+            timeOnly: this.input.dataset.timeOnly === 'true', // default false
+            timepickerDefaultNow: this.input.dataset.timepickerDefaultNow !== 'false', // default true
             ampm: this.input.dataset.ampm === 'false',
             hoursStep: parseInt(this.input.dataset.hoursStep) || 1,
             minutesStep: parseInt(this.input.dataset.minutesStep) || 1,
@@ -78,6 +79,11 @@ class FDatepicker {
 
         this.locale = FDATEPICKER_DEFAULT_MESSAGES;
 
+        // Prevent autoClose if timeOnly is active
+        // This ensures the popup stays open so the user can interact with the timepicker.
+        if (this.options.timeOnly) {
+            this.options.autoClose = false;
+        }
         if (!this.input.dataset.format && !this.options.format) {
             this.options.format = this.locale.format || 'm/d/Y';
         }
@@ -205,7 +211,8 @@ class FDatepicker {
         const popup = document.createElement('div');
         popup.className = 'fdatepicker-popup';
 
-        popup.innerHTML = `
+        if (!this.options.timeOnly) {
+            popup.innerHTML = `
         <div class="fdatepicker-header">
             <button class="fdatepicker-nav" data-action="prev" tabindex="0">‹</button>
             <div class="fdatepicker-title" tabindex="0"></div>
@@ -217,6 +224,7 @@ class FDatepicker {
             </div>
         </div>
         `;
+        }
 
         // Add timepicker if needed
         if (this.options.timepicker) {
@@ -956,6 +964,14 @@ class FDatepicker {
     }
 
     selectDate(day) {
+        if (this.options.timeOnly) {
+            // We don't want to change the selected day.
+            // Instead, just ensure the time is updated based on the inputs.
+            this.updateSelectedTime();
+            // We don't call close() here because autoClose is already false.
+            return;
+        }
+
         const year = this.focusedDate.getFullYear();
         const month = this.focusedDate.getMonth();
 
