@@ -56,7 +56,7 @@ class FDatepicker {
             range: this.input.dataset.range === 'true',
             multiple: this.input.dataset.multiple === 'true',
             multipleSeparator: this.input.dataset.multipleSeparator || ',',
-            altFieldMultipleDatesSeparator: this.input.dataset.altFieldMultipleDatesSeparator || ',',
+            altFieldMultipleSeparator: this.input.dataset.altFieldMultipleSeparator || ',',
             multipleDisplaySelector: this.input.dataset.multipleDisplaySelector || '.selected-dates-display',
             autoClose: this.input.dataset.autoClose !== 'false', // default true
             firstDayOfWeek: parseInt(this.input.dataset.firstDayOfWeek) || 0, // 0 = Sunday, 1 = Monday, etc.
@@ -780,38 +780,48 @@ class FDatepicker {
     // Simplified positioning - let CSS and browser handle most of it
     setPosition() {
         const inputRect = this.input.getBoundingClientRect();
+        const inputBounds = this.input.getBoundingClientRect();
         const offset = 4;
 
-        // Simple rule: if there's more space above, go up. Otherwise, go down.
-        const spaceBelow = window.innerHeight - inputRect.bottom;
-        const spaceAbove = inputRect.top;
+        // Get the input's position relative to the document (not the viewport)
+        const inputTop = inputRect.top + window.scrollY;
+        const inputLeft = inputRect.left + window.scrollX;
+
+        // Calculate space above and below relative to the *document* and viewport
+        const spaceBelow = window.innerHeight - inputBounds.bottom;
+        const spaceAbove = inputBounds.top; // This is still relative to viewport
 
         let top, left;
 
-        this.popup.classList.remove('fdatepicker-popup-top', 'fdatepicker-popup-bottom');
+        this.popup.classList.remove('fdatepicker-popup-top', 'fdatepicker-popup-bottom', 'fdatepicker-popup-middle');
+        
         if (spaceAbove > spaceBelow && spaceAbove > 300) {
             // Position above
             this.popup.classList.add('fdatepicker-popup-top');
-            top = inputRect.top - offset;
-        } else if ((spaceAbove > spaceBelow && spaceAbove > 150) || spaceBelow<150) {
-            // Position above
+            top = inputTop - offset;
+        } else if ((spaceAbove > spaceBelow && spaceAbove > 150) || spaceBelow < 150) {
+            // Position above (middle variant)
             this.popup.classList.add('fdatepicker-popup-middle');
-            top = inputRect.top - offset;
+            top = inputTop - offset;
         } else {
             // Position below (default)
             this.popup.classList.add('fdatepicker-popup-bottom');
-            top = inputRect.bottom + offset;
+            top = inputTop + inputBounds.height + offset;
         }
-
-        // Horizontal: just align with input left edge
-        left = inputRect.left;
+        
+        // Horizontal: align with input's left edge, relative to the document
+        left = inputLeft;
 
         // Basic bounds checking - keep on screen
+        // Ensure the popup doesn't go off the left or right edge of the viewport
+        const popupWidth = 320; // Assuming a standard width, adjust if needed
         if (left < 10) left = 10;
-        if (left > window.innerWidth - 320) left = window.innerWidth - 320;
+        if (left > window.innerWidth - popupWidth) left = window.innerWidth - popupWidth;
+
+        // Ensure the popup doesn't go off the top of the document
         if (top < 10) top = 10;
 
-        // Apply position
+        // Apply position using document coordinates
         this.popup.style.top = `${top}px`;
         this.popup.style.left = `${left}px`;
     }
@@ -1259,9 +1269,9 @@ class FDatepicker {
             if (altField) {
                 let altValue = '';
                 if (this.options.multiple) {
-                    altValue = this.selectedDates.map(date => this.formatDate(date, this.options.altFormat)).join(this.options.altFieldMultipleDatesSeparator);
+                    altValue = this.selectedDates.map(date => this.formatDate(date, this.options.altFormat)).join(this.options.altFieldMultipleSeparator);
                 } else if (this.options.range && this.selectedDate && this.selectedEndDate) {
-                    altValue = this.formatDate(this.selectedDate, this.options.altFormat) + this.options.altFieldMultipleDatesSeparator + this.formatDate(this.selectedEndDate, this.options.altFormat);
+                    altValue = this.formatDate(this.selectedDate, this.options.altFormat) + this.options.altFieldMultipleSeparator + this.formatDate(this.selectedEndDate, this.options.altFormat);
                 } else if (this.selectedDate) {
                     altValue = this.formatDate(this.selectedDate, this.options.altFormat);
                 }
