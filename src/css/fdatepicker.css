@@ -232,13 +232,12 @@
             justify-content: center;
         }
 
-        .fdatepicker-time-input {
+        input.fdatepicker-time-input {
             width: 60px;
-            padding: 8px;
             border: 1px solid #d1d5db;
             border-radius: 4px;
             text-align: center;
-            font-size: 16px;
+            font-size: 14px;
         }
 
         .fdatepicker-time-separator {
@@ -247,13 +246,13 @@
         }
 
         .fdatepicker-time-ampm {
-            padding: 8px 12px;
+            padding: 4px 10px;
             border: 1px solid #d1d5db;
             border-radius: 4px;
             background: white;
             cursor: pointer;
             font-size: 14px;
-            font-weight: 600;
+            font-weight: bold;
         }
 
         .fdatepicker-time-ampm.active {

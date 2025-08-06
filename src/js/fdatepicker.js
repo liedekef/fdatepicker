@@ -83,6 +83,8 @@ class FDatepicker {
         // This ensures the popup stays open so the user can interact with the timepicker.
         if (this.options.timeOnly) {
             this.options.autoClose = false;
+            this.options.todayButton = false;
+            this.options.clearButton = false;
         }
         if (!this.input.dataset.format && !this.options.format) {
             this.options.format = this.locale.format || 'm/d/Y';
@@ -260,6 +262,9 @@ class FDatepicker {
                     max="${maxHours}"
                     step="${this.options.hoursStep}"
                     value="${String(initialTime.hours).padStart(2, '0')}">
+            `;
+
+            const ampmButtons = `
                 <div class="fdatepicker-time-ampm ${initialTime.isAM ? 'active' : ''}" data-ampm="AM">AM</div>
                 <div class="fdatepicker-time-ampm ${!initialTime.isAM ? 'active' : ''}" data-ampm="PM">PM</div>
             `;
@@ -277,6 +282,7 @@ class FDatepicker {
                         max="${this.options.maxMinutes}"
                         step="${this.options.minutesStep}"
                         value="${String(initialTime.minutes).padStart(2, '0')}">
+                    ${ampmButtons}
                 </div>
             `;
             popup.appendChild(timepicker);
@@ -445,7 +451,7 @@ class FDatepicker {
         });
 
         // Handle keyboard navigation within grid - prevent event bubbling to avoid double handling
-        this.grid.addEventListener('keydown', (e) => {
+        this.grid?.addEventListener('keydown', (e) => {
             if (['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', 'PageUp', 'PageDown', 'Home', 'End', ' ', 'Enter', 'Escape'].includes(e.key)) {
                 e.preventDefault();
                 e.stopPropagation();
@@ -656,7 +662,7 @@ class FDatepicker {
         this.input.addEventListener('click', () => this.toggle());
 
         // Mouse interactions on grid
-        this.grid.addEventListener('mouseover', (e) => {
+        this.grid?.addEventListener('mouseover', (e) => {
             if (e.target.classList.contains('fdatepicker-day')) {
                 if (e.target.classList.contains('other-month')) {
                     e.target.classList.add('hover');
@@ -671,7 +677,7 @@ class FDatepicker {
         });
 
         // Clear focus when mouse leaves the popup
-        this.grid.addEventListener('mouseleave', () => {
+        this.grid?.addEventListener('mouseleave', () => {
             this.clearFocus();
         });
 
@@ -1327,6 +1333,9 @@ class FDatepicker {
     }
 
     render() {
+        if (this.options.timeOnly) {
+            return;
+        }
         this.renderTitle();
         if (this.view === 'days') {
             this.renderDays();
