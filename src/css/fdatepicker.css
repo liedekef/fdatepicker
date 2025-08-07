@@ -218,10 +218,6 @@
             border-top: 1px solid #e5e7eb;
             padding: 5px;
             margin-top: 5px;
-            display: none;
-        }
-
-        .fdatepicker-timepicker.active {
             display: block;
         }
 
@@ -249,13 +245,17 @@
             padding: 4px 10px;
             border: 1px solid #d1d5db;
             border-radius: 4px;
-            background: white;
             cursor: pointer;
             font-size: 14px;
             font-weight: bold;
+            background: white;
         }
 
         .fdatepicker-time-ampm.active {
             background: #3b82f6;
             color: white;
+        }
+        .fdatepicker-time-ampm:focus {
+            outline: 2px solid #3b82f6;
+            outline-offset: -2px;
         }

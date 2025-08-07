@@ -100,7 +100,6 @@ class FDatepicker {
         this.title = this.popup.querySelector('.fdatepicker-title');
         this.content = this.popup.querySelector('.fdatepicker-content');
         this.grid = this.popup.querySelector('.fdatepicker-grid');
-        this.timepicker = this.popup.querySelector('.fdatepicker-timepicker');
         this.hoursInput = this.popup.querySelector('[data-time="hours"]');
         this.minutesInput = this.popup.querySelector('[data-time="minutes"]');
 
@@ -149,13 +148,6 @@ class FDatepicker {
         // Handle pre-filled dates
         this.initializePrefilledDates();
 
-        // Setup timepicker
-        if (this.options.timepicker) {
-            this.timepicker.classList.add('active');
-            if (this.options.ampm) {
-                this.setupAmPm();
-            }
-        }
         this.view = this.options.startView === 'years' ? 'years' :
             this.options.startView === 'months' ? 'months' : 'days';
         this.render();
@@ -246,45 +238,86 @@ class FDatepicker {
                 maxHours = this.options.maxHours !== null ? this.options.maxHours : 12;
             }
 
-            const timeInputHtml = is24Hour ? `
-                <input type="number"
-                    class="fdatepicker-time-input"
-                    data-time="hours"
-                    min="${minHours}"
-                    max="${maxHours}"
-                    step="${this.options.hoursStep}"
-                    value="${String(initialTime.hours).padStart(2, '0')}">
-            ` : `
-                <input type="number"
-                    class="fdatepicker-time-input"
-                    data-time="hours"
-                    min="${minHours}"
-                    max="${maxHours}"
-                    step="${this.options.hoursStep}"
-                    value="${String(initialTime.hours).padStart(2, '0')}">
-            `;
+            // Create the time inputs and AM/PM container
+            const timeInputs = document.createElement('div');
+            timeInputs.className = 'fdatepicker-time-inputs';
 
-            const ampmButtons = `
-                <div class="fdatepicker-time-ampm ${initialTime.isAM ? 'active' : ''}" data-ampm="AM">AM</div>
-                <div class="fdatepicker-time-ampm ${!initialTime.isAM ? 'active' : ''}" data-ampm="PM">PM</div>
-            `;
+            // Add hours input
+            const hoursInput = document.createElement('input');
+            hoursInput.type = 'number';
+            hoursInput.className = 'fdatepicker-time-input';
+            hoursInput.dataset.time = 'hours';
+            hoursInput.min = minHours;
+            hoursInput.max = maxHours;
+            hoursInput.step = this.options.hoursStep;
+            hoursInput.value = String(initialTime.hours).padStart(2, '0');
+            hoursInput.tabIndex = 0; // Ensure it's focusable
+            timeInputs.appendChild(hoursInput);
+
+            // Add separator
+            const separator = document.createElement('span');
+            separator.className = 'fdatepicker-time-separator';
+            separator.textContent = ':';
+            timeInputs.appendChild(separator);
+
+            // Add minutes input
+            const minutesInput = document.createElement('input');
+            minutesInput.type = 'number';
+            minutesInput.className = 'fdatepicker-time-input';
+            minutesInput.dataset.time = 'minutes';
+            minutesInput.min = this.options.minMinutes;
+            minutesInput.max = this.options.maxMinutes;
+            minutesInput.step = this.options.minutesStep;
+            minutesInput.value = String(initialTime.minutes).padStart(2, '0');
+            minutesInput.tabIndex = 0; // Ensure it's focusable
+            timeInputs.appendChild(minutesInput);
+
+            // --- Create AM/PM buttons as DOM elements and attach listeners ---
+            if (this.options.ampm) {
+                const amButton = document.createElement('div');
+                amButton.className = `fdatepicker-time-ampm ${initialTime.isAM ? 'active' : ''}`;
+                amButton.dataset.ampm = 'AM';
+                amButton.textContent = 'AM';
+                amButton.tabIndex = 0; // Make it focusable
+                amButton.addEventListener('click', () => {
+                    // Deactivate all and activate this one
+                    amButton.classList.add('active');
+                    pmButton.classList.remove('active');
+                    this.updateSelectedTime();
+                });
+                // Add keyboard support to AM button
+                amButton.addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        amButton.click();
+                    }
+                });
+                timeInputs.appendChild(amButton);
+
+                const pmButton = document.createElement('div');
+                pmButton.className = `fdatepicker-time-ampm ${!initialTime.isAM ? 'active' : ''}`;
+                pmButton.dataset.ampm = 'PM';
+                pmButton.textContent = 'PM';
+                pmButton.tabIndex = 0; // Make it focusable
+                pmButton.addEventListener('click', () => {
+                    // Deactivate all and activate this one
+                    pmButton.classList.add('active');
+                    amButton.classList.remove('active');
+                    this.updateSelectedTime();
+                });
+                // Add keyboard support to PM button
+                pmButton.addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        pmButton.click();
+                    }
+                });
+                timeInputs.appendChild(pmButton);
+            }
 
             const timepicker = document.createElement('div');
             timepicker.className = 'fdatepicker-timepicker';
-            timepicker.innerHTML = `
-                <div class="fdatepicker-time-inputs">
-                    ${timeInputHtml}
-                    <span class="fdatepicker-time-separator">:</span>
-                    <input type="number"
-                        class="fdatepicker-time-input"
-                        data-time="minutes"
-                        min="${this.options.minMinutes}"
-                        max="${this.options.maxMinutes}"
-                        step="${this.options.minutesStep}"
-                        value="${String(initialTime.minutes).padStart(2, '0')}">
-                    ${ampmButtons}
-                </div>
-            `;
+            timepicker.appendChild(timeInputs);
             popup.appendChild(timepicker);
         }
 
@@ -340,17 +373,6 @@ class FDatepicker {
 
         this.container.appendChild(popup);
         return popup;
-    }
-
-    setupAmPm() {
-        const ampmElements = this.popup.querySelectorAll('[data-ampm]');
-        ampmElements.forEach(el => {
-            el.addEventListener('click', () => {
-                ampmElements.forEach(e => e.classList.remove('active'));
-                el.classList.add('active');
-                this.updateSelectedTime();
-            });
-        });
     }
 
     bindKeyboard() {
@@ -542,12 +564,26 @@ class FDatepicker {
 
     setInitialFocus() {
         setTimeout(() => {
+            if (this.options.timeOnly) {
+                // Focus the hours input in timeOnly mode
+                if (this.hoursInput) {
+                    this.hoursInput.focus();
+                } else if (this.minutesInput) {
+                    this.minutesInput.focus();
+                }
+                return;
+            }
             if (this.view === 'days') {
                 this.focusCurrentDay();
-            } else if (this.view === 'months') {
+                return;
+            }
+            if (this.view === 'months') {
                 this.focusCurrentMonth();
-            } else if (this.view === 'years') {
+                return;
+            }
+            if (this.view === 'years') {
                 this.focusCurrentYear();
+                return;
             }
         }, 0);
     }
@@ -717,8 +753,17 @@ class FDatepicker {
             [this.hoursInput, this.minutesInput].forEach(input => {
                 if (input) {
                     input.addEventListener('keydown', (e) => {
-                        // let's make sure that the global keydown listener won't take arrow up/down when in the timepicker
-                        e.stopPropagation(); 
+                        // Only stop propagation for arrow keys to prevent grid navigation
+                        if (['Enter', 'Escape'].includes(e.key)) {
+                            e.preventDefault(); // Prevent any default browser behavior
+                            e.stopPropagation(); // Stop the event from bubbling and being handled elsewhere
+                            this.close(); // Close the datepicker
+                            this.input.focus(); // Return focus to the original input
+                            return;
+                        }
+                        if (['ArrowUp', 'ArrowDown'].includes(e.key)) {
+                            e.stopPropagation();
+                        }
                     });
                     input.addEventListener('change', () => this.updateSelectedTime());
 
@@ -872,7 +917,6 @@ class FDatepicker {
         this.title = null;
         this.content = null;
         this.grid = null;
-        this.timepicker = null;
         this.hoursInput = null;
         this.minutesInput = null;
         this.focusedElement = null;
