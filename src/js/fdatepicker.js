@@ -56,7 +56,7 @@ class FDatepicker {
             multiple: this.input.dataset.multiple === 'true',
             multipleSeparator: this.input.dataset.multipleSeparator || ',',
             altFieldMultipleSeparator: this.input.dataset.altFieldMultipleSeparator || ',',
-            multipleDisplaySelector: this.input.dataset.multipleDisplaySelector || '.selected-dates-display',
+            multipleDisplaySelector: this.input.dataset.multipleDisplaySelector || '',
             autoClose: this.input.dataset.autoClose !== 'false', // default true
             firstDayOfWeek: parseInt(this.input.dataset.firstDayOfWeek) || 0, // 0 = Sunday, 1 = Monday, etc.
             todayButton: this.input.dataset.todayButton !== 'false',
@@ -1217,13 +1217,16 @@ class FDatepicker {
     }
 
     updateMultipleDisplay() {
+        if (!this.options.multipleDisplaySelector) {
+            return;
+        }
         const display = document.querySelector(this.options.multipleDisplaySelector);
         if (display && this.options.multiple) {
             if (this.selectedDates.length === 0) {
-                display.textContent = this.locale.noDatesSelected || 'No dates selected';
+                display.textContent = this.locale.noDatesSelected;
             } else {
                 const dateStrings = this.selectedDates.map(date => this.formatDate(date));
-                const selectedString = this.locale.datesSelected || 'Selected dates ({0}):';
+                const selectedString = this.locale.datesSelected;
                 display.innerHTML = "<strong>" + selectedString.replace(/\{0\}/g, this.selectedDates.length) + `</strong><br>${dateStrings.join(', ')}`;
             }
         }
@@ -1294,8 +1297,8 @@ class FDatepicker {
 
         if (this.options.multiple) {
             if (this.selectedDates.length > 0) {
-                if (this.options.altField) {
-                    // we have an altField, so we can be pretty here
+                if (this.options.altField && this.options.multipleDisplaySelector) {
+                    // we have a multiple display selector, so we can be pretty here
                     value = `${this.selectedDates.length} date${this.selectedDates.length !== 1 ? 's' : ''} selected`;
                 } else {
                     value = this.selectedDates.map(date => this.formatDate(date)).join(this.options.multipleSeparator);
