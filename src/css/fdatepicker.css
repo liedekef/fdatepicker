@@ -24,7 +24,7 @@
             border: 1px solid #e1e5e9;
             border-radius: 10px;
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
-            padding: 10px;
+            padding: 3px;
             min-width: 250px;
             z-index: 1000;
             display: none;
@@ -123,6 +123,7 @@
             transition: all 0.2s;
             position: relative;
             outline: none;
+            height: 32px;
         }
 
         .fdatepicker-month, .fdatepicker-year {
