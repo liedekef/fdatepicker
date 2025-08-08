@@ -158,9 +158,9 @@ class FDatepicker {
     }
 
     initializePrefilledDates() {
-        if (this.options.multiple && this.input.dataset.dates) {
+        if (this.options.multiple && this.input.dataset.date) {
             // Multiple dates
-            const dates = this.input.dataset.dates.split(',');
+            const dates = this.input.dataset.date.split(',');
             this.selectedDates = dates.map(dateStr => new Date(dateStr.trim())).filter(date => !isNaN(date));
             if (this.selectedDates.length > 0) {
                 this.focusedDate = new Date(this.selectedDates[0]);
