@@ -40,14 +40,13 @@ class FDatepicker {
         this.selectedEndDate = null;
         this.selectedDates = [];
         this.isOpen = false;
-        this.view = 'days';
         this.currentYear = new Date().getFullYear();
         this.focusedElement = null;
 
         // Read options from input's dataset
         this.options = {
             format: this.input.dataset.format || '',
-            startView: this.input.dataset.startView || 'days',
+            view: this.input.dataset.view || 'days',
             minDate: this.input.dataset.minDate ? new Date(this.input.dataset.minDate) : null,
             maxDate: this.input.dataset.maxDate ? new Date(this.input.dataset.maxDate) : null,
             disabledDates: this.input.dataset.disabledDates ?  this.input.dataset.disabledDates.split(',').map(d => d.trim()) : [],
@@ -76,6 +75,10 @@ class FDatepicker {
             onSelect: typeof this.input.dataset.onSelect === 'function' ? this.input.dataset.onSelect : null,
             ...options
         };
+
+        // get the default view to start with
+        this.view = this.options.view === 'years' ? 'years' :
+            this.options.view === 'months' ? 'months' : 'days';
 
         this.locale = FDATEPICKER_DEFAULT_MESSAGES;
 
@@ -148,8 +151,6 @@ class FDatepicker {
         // Handle pre-filled dates
         this.initializePrefilledDates();
 
-        this.view = this.options.startView === 'years' ? 'years' :
-            this.options.startView === 'months' ? 'months' : 'days';
         this.render();
         this.bindEvents();
         this.bindKeyboard();
