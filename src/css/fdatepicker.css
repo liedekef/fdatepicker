@@ -65,6 +65,8 @@
             padding: 8px;
             border-radius: 6px;
             transition: background-color 0.2s;
+            margin: auto;
+            color: initial;
         }
 
         .fdatepicker-nav:hover, .fdatepicker-nav:focus {
@@ -201,6 +203,7 @@
             transition: background-color 0.2s, color 0.2s;
             flex: 1;
             text-align: center;
+            margin: auto;
         }
 
         .fdatepicker-button-text:hover,

@@ -15,7 +15,7 @@
   "scripts": {
     "build": "npm run build:esmumd && npm run build:min",
     "build:esmumd": "node build.mjs",
-    "build:min": "uglifyjs fdatepicker.js -o fdatepicker.min.js --compress --mangle",
+    "build:min": "uglifyjs -o fdatepicker.min.js fdatepicker.js",
     "prepublishOnly": "npm run build"
   },
   "keywords": [

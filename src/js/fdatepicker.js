@@ -148,6 +148,10 @@ class FDatepicker {
     }
 
     init() {
+        // Remove readonly so browser treats the field as properly interactive
+        // This helps with HTML5 validation, focus, and accessibility
+        this.input.removeAttribute('readonly');
+
         // Handle pre-filled dates
         this.initializePrefilledDates();
 
@@ -380,9 +384,9 @@ class FDatepicker {
         // Handle keyboard events on input
         this.input.addEventListener('keydown', (e) => {
             if (!this.isOpen && e.key !== 'Escape') {
+                e.preventDefault();
+                e.stopPropagation();
                 if (['ArrowDown', ' ', 'Enter'].includes(e.key)) {
-                    e.preventDefault();
-                    e.stopPropagation();
                     this.open();
                 }
                 return;
