@@ -77,6 +77,9 @@ class FDatepicker {
         };
 
         // get the default view to start with
+        if (this.input.value || this.input.dataset.date) {
+            this.options.view = 'days';
+        }
         this.view = this.options.view === 'years' ? 'years' :
             this.options.view === 'months' ? 'months' : 'days';
 
@@ -338,8 +341,8 @@ class FDatepicker {
                 todayBtn.addEventListener('click', (e) => {
                     e.stopPropagation();
                     const today = new Date();
+                    this.focusedDate = new Date(today); // order matters
                     this.selectDate(today.getDate());
-                    this.focusedDate = new Date(today);
                     this.render();
                 });
                 buttonRow.appendChild(todayBtn);
