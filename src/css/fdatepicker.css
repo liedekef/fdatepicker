@@ -139,11 +139,11 @@
             z-index: 1;
         }
 
-        .fdatepicker-day.other-month {
+        .fdatepicker-day.other-month, .fdatepicker-year.other-decade {
             color: #d1d5db;
         }
 
-        .fdatepicker-day.other-month:hover {
+        .fdatepicker-day.other-month:hover, .fdatepicker-year.other-decade:hover {
             background: #f3f4f6;
         }
 

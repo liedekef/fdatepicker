@@ -564,7 +564,7 @@ class FDatepicker {
             }
         } else if (this.view === 'years') {
             const focusedYear = this.popup.querySelector('.fdatepicker-year:focus, .fdatepicker-year.focus');
-            if (focusedYear) {
+            if (focusedYear && !focusedDay.classList.contains('other-decade') && !focusedDay.classList.contains('disabled')) {
                 this.selectYear(parseInt(focusedYear.dataset.year));
             }
         }
@@ -630,14 +630,18 @@ class FDatepicker {
 
     focusCurrentYear() {
         if (this.view !== 'years') return;
-
         this.clearFocus();
-
         const year = this.focusedDate.getFullYear();
-        const yearElement = this.popup.querySelector(`[data-year="${year}"]`);
+        const startDecade = Math.floor(this.currentYear / 10) * 10;
+        const minYear = startDecade;
+        const maxYear = startDecade + 9;
 
-        if (yearElement) {
-            this.setFocus(yearElement);
+        // Only focus if year is in valid range (not placeholder)
+        if (year >= minYear && year <= maxYear) {
+            const yearElement = this.popup.querySelector(`[data-year="${year}"]`);
+            if (yearElement && !yearElement.classList.contains('other-decade') && !yearElement.classList.contains('disabled')) {
+                this.setFocus(yearElement);
+            }
         }
     }
 
@@ -716,7 +720,11 @@ class FDatepicker {
             } else if (e.target.classList.contains('fdatepicker-month')) {
                 this.setFocus(e.target);
             } else if (e.target.classList.contains('fdatepicker-year')) {
-                this.setFocus(e.target);
+                if (e.target.classList.contains('other-decade')) {
+                    e.target.classList.add('hover');
+                } else {
+                    this.setFocus(e.target);
+                }
             }
         });
 
@@ -751,7 +759,7 @@ class FDatepicker {
                 this.selectMonth(parseInt(e.target.dataset.month));
             }
 
-            if (e.target.classList.contains('fdatepicker-year')) {
+            if (e.target.classList.contains('fdatepicker-year') && !e.target.classList.contains('other-decade')) {
                 this.selectYear(parseInt(e.target.dataset.year));
             }
         });
@@ -813,7 +821,8 @@ class FDatepicker {
         } else if (this.view === 'months') {
             this.focusedDate.setFullYear(this.focusedDate.getFullYear() + direction);
         } else if (this.view === 'years') {
-            this.currentYear += direction * 12;
+            // Move by 10 years per navigation
+            this.currentYear += direction * 10;
         }
         this.render();
     }
@@ -1408,7 +1417,9 @@ class FDatepicker {
         } else if (this.view === 'months') {
             title = this.focusedDate.getFullYear();
         } else if (this.view === 'years') {
-            title = `${this.currentYear} - ${this.currentYear + 11}`;
+            const startDecade = Math.floor(this.currentYear / 10) * 10;
+            const endDecade = startDecade + 9;
+            title = `${startDecade} - ${endDecade}`;
         }
         this.title.textContent = title;
     }
@@ -1536,23 +1547,37 @@ class FDatepicker {
         this.grid.className = 'fdatepicker-grid years';
         this.grid.innerHTML = '';
 
-        for (let year = this.currentYear; year < this.currentYear + 12; year++) {
+        const startDecade = Math.floor(this.currentYear / 10) * 10; // e.g., 2020
+        const years = [
+            startDecade - 1, // Previous decade end (e.g., 2019)
+            ...Array.from({ length: 10 }, (_, i) => startDecade + i), // 2020–2029
+            startDecade + 10  // Next decade start (e.g., 2030)
+        ];
+
+        years.forEach(year => {
             const yearEl = document.createElement('div');
             yearEl.className = 'fdatepicker-year';
             yearEl.textContent = year;
             yearEl.dataset.year = year;
             yearEl.setAttribute('tabindex', '-1');
 
+            // Mark current year
             if (year === new Date().getFullYear()) {
                 yearEl.classList.add('current');
             }
 
+            // Mark selected year
             if (this.selectedDate && year === this.selectedDate.getFullYear()) {
                 yearEl.classList.add('selected');
             }
 
+            // Disable placeholder years (first and last)
+            if (year === startDecade - 1 || year === startDecade + 10) {
+                yearEl.classList.add('disabled','other-decade');
+            }
+
             this.grid.appendChild(yearEl);
-        }
+        });
     }
 
     /* the next 2 function are there so you can call update via JS to change options */
