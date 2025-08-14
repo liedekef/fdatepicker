@@ -384,11 +384,13 @@ class FDatepicker {
     }
 
     bindKeyboard() {
-        // Handle keyboard events on input
+        // Handle keyboard events on input (actual input is blocked in bindEvents, input listener)
         this.input.addEventListener('keydown', (e) => {
-            if (!this.isOpen && e.key !== 'Escape') {
-                e.preventDefault();
-                e.stopPropagation();
+            if (!this.isOpen) {
+                if (!['Tab'].includes(e.key)) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                }
                 if (['ArrowDown', ' ', 'Enter'].includes(e.key)) {
                     this.open();
                 }
@@ -708,6 +710,24 @@ class FDatepicker {
     }
 
     bindEvents() {
+        this.input.addEventListener('input', (e) => {
+            // Prevent any programmatic or IME input
+            if (this.input.value && !this.selectedDate) {
+                // restore last valid value
+                this.updateInput();
+            }
+            e.preventDefault();
+            e.stopPropagation();
+        });
+
+        this.input.addEventListener('paste', (e) => {
+            e.preventDefault();
+        });
+
+        this.input.addEventListener('drop', (e) => {
+            e.preventDefault();
+        });
+
         // Input click to toggle
         this.input.addEventListener('click', () => this.toggle());
 
