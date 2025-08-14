@@ -417,19 +417,19 @@ class FDatepicker {
                     break;
 
                 case 'ArrowLeft':
-                    this.navigate(-1, 'horizontal');
+                    this.keyboardNavigate(-1, 'horizontal');
                     break;
 
                 case 'ArrowRight':
-                    this.navigate(1, 'horizontal');
+                    this.keyboardNavigate(1, 'horizontal');
                     break;
 
                 case 'ArrowUp':
-                    this.navigate(-1, 'vertical');
+                    this.keyboardNavigate(-1, 'vertical');
                     break;
 
                 case 'ArrowDown':
-                    this.navigate(1, 'vertical');
+                    this.keyboardNavigate(1, 'vertical');
                     break;
 
                 case 'PageUp':
@@ -475,7 +475,7 @@ class FDatepicker {
 
                 case 'Enter':
                 case ' ':
-                    this.handleSelection();
+                    this.keyboardHandleSelection();
                     break;
             }
         });
@@ -511,7 +511,8 @@ class FDatepicker {
         document.addEventListener('keydown', this.boundDocumentKeydownHandler);
     }
 
-    navigate(direction, orientation) {
+    // keyboard navigation function
+    keyboardNavigate(direction, orientation) {
         if (this.view === 'days') {
             if (orientation === 'horizontal') {
                 this.focusedDate.setDate(this.focusedDate.getDate() + direction);
@@ -551,7 +552,8 @@ class FDatepicker {
         }
     }
 
-    handleSelection() {
+    // keyboard selection
+    keyboardHandleSelection() {
         if (this.view === 'days') {
             const focusedDay = this.popup.querySelector('.fdatepicker-day:focus, .fdatepicker-day.focus');
             if (focusedDay && !focusedDay.classList.contains('other-month') && !focusedDay.classList.contains('disabled')) {
@@ -636,10 +638,10 @@ class FDatepicker {
         const minYear = startDecade;
         const maxYear = startDecade + 9;
 
-        // Only focus if year is in valid range (not placeholder)
+        // Only focus if year is in valid range
         if (year >= minYear && year <= maxYear) {
             const yearElement = this.popup.querySelector(`[data-year="${year}"]`);
-            if (yearElement && !yearElement.classList.contains('other-decade') && !yearElement.classList.contains('disabled')) {
+            if (yearElement) {
                 this.setFocus(yearElement);
             }
         }
