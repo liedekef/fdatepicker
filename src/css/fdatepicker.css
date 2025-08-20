@@ -133,10 +133,12 @@
         }
 
         .fdatepicker-day.focus, .fdatepicker-month.focus, .fdatepicker-year.focus {
-            background: #e0e7ff !important;
             outline: 2px solid #3b82f6;
             outline-offset: 1px;
             z-index: 1;
+        }
+        .fdatepicker-day.focus:not(.selected), .fdatepicker-month.focus:not(.selected), .fdatepicker-year.focus:not(.selected) {
+            background: #e0e7ff !important;
         }
 
         .fdatepicker-day.other-month, .fdatepicker-year.other-decade {
