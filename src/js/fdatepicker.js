@@ -136,15 +136,33 @@ class FDatepicker {
     }
 
     isDateDisabled(date) {
-        const time = date.getTime();
-        const dateString = this.formatDate(date,'Y-m-d');
+        if (!date || isNaN(date.getTime())) {
+            return true; // Invalid dates are disabled
+        }
 
-        // Check min/max
-        if (this.options.minDate && time < this.options.minDate.setHours(0,0,0,0)) return true;
-        if (this.options.maxDate && time > this.options.maxDate.setHours(23,59,59,999)) return true;
+        const dateString = this.formatDate(date, 'Y-m-d');
 
-        // Check disabled dates
-        if (this.options.disabledDates.includes(dateString)) return true;
+        // Create normalized date for comparison (start of day)
+        const normalizedDate = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+        const normalizedTime = normalizedDate.getTime();
+
+        // Check min/max dates - create copies to avoid mutation
+        if (this.options.minDate) {
+            const minDateCopy = new Date(this.options.minDate);
+            const minTime = new Date(minDateCopy.getFullYear(), minDateCopy.getMonth(), minDateCopy.getDate()).getTime();
+            if (normalizedTime < minTime) return true;
+        }
+
+        if (this.options.maxDate) {
+            const maxDateCopy = new Date(this.options.maxDate);
+            const maxTime = new Date(maxDateCopy.getFullYear(), maxDateCopy.getMonth(), maxDateCopy.getDate()).getTime();
+            if (normalizedTime > maxTime) return true;
+        }
+
+        // Check disabled dates array
+        if (this.options.disabledDates && this.options.disabledDates.includes(dateString)) {
+            return true;
+        }
 
         return false;
     }
