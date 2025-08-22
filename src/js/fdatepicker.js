@@ -14,8 +14,41 @@ const FDATEPICKER_DEFAULT_MESSAGES = {
 }
 
 class FDatepicker {
+    // statics for event listeners
+    static _documentListenersAdded = false;
+    static _openInstances = new Set();
+
     static setMessages(customMessages) {
         Object.assign(FDATEPICKER_DEFAULT_MESSAGES, customMessages);
+    }
+
+    static _handleGlobalClick(e) {
+        const target = e.target;
+
+        // Close all open datepickers that don't contain the click target
+        for (const instance of FDatepicker._openInstances) {
+            if (instance.isOpen &&
+                target !== instance.input &&
+                !instance.popup.contains(target)) {
+                instance.close();
+            }
+        }
+    }
+
+    static _handleGlobalKeydown(e) {
+        const key = e.key;
+        if (!['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', 'PageUp', 'PageDown', 'Home', 'End', ' '].includes(key)) {
+            return;
+        }
+
+        for (const instance of FDatepicker._openInstances) {
+            if (instance.isOpen &&
+                (instance.grid === e.target || instance.popup.contains(e.target))) {
+                e.preventDefault();
+                e.stopPropagation();
+                break; // Only one popup can be active
+            }
+        }
     }
 
     constructor(input, options = {}) {
@@ -99,16 +132,6 @@ class FDatepicker {
             this.options.ampm = true;
         }
 
-        // Create popup and attach it
-        this.popup = this.createPopup();
-
-        // Now query elements inside popup
-        this.title = this.popup.querySelector('.fdatepicker-title');
-        this.content = this.popup.querySelector('.fdatepicker-content');
-        this.grid = this.popup.querySelector('.fdatepicker-grid');
-        this.hoursInput = this.popup.querySelector('[data-time="hours"]');
-        this.minutesInput = this.popup.querySelector('[data-time="minutes"]');
-
         this.init();
     }
 
@@ -158,9 +181,7 @@ class FDatepicker {
         // Handle pre-filled dates
         this.initializePrefilledDates();
 
-        this.render();
-        this.bindEvents();
-        this.bindKeyboard();
+        this.bindInputEvents();
         this.updateInput();
     }
 
@@ -383,24 +404,30 @@ class FDatepicker {
         return popup;
     }
 
-    bindKeyboard() {
-        // Handle keyboard events on input (actual input is blocked in bindEvents, input listener)
+    bindInputEvents() {
+        // Prevent typing, paste, drop
+        this.input.addEventListener('input', (e) => {
+            if (this.input.value && !this.selectedDate) {
+                this.updateInput();
+            }
+            e.preventDefault();
+            e.stopPropagation();
+        });
+        this.input.addEventListener('paste', (e) => e.preventDefault());
+        this.input.addEventListener('drop', (e) => e.preventDefault());
+
+        // Toggle on click
+        this.input.addEventListener('click', () => this.toggle());
+
+        // Keyboard events on input (navigation, Enter, etc.)
         this.input.addEventListener('keydown', (e) => {
-            if (!this.isOpen) {
-                if (!['Tab'].includes(e.key)) {
+            if (!this.isOpen && e.key !== 'Escape') {
+                if (['ArrowDown', ' ', 'Enter'].includes(e.key)) {
                     e.preventDefault();
                     e.stopPropagation();
-                }
-                if (['ArrowDown', ' ', 'Enter'].includes(e.key)) {
                     this.open();
                 }
                 return;
-            }
-
-            // Prevent scrolling for navigation keys when popup is open
-            if (['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', 'PageUp', 'PageDown', 'Home', 'End', ' '].includes(e.key)) {
-                e.preventDefault();
-                e.stopPropagation();
             }
 
             switch (e.key) {
@@ -481,14 +508,36 @@ class FDatepicker {
                     break;
             }
         });
+    }
 
-        // Handle keyboard navigation within grid - prevent event bubbling to avoid double handling
-        this.grid?.addEventListener('keydown', (e) => {
-            if (['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', 'PageUp', 'PageDown', 'Home', 'End', ' ', 'Enter', 'Escape'].includes(e.key)) {
+    bindGridAndPopupEvents() {
+        // Mouseover for hover/focus
+        this.grid.addEventListener('mouseover', (e) => {
+            if (e.target.classList.contains('fdatepicker-day')) {
+                if (e.target.classList.contains('other-month')) {
+                    e.target.classList.add('hover');
+                } else {
+                    this.setFocus(e.target);
+                }
+            } else if (e.target.classList.contains('fdatepicker-month') ||
+                e.target.classList.contains('fdatepicker-year')) {
+                this.setFocus(e.target);
+            }
+        });
+
+        // Clear focus when mouse leaves the popup
+        this.grid.addEventListener('mouseleave', () => {
+            this.clearFocus();
+        });
+ 
+        // Keyboard nav inside grid
+        this.grid.addEventListener('keydown', (e) => {
+            const keys = ['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown',
+                'PageUp', 'PageDown', 'Home', 'End', ' ', 'Enter', 'Escape'];
+            if (keys.includes(e.key)) {
                 e.preventDefault();
                 e.stopPropagation();
 
-                // Dispatch to input handler
                 const syntheticEvent = new KeyboardEvent('keydown', {
                     key: e.key,
                     shiftKey: e.shiftKey,
@@ -501,16 +550,79 @@ class FDatepicker {
             }
         });
 
-        // Store bound handlers for cleanup
-        this.boundDocumentKeydownHandler = (e) => {
-            if (this.isOpen && ['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', 'PageUp', 'PageDown', 'Home', 'End', ' '].includes(e.key)) {
-                if (this.grid === e.target || this.popup.contains(e.target)) {
-                    e.preventDefault();
-                    e.stopPropagation();
-                }
+        this.popup.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const action = e.target.dataset.action;
+            if (action === 'prev') {
+                this.navigateView(-1);
+                this.setInitialFocus();
             }
-        };
-        document.addEventListener('keydown', this.boundDocumentKeydownHandler);
+            if (action === 'next') {
+                this.navigateView(1);
+                this.setInitialFocus();
+            }
+
+            if (e.target === this.title) {
+                if (this.view === 'days') this.view = 'months';
+                else if (this.view === 'months') this.view = 'years';
+                this.render();
+                this.setInitialFocus();
+            }
+            if (e.target.classList.contains('fdatepicker-day') && !e.target.classList.contains('other-month')) {
+                this.selectDate(parseInt(e.target.textContent));
+            }
+
+            if (e.target.classList.contains('fdatepicker-month')) {
+                this.selectMonth(parseInt(e.target.dataset.month));
+            }
+
+            if (e.target.classList.contains('fdatepicker-year') && !e.target.classList.contains('other-decade')) {
+                this.selectYear(parseInt(e.target.dataset.year));
+            }
+        });
+
+        // Time inputs
+        if (this.options.timepicker) {
+            [this.hoursInput, this.minutesInput].forEach(input => {
+                if (input) {
+                    input.addEventListener('keydown', (e) => {
+                        // Only stop propagation for arrow keys to prevent grid navigation
+                        if (['Enter', 'Escape'].includes(e.key)) {
+                            e.preventDefault(); // Prevent any default browser behavior
+                            e.stopPropagation(); // Stop the event from bubbling and being handled elsewhere
+                            this.close(); // Close the datepicker
+                            this.input.focus(); // Return focus to the original input
+                            return;
+                        }
+                        if (['ArrowUp', 'ArrowDown'].includes(e.key)) {
+                            e.stopPropagation();
+                        }
+                    });
+                    input.addEventListener('change', () => this.updateSelectedTime());
+
+                    // Add blur event for immediate validation
+                    input.addEventListener('blur', (e) => {
+                        const type = e.target.dataset.time;
+                        const value = parseInt(e.target.value) || 0;
+                        const validatedValue = this.validateTimeInput(type, value);
+                        e.target.value = String(validatedValue).padStart(2, '0');
+                    });
+
+                    // Add input event for real-time validation
+                    input.addEventListener('input', (e) => {
+                        const type = e.target.dataset.time;
+                        const value = parseInt(e.target.value);
+                        if (!isNaN(value)) {
+                            const validatedValue = this.validateTimeInput(type, value);
+                            if (validatedValue !== value) {
+                                e.target.value = String(validatedValue).padStart(2, '0');
+                            }
+                        }
+                    });
+                }
+            });
+        }
+ 
     }
 
     // keyboard navigation function
@@ -827,14 +939,6 @@ class FDatepicker {
                 }
             });
         }
-
-        // Store bound handlers for cleanup
-        this.boundDocumentClickHandler = (e) => {
-            if (e.target !== this.input && !this.popup.contains(e.target)) {
-                this.close();
-            }
-        };
-        document.addEventListener('click', this.boundDocumentClickHandler);
     }
 
     navigateView(direction) {
@@ -855,6 +959,29 @@ class FDatepicker {
 
     open() {
         if (this.isOpen) return;
+
+        // Create popup and attach it
+        this.popup = this.createPopup();
+ 
+        // Now query elements inside popup
+        this.title = this.popup.querySelector('.fdatepicker-title');
+        this.content = this.popup.querySelector('.fdatepicker-content');
+        this.grid = this.popup.querySelector('.fdatepicker-grid');
+        this.hoursInput = this.popup.querySelector('[data-time="hours"]');
+        this.minutesInput = this.popup.querySelector('[data-time="minutes"]');
+
+        this.bindGridAndPopupEvents();
+
+        // Add to global open instances
+        FDatepicker._openInstances.add(this);
+
+        // Ensure global listeners are attached only once
+        if (!FDatepicker._documentListenersAdded) {
+            FDatepicker._documentListenersAdded = true;
+
+            document.addEventListener('click', FDatepicker._handleGlobalClick);
+            document.addEventListener('keydown', FDatepicker._handleGlobalKeydown);
+        }
 
         this.isOpen = true;
         this.render();
@@ -920,28 +1047,34 @@ class FDatepicker {
         this.isOpen = false;
         this.popup.classList.remove('active');
         this.clearFocus();
-    }
-
-    destroy() {
-        // Close the popup first
-        this.close();
-
-        // Clean up popup from global container
+ 
+        // Remove popup from DOM
         if (this.popup && this.popup.parentNode) {
             this.popup.parentNode.removeChild(this.popup);
         }
 
+        // Null it out so a new one is created on next open
+        this.popup = null;
+
+        // Remove from open instances
+        FDatepicker._openInstances.delete(this);
+
+        // Optional: clean up global listeners if no instances are open
+        if (FDatepicker._openInstances.size === 0 && FDatepicker._documentListenersAdded) {
+            document.removeEventListener('click', FDatepicker._handleGlobalClick);
+            document.removeEventListener('keydown', FDatepicker._handleGlobalKeydown);
+            FDatepicker._documentListenersAdded = false;
+        }
+    }
+
+    destroy() {
+        // Close the popup first
+        if (this.isOpen) {
+            this.close();
+        }
+
         // Clean up global container if no more popups
         this.cleanupGlobalContainer();
-
-        // Remove document-level event listeners that we specifically added
-        if (this.boundDocumentClickHandler) {
-            document.removeEventListener('click', this.boundDocumentClickHandler);
-        }
-
-        if (this.boundDocumentKeydownHandler) {
-            document.removeEventListener('keydown', this.boundDocumentKeydownHandler);
-        }
 
         // Remove input event listeners by replacing with clean clone
         if (this.input && this.input.parentNode) {
@@ -964,9 +1097,9 @@ class FDatepicker {
         this.selectedDates = [];
         this.options = null;
         this.locale = null;
-        this.boundDocumentClickHandler = null;
-        this.boundDocumentKeydownHandler = null;
 
+        // Remove from _openInstances in case close wasn't called
+        FDatepicker._openInstances.delete(this);
     }
  
     // Static cleanup method for cleaning up all instances
@@ -1419,9 +1552,7 @@ class FDatepicker {
     }
 
     render() {
-        if (this.options.timeOnly) {
-            return;
-        }
+        if (!this.popup || this.options.timeOnly) return;
         this.renderTitle();
         if (this.view === 'days') {
             this.renderDays();
