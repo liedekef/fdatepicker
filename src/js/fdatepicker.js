@@ -512,7 +512,7 @@ class FDatepicker {
 
     bindGridAndPopupEvents() {
         // Mouseover for hover/focus
-        this.grid.addEventListener('mouseover', (e) => {
+        this.grid?.addEventListener('mouseover', (e) => {
             if (e.target.classList.contains('fdatepicker-day')) {
                 if (e.target.classList.contains('other-month')) {
                     e.target.classList.add('hover');
@@ -526,12 +526,12 @@ class FDatepicker {
         });
 
         // Clear focus when mouse leaves the popup
-        this.grid.addEventListener('mouseleave', () => {
+        this.grid?.addEventListener('mouseleave', () => {
             this.clearFocus();
         });
  
         // Keyboard nav inside grid
-        this.grid.addEventListener('keydown', (e) => {
+        this.grid?.addEventListener('keydown', (e) => {
             const keys = ['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown',
                 'PageUp', 'PageDown', 'Home', 'End', ' ', 'Enter', 'Escape'];
             if (keys.includes(e.key)) {
@@ -819,126 +819,6 @@ class FDatepicker {
             el.setAttribute('tabindex', '-1');
         });
         this.focusedElement = null;
-    }
-
-    bindEvents() {
-        this.input.addEventListener('input', (e) => {
-            // Prevent any programmatic or IME input
-            if (this.input.value && !this.selectedDate) {
-                // restore last valid value
-                this.updateInput();
-            }
-            e.preventDefault();
-            e.stopPropagation();
-        });
-
-        this.input.addEventListener('paste', (e) => {
-            e.preventDefault();
-        });
-
-        this.input.addEventListener('drop', (e) => {
-            e.preventDefault();
-        });
-
-        // Input click to toggle
-        this.input.addEventListener('click', () => this.toggle());
-
-        // Mouse interactions on grid
-        this.grid?.addEventListener('mouseover', (e) => {
-            if (e.target.classList.contains('fdatepicker-day')) {
-                if (e.target.classList.contains('other-month')) {
-                    e.target.classList.add('hover');
-                } else {
-                    this.setFocus(e.target);
-                }
-            } else if (e.target.classList.contains('fdatepicker-month')) {
-                this.setFocus(e.target);
-            } else if (e.target.classList.contains('fdatepicker-year')) {
-                if (e.target.classList.contains('other-decade')) {
-                    e.target.classList.add('hover');
-                } else {
-                    this.setFocus(e.target);
-                }
-            }
-        });
-
-        // Clear focus when mouse leaves the popup
-        this.grid?.addEventListener('mouseleave', () => {
-            this.clearFocus();
-        });
-
-        this.popup.addEventListener('click', (e) => {
-            e.stopPropagation();
-            const action = e.target.dataset.action;
-            if (action === 'prev') {
-                this.navigateView(-1);
-                this.setInitialFocus();
-            }
-            if (action === 'next') {
-                this.navigateView(1);
-                this.setInitialFocus();
-            }
-
-            if (e.target === this.title) {
-                if (this.view === 'days') this.view = 'months';
-                else if (this.view === 'months') this.view = 'years';
-                this.render();
-                this.setInitialFocus();
-            }
-            if (e.target.classList.contains('fdatepicker-day') && !e.target.classList.contains('other-month')) {
-                this.selectDate(parseInt(e.target.textContent));
-            }
-
-            if (e.target.classList.contains('fdatepicker-month')) {
-                this.selectMonth(parseInt(e.target.dataset.month));
-            }
-
-            if (e.target.classList.contains('fdatepicker-year') && !e.target.classList.contains('other-decade')) {
-                this.selectYear(parseInt(e.target.dataset.year));
-            }
-        });
-
-        // Time inputs
-        if (this.options.timepicker) {
-            [this.hoursInput, this.minutesInput].forEach(input => {
-                if (input) {
-                    input.addEventListener('keydown', (e) => {
-                        // Only stop propagation for arrow keys to prevent grid navigation
-                        if (['Enter', 'Escape'].includes(e.key)) {
-                            e.preventDefault(); // Prevent any default browser behavior
-                            e.stopPropagation(); // Stop the event from bubbling and being handled elsewhere
-                            this.close(); // Close the datepicker
-                            this.input.focus(); // Return focus to the original input
-                            return;
-                        }
-                        if (['ArrowUp', 'ArrowDown'].includes(e.key)) {
-                            e.stopPropagation();
-                        }
-                    });
-                    input.addEventListener('change', () => this.updateSelectedTime());
-
-                    // Add blur event for immediate validation
-                    input.addEventListener('blur', (e) => {
-                        const type = e.target.dataset.time;
-                        const value = parseInt(e.target.value) || 0;
-                        const validatedValue = this.validateTimeInput(type, value);
-                        e.target.value = String(validatedValue).padStart(2, '0');
-                    });
-
-                    // Add input event for real-time validation
-                    input.addEventListener('input', (e) => {
-                        const type = e.target.dataset.time;
-                        const value = parseInt(e.target.value);
-                        if (!isNaN(value)) {
-                            const validatedValue = this.validateTimeInput(type, value);
-                            if (validatedValue !== value) {
-                                e.target.value = String(validatedValue).padStart(2, '0');
-                            }
-                        }
-                    });
-                }
-            });
-        }
     }
 
     navigateView(direction) {
@@ -1388,6 +1268,9 @@ class FDatepicker {
     }
 
     updateMultipleDisplay() {
+        if (!this.options.multiple) {
+            return;
+        }
         if (!this.options.multipleDisplaySelector) {
             return;
         }
@@ -1506,43 +1389,8 @@ class FDatepicker {
             }
         }
 
-        // Update time inputs
-        if (this.options.timepicker && this.selectedDate) {
-            let hours = this.selectedDate.getHours();
-            let minutes = this.selectedDate.getMinutes();
-            if (this.selectedEndDate) {
-                hours = this.selectedEndDate.getHours();
-                minutes = this.selectedEndDate.getMinutes();
-            }
-
-            if (this.options.ampm) {
-                const isAM = hours < 12;
-                const displayHours = hours === 0 ? 12 : (hours > 12 ? hours - 12 : hours);
-
-                if (this.hoursInput) {
-                    this.hoursInput.value = String(displayHours).padStart(2, '0');
-                }
-
-                // Update AM/PM buttons
-                const ampmButtons = this.popup.querySelectorAll('[data-ampm]');
-                ampmButtons.forEach(btn => {
-                    btn.classList.toggle('active', btn.dataset.ampm === (isAM ? 'AM' : 'PM'));
-                });
-            } else {
-                if (this.hoursInput) {
-                    this.hoursInput.value = String(hours).padStart(2, '0');
-                }
-            }
-
-            if (this.minutesInput) {
-                this.minutesInput.value = String(minutes).padStart(2, '0');
-            }
-        }
-
         // Update multiple display
-        if (this.options.multiple) {
-            this.updateMultipleDisplay();
-        }
+        this.updateMultipleDisplay();
 
         // Trigger change event
         if (!this.options.altField) {
@@ -1789,7 +1637,7 @@ class FDatepicker {
 
         // Refresh UI and input
         this.updateInput();
-        this.updateMultipleDisplay();
         this.render();
+        this.updateMultipleDisplay();
     }
 }
