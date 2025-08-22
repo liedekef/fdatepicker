@@ -51,6 +51,39 @@ class FDatepicker {
         }
     }
 
+        static _addGlobalListeners() {
+        if (!FDatepicker._documentListenersAdded) {
+            document.addEventListener('click', FDatepicker._handleGlobalClick);
+            document.addEventListener('keydown', FDatepicker._handleGlobalKeydown);
+            FDatepicker._documentListenersAdded = true;
+        }
+    }
+
+    static _removeGlobalListeners() {
+        if (FDatepicker._documentListenersAdded) {
+            document.removeEventListener('click', FDatepicker._handleGlobalClick);
+            document.removeEventListener('keydown', FDatepicker._handleGlobalKeydown);
+            FDatepicker._documentListenersAdded = false;
+        }
+    }
+
+    static _cleanupOpenInstances() {
+        // Remove any instances that have been destroyed
+        const validInstances = new Set();
+        for (const instance of FDatepicker._openInstances) {
+            // Check if instance is still valid (not destroyed)
+            if (instance.input && instance.input._fdatepicker === instance) {
+                validInstances.add(instance);
+            }
+        }
+        FDatepicker._openInstances = validInstances;
+
+        // Remove global listeners if no open instances remain
+        if (FDatepicker._openInstances.size === 0) {
+            FDatepicker._removeGlobalListeners();
+        }
+    }
+
     constructor(input, options = {}) {
         this.input = typeof input === 'string' ?
             document.querySelector(input) : input;
@@ -98,14 +131,13 @@ class FDatepicker {
             timepicker: this.input.dataset.timepicker === 'true', // default false, no timepicker
             timeOnly: this.input.dataset.timeOnly === 'true', // default false
             timepickerDefaultNow: this.input.dataset.timepickerDefaultNow !== 'false', // default true
-            ampm: this.input.dataset.ampm === 'false',
+            ampm: this.input.dataset.ampm === 'true',
             hoursStep: parseInt(this.input.dataset.hoursStep) || 1,
             minutesStep: parseInt(this.input.dataset.minutesStep) || 1,
             minHours: this.input.dataset.minHours !== undefined ? parseInt(this.input.dataset.minHours) : null,
             maxHours: this.input.dataset.maxHours !== undefined ? parseInt(this.input.dataset.maxHours) : null,
             minMinutes: this.input.dataset.minMinutes !== undefined ? parseInt(this.input.dataset.minMinutes) : 0,
             maxMinutes: this.input.dataset.maxMinutes !== undefined ? parseInt(this.input.dataset.maxMinutes) : 59,
-            onSelect: typeof this.input.dataset.onSelect === 'function' ? this.input.dataset.onSelect : null,
             ...options
         };
 
@@ -131,6 +163,107 @@ class FDatepicker {
         if (this.options.format.includes('a') || this.options.format.includes('A')) {
             this.options.ampm = true;
         }
+
+        this.boundHandlers = {
+            paste: (e) => e.preventDefault(),
+            drop: (e) => e.preventDefault(),
+            click: () => this.toggle(),
+            input: (e) => {
+                if (this.input.value && !this.selectedDate) {
+                    this.updateInput();
+                }
+                e.preventDefault();
+                e.stopPropagation();
+            },
+            keydown: (e) => {
+                if (!this.isOpen && e.key !== 'Escape') {
+                    if (['ArrowDown', ' ', 'Enter'].includes(e.key)) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        this.open();
+                    }
+                    return;
+                }
+
+                switch (e.key) {
+                    case 'Escape':
+                        e.preventDefault();
+                        e.stopPropagation();
+                        this.close();
+                        this.input.focus();
+                        break;
+
+                    case 'Tab':
+                        // Allow normal tab behavior within popup
+                        if (!this.popup.contains(e.target)) {
+                            this.close();
+                        }
+                        break;
+
+                    case 'ArrowLeft':
+                        this.keyboardNavigate(-1, 'horizontal');
+                        break;
+
+                    case 'ArrowRight':
+                        this.keyboardNavigate(1, 'horizontal');
+                        break;
+
+                    case 'ArrowUp':
+                        this.keyboardNavigate(-1, 'vertical');
+                        break;
+
+                    case 'ArrowDown':
+                        this.keyboardNavigate(1, 'vertical');
+                        break;
+
+                    case 'PageUp':
+                        if (this.view === 'days') {
+                            if (e.shiftKey) {
+                                this.focusedDate.setFullYear(this.focusedDate.getFullYear() - 1);
+                            } else {
+                                this.focusedDate.setMonth(this.focusedDate.getMonth() - 1);
+                            }
+                            this.render();
+                            this.setInitialFocus();
+                        }
+                        break;
+
+                    case 'PageDown':
+                        if (this.view === 'days') {
+                            if (e.shiftKey) {
+                                this.focusedDate.setFullYear(this.focusedDate.getFullYear() + 1);
+                            } else {
+                                this.focusedDate.setMonth(this.focusedDate.getMonth() + 1);
+                            }
+                            this.render();
+                            this.setInitialFocus();
+                        }
+                        break;
+
+                    case 'Home':
+                        if (this.view === 'days') {
+                            this.focusedDate.setDate(1);
+                            this.render();
+                            this.focusCurrentDay();
+                        }
+                        break;
+
+                    case 'End':
+                        if (this.view === 'days') {
+                            const lastDay = new Date(this.focusedDate.getFullYear(), this.focusedDate.getMonth() + 1, 0).getDate();
+                            this.focusedDate.setDate(lastDay);
+                            this.render();
+                            this.focusCurrentDay();
+                        }
+                        break;
+
+                    case 'Enter':
+                    case ' ':
+                        this.keyboardHandleSelection();
+                        break;
+                }
+            }
+        };
 
         this.init();
     }
@@ -423,109 +556,11 @@ class FDatepicker {
     }
 
     bindInputEvents() {
-        // Prevent typing, paste, drop
-        this.input.addEventListener('input', (e) => {
-            if (this.input.value && !this.selectedDate) {
-                this.updateInput();
-            }
-            e.preventDefault();
-            e.stopPropagation();
-        });
-        this.input.addEventListener('paste', (e) => e.preventDefault());
-        this.input.addEventListener('drop', (e) => e.preventDefault());
-
-        // Toggle on click
-        this.input.addEventListener('click', () => this.toggle());
-
-        // Keyboard events on input (navigation, Enter, etc.)
-        this.input.addEventListener('keydown', (e) => {
-            if (!this.isOpen && e.key !== 'Escape') {
-                if (['ArrowDown', ' ', 'Enter'].includes(e.key)) {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    this.open();
-                }
-                return;
-            }
-
-            switch (e.key) {
-                case 'Escape':
-                    e.preventDefault();
-                    e.stopPropagation();
-                    this.close();
-                    this.input.focus();
-                    break;
-
-                case 'Tab':
-                    // Allow normal tab behavior within popup
-                    if (!this.popup.contains(e.target)) {
-                        this.close();
-                    }
-                    break;
-
-                case 'ArrowLeft':
-                    this.keyboardNavigate(-1, 'horizontal');
-                    break;
-
-                case 'ArrowRight':
-                    this.keyboardNavigate(1, 'horizontal');
-                    break;
-
-                case 'ArrowUp':
-                    this.keyboardNavigate(-1, 'vertical');
-                    break;
-
-                case 'ArrowDown':
-                    this.keyboardNavigate(1, 'vertical');
-                    break;
-
-                case 'PageUp':
-                    if (this.view === 'days') {
-                        if (e.shiftKey) {
-                            this.focusedDate.setFullYear(this.focusedDate.getFullYear() - 1);
-                        } else {
-                            this.focusedDate.setMonth(this.focusedDate.getMonth() - 1);
-                        }
-                        this.render();
-                        this.setInitialFocus();
-                    }
-                    break;
-
-                case 'PageDown':
-                    if (this.view === 'days') {
-                        if (e.shiftKey) {
-                            this.focusedDate.setFullYear(this.focusedDate.getFullYear() + 1);
-                        } else {
-                            this.focusedDate.setMonth(this.focusedDate.getMonth() + 1);
-                        }
-                        this.render();
-                        this.setInitialFocus();
-                    }
-                    break;
-
-                case 'Home':
-                    if (this.view === 'days') {
-                        this.focusedDate.setDate(1);
-                        this.render();
-                        this.focusCurrentDay();
-                    }
-                    break;
-
-                case 'End':
-                    if (this.view === 'days') {
-                        const lastDay = new Date(this.focusedDate.getFullYear(), this.focusedDate.getMonth() + 1, 0).getDate();
-                        this.focusedDate.setDate(lastDay);
-                        this.render();
-                        this.focusCurrentDay();
-                    }
-                    break;
-
-                case 'Enter':
-                case ' ':
-                    this.keyboardHandleSelection();
-                    break;
-            }
-        });
+        this.input.addEventListener('input', this.boundHandlers.input);
+        this.input.addEventListener('click', this.boundHandlers.click);
+        this.input.addEventListener('paste', this.boundHandlers.paste);
+        this.input.addEventListener('drop', this.boundHandlers.drop);
+        this.input.addEventListener('keydown', this.boundHandlers.keydown);
     }
 
     bindGridAndPopupEvents() {
@@ -698,7 +733,7 @@ class FDatepicker {
             }
         } else if (this.view === 'years') {
             const focusedYear = this.popup.querySelector('.fdatepicker-year:focus, .fdatepicker-year.focus');
-            if (focusedYear && !focusedDay.classList.contains('other-decade') && !focusedDay.classList.contains('disabled')) {
+            if (focusedYear && !focusedYear.classList.contains('other-decade') && !focusedYear.classList.contains('disabled')) {
                 this.selectYear(parseInt(focusedYear.dataset.year));
             }
         }
@@ -870,16 +905,9 @@ class FDatepicker {
 
         this.bindGridAndPopupEvents();
 
-        // Add to global open instances
+        // Add to global open instances and ensure listeners are added
         FDatepicker._openInstances.add(this);
-
-        // Ensure global listeners are attached only once
-        if (!FDatepicker._documentListenersAdded) {
-            FDatepicker._documentListenersAdded = true;
-
-            document.addEventListener('click', FDatepicker._handleGlobalClick);
-            document.addEventListener('keydown', FDatepicker._handleGlobalKeydown);
-        }
+        FDatepicker._addGlobalListeners();
 
         this.isOpen = true;
         this.render();
@@ -942,6 +970,8 @@ class FDatepicker {
     }
 
     close() {
+        if (!this.isOpen) return;
+
         this.isOpen = false;
         this.popup.classList.remove('active');
         this.clearFocus();
@@ -954,15 +984,14 @@ class FDatepicker {
         // Null it out so a new one is created on next open
         this.popup = null;
 
-        // Remove from open instances
+        // Remove from open instances first
         FDatepicker._openInstances.delete(this);
 
-        // Optional: clean up global listeners if no instances are open
-        if (FDatepicker._openInstances.size === 0 && FDatepicker._documentListenersAdded) {
-            document.removeEventListener('click', FDatepicker._handleGlobalClick);
-            document.removeEventListener('keydown', FDatepicker._handleGlobalKeydown);
-            FDatepicker._documentListenersAdded = false;
-        }
+        // Clean up global listeners if no instances are open
+        // Use a timeout to ensure any pending operations complete
+        setTimeout(() => {
+            FDatepicker._cleanupOpenInstances();
+        }, 0);
     }
 
     destroy() {
@@ -971,15 +1000,16 @@ class FDatepicker {
             this.close();
         }
 
-        // Clean up global container if no more popups
-        this.cleanupGlobalContainer();
-
-        // Remove input event listeners by replacing with clean clone
-        if (this.input && this.input.parentNode) {
-            const newInput = this.input.cloneNode(true);
-            this.input.parentNode.replaceChild(newInput, this.input);
-            delete newInput._fdatepicker;
+        // Remove the instance reference from input
+        if (this.input && this.input._fdatepicker === this) {
+            delete this.input._fdatepicker;
         }
+
+        this.input.removeEventListener('input', this.boundHandlers.input);
+        this.input.removeEventListener('click', this.boundHandlers.click);
+        this.input.removeEventListener('paste', this.boundHandlers.paste);
+        this.input.removeEventListener('drop', this.boundHandlers.drop);
+        this.input.removeEventListener('keydown', this.boundHandlers.keydown);
 
         this.input = null;
         this.popup = null;
@@ -998,20 +1028,45 @@ class FDatepicker {
 
         // Remove from _openInstances in case close wasn't called
         FDatepicker._openInstances.delete(this);
+        // Clean up global container if no more popups
+        this.cleanupGlobalContainer();
+
+        // Clean up global listeners if needed
+        setTimeout(() => {
+            FDatepicker._cleanupOpenInstances();
+        }, 0);
     }
  
-    // Static cleanup method for cleaning up all instances
     static destroyAll() {
+        // Create a copy of the set to avoid modification during iteration
+        const instancesToDestroy = Array.from(FDatepicker._openInstances);
+        
+        // Also find instances by DOM query
         const inputs = document.querySelectorAll('input[data-fdatepicker]');
         inputs.forEach(input => {
             if (input._fdatepicker) {
-                input._fdatepicker.destroy();
-                delete input._fdatepicker;
+                instancesToDestroy.push(input._fdatepicker);
             }
         });
+
+        // Destroy all found instances
+        instancesToDestroy.forEach(instance => {
+            if (instance && typeof instance.destroy === 'function') {
+                instance.destroy();
+            }
+        });
+
+        // Force cleanup of global state
+        FDatepicker._openInstances.clear();
+        FDatepicker._removeGlobalListeners();
     }
 
-    // Add this helper method
+    // Utility method to check if global cleanup is needed
+    static cleanup() {
+        FDatepicker._cleanupOpenInstances();
+    }
+
+    // helper method to clean dom
     cleanupGlobalContainer() {
         const container = document.getElementById('fdatepicker-global-container');
         if (container && container.children.length === 0) {
