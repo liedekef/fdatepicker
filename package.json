@@ -1,6 +1,6 @@
 {
   "name": "@liedekef/fdatepicker",
-  "version": "1.1.1",
+  "version": "3.0.18",
   "description": "Modern, lightweight, jQuery-free Lightweight customizable datepicker.",
   "main": "fdatepicker.js",
   "module": "fdatepicker.esm.js",
@@ -17,11 +17,11 @@
     "prepublishOnly": "npm run build"
   },
   "keywords": [
-      "fdatepicker",
-      "datepicker",
-      "timepicker",
-      "customizable",
-      "vanilla-js"
+    "fdatepicker",
+    "datepicker",
+    "timepicker",
+    "customizable",
+    "vanilla-js"
   ],
   "author": "Franky Van Liedekerke",
   "license": "MIT",

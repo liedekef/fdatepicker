@@ -1433,7 +1433,27 @@ class FDatepicker {
             'a': isPM ? 'pm' : 'am'
         };
 
-        return format.replace(/d|j|l|D|S|m|n|F|M|Y|y|H|G|h|g|i|s|A|a/g, match => formatMap[match] || '');
+        // Handle escaped characters by replacing \X with a placeholder, then restoring after formatting
+        const escapedChars = {};
+        let placeholderIndex = 0;
+
+        // First pass: replace escaped characters with unique placeholders
+        let processedFormat = format.replace(/\\(.)/g, (match, char) => {
+            const placeholder = `___${placeholderIndex}___`;
+            escapedChars[placeholder] = char;
+            placeholderIndex++;
+            return placeholder;
+        });
+
+        // Second pass: replace format characters
+        processedFormat = processedFormat.replace(/d|j|l|D|S|m|n|F|M|Y|y|H|G|h|g|i|s|A|a/g, match => formatMap[match] || '');
+
+        // Third pass: restore escaped characters
+        Object.keys(escapedChars).forEach(placeholder => {
+            processedFormat = processedFormat.replace(placeholder, escapedChars[placeholder]);
+        });
+
+        return processedFormat;
     }
 
     static getOrdinalSuffix(day) {
