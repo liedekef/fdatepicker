@@ -20,13 +20,13 @@ $scriptdir/fdatepicker_minify.sh
 echo $release >$basedir/VERSION
 
 # --- NPM: update version and publish ---
-##if [ -f "$basedir/package.json" ]; then
-##    # Update package.json version (no git tag, since we'll handle it manually)
-##    npm version $release --no-git-tag-version
-##
-##    # Publish to npm (scoped package, so --access public)
-##    npm publish --access public
-##fi
+if [ -f "$basedir/package.json" ]; then
+    # Update package.json version (no git tag, since we'll handle it manually)
+    npm version $release --no-git-tag-version
+
+    # Publish to npm (scoped package, so --access public)
+    npm publish --access public
+fi
 
 # --- GitHub release steps as before ---
 # Create a zip of the new release for GitHub (but not for npm)

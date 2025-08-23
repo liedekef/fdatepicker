@@ -141,6 +141,15 @@ class FDatepicker {
             ...options
         };
 
+        // some validation
+        if (isNaN(this.options.minutesStep)) this.options.minutesStep=1;
+        if (isNaN(this.options.hoursStep)) this.options.hoursStep=1;
+        if (isNaN(this.options.firstDayOfWeek)) this.options.firstDayOfWeek=0;
+        if (isNaN(this.options.minMinutes)) this.options.minMinutes=0;
+        if (isNaN(this.options.maxMinutes)) this.options.maxMinutes=59;
+        if (isNaN(this.options.minHours)) this.options.minHours = null;
+        if (isNaN(this.options.maxHours)) this.options.maxHours = null;
+
         // get the default view to start with
         if (this.input.value || this.input.dataset.date) {
             this.options.view = 'days';
@@ -1309,9 +1318,20 @@ class FDatepicker {
     }
 
     updateSelectedTime() {
-        const target = this.options.multiple ? this.selectedDates[this.selectedDates.length -1 ] :
-            this.selectedEndDate ? this.selectedEndDate :
-            this.selectedDate ? this.selectedDate : null;
+        let target;
+        // Handle timeOnly mode specially
+        if (this.options.timeOnly) {
+            // Create a date object for today if no date is selected
+            if (!this.selectedDate) {
+                this.selectedDate = new Date();
+            }
+            target = this.selectedDate;
+        } else {
+            // Original logic for non-timeOnly modes
+            target = this.options.multiple ? this.selectedDates[this.selectedDates.length - 1] :
+                this.selectedEndDate ? this.selectedEndDate :
+                this.selectedDate ? this.selectedDate : null;
+        }
 
         if (!target) return;
 

@@ -4,10 +4,8 @@
   "description": "Modern, lightweight, jQuery-free Lightweight customizable datepicker.",
   "main": "fdatepicker.js",
   "module": "fdatepicker.esm.js",
-  "types": "fdatepicker.d.ts",
   "files": [
     "*.js",
-    "fdatepicker.d.ts",
     "src/js/i18n",
     "CHANGES.md",
     "README.md"
