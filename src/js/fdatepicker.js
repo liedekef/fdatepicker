@@ -51,7 +51,7 @@ class FDatepicker {
         }
     }
 
-        static _addGlobalListeners() {
+    static _addGlobalListeners() {
         if (!FDatepicker._documentListenersAdded) {
             document.addEventListener('click', FDatepicker._handleGlobalClick);
             document.addEventListener('keydown', FDatepicker._handleGlobalKeydown);
@@ -388,9 +388,9 @@ class FDatepicker {
         if (!this.options.timeOnly) {
             popup.innerHTML = `
         <div class="fdatepicker-header">
-            <button class="fdatepicker-nav" data-action="prev" tabindex="0">‹</button>
+            <button class="fdatepicker-nav" data-action="prev" aria-label="Previous" tabindex="0">‹</button>
             <div class="fdatepicker-title" tabindex="0"></div>
-            <button class="fdatepicker-nav" data-action="next" tabindex="0">›</button>
+            <button class="fdatepicker-nav" data-action="next" aria-label="Next" tabindex="0">›</button>
         </div>
         <div class="fdatepicker-content">
             <div class="fdatepicker-grid">
@@ -499,6 +499,9 @@ class FDatepicker {
             timepicker.className = 'fdatepicker-timepicker';
             timepicker.appendChild(timeInputs);
             popup.appendChild(timepicker);
+
+            popup.setAttribute('role', 'application');
+            popup.setAttribute('aria-label', 'Date picker');
         }
 
         if (this.options.todayButton || this.options.clearButton || this.options.closeButton) {
@@ -918,6 +921,8 @@ class FDatepicker {
         this.setInitialFocus();
 
         this.setPosition();
+
+        if (this.options.onOpen && typeof this.options.onOpen === 'function') this.options.onOpen.call(this.input, this);
     }
 
     // Simplified positioning - let CSS and browser handle most of it
@@ -992,6 +997,8 @@ class FDatepicker {
         setTimeout(() => {
             FDatepicker._cleanupOpenInstances();
         }, 0);
+
+        if (this.options.onClose && typeof this.options.onClose === 'function') this.options.onClose.call(this.input, this);
     }
 
     destroy() {
@@ -1083,13 +1090,13 @@ class FDatepicker {
 
         if (this.options.multiple) {
             date = this.selectedDates;
-            formattedDate = this.selectedDates.map(d => this.formatDate(d, this.options.dateFormat)).join(this.options.multipleDatesSeparator);
+            formattedDate = this.selectedDates.map(d => this.formatDate(d)).join(this.options.multipleDatesSeparator);
         } else if (this.options.range) {
             date = [this.selectedDate, this.selectedEndDate].filter(Boolean);
-            formattedDate = date.map(d => this.formatDate(d, this.options.dateFormat)).join(' - ');
+            formattedDate = date.map(d => this.formatDate(d)).join(' - ');
         } else {
             date = this.selectedDate;
-            formattedDate = this.selectedDate ? this.formatDate(this.selectedDate, this.options.dateFormat) : '';
+            formattedDate = this.selectedDate ? this.formatDate(this.selectedDate) : '';
         }
 
         // Call the onSelect callback
@@ -1548,6 +1555,7 @@ class FDatepicker {
 
             if (this.isDateDisabled(dayDate)) {
                 dayEl.classList.add('disabled');
+                dayEl.setAttribute('aria-disabled', 'true');
             }
 
             // Handle different selection modes
@@ -1563,15 +1571,18 @@ class FDatepicker {
                 // Single or range selection
                 if (this.selectedDate && dayDate.toDateString() === this.selectedDate.toDateString()) {
                     dayEl.classList.add(this.options.range ? 'range-start' : 'selected');
+                    dayEl.setAttribute('aria-selected', 'true');
                 }
 
                 if (this.options.range && this.selectedEndDate && dayDate.toDateString() === this.selectedEndDate.toDateString()) {
                     dayEl.classList.add('range-end');
+                    dayEl.setAttribute('aria-selected', 'true');
                 }
 
                 if (this.options.range && this.selectedDate && this.selectedEndDate && 
                     dayDate > this.selectedDate && dayDate < this.selectedEndDate) {
                     dayEl.classList.add('in-range');
+                    dayEl.setAttribute('aria-selected', 'true');
                 }
             }
 
@@ -1589,6 +1600,7 @@ class FDatepicker {
             dayEl.className = 'fdatepicker-day other-month';
             dayEl.textContent = day;
             dayEl.setAttribute('tabindex', '-1');
+            dayEl.setAttribute('aria-disabled', 'true');
             this.grid.appendChild(dayEl);
         }
     }
@@ -1611,6 +1623,7 @@ class FDatepicker {
             if (this.selectedDate && month === this.selectedDate.getMonth() && 
                 this.focusedDate.getFullYear() === this.selectedDate.getFullYear()) {
                 monthEl.classList.add('selected');
+                monthEl.setAttribute('aria-selected', 'true');
             }
 
             this.grid.appendChild(monthEl);
@@ -1643,11 +1656,13 @@ class FDatepicker {
             // Mark selected year
             if (this.selectedDate && year === this.selectedDate.getFullYear()) {
                 yearEl.classList.add('selected');
+                yearEl.setAttribute('aria-selected', 'true');
             }
 
             // Disable placeholder years (first and last)
             if (year === startDecade - 1 || year === startDecade + 10) {
                 yearEl.classList.add('disabled','other-decade');
+                yearEl.setAttribute('aria-disabled', 'true');
             }
 
             this.grid.appendChild(yearEl);
