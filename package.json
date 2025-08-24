@@ -1,6 +1,6 @@
 {
   "name": "@liedekef/fdatepicker",
-  "version": "3.0.19",
+  "version": "3.0.20",
   "description": "Modern, lightweight, jQuery-free Lightweight customizable datepicker.",
   "main": "fdatepicker.js",
   "module": "fdatepicker.esm.js",
