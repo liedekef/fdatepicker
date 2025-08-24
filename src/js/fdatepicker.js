@@ -1581,10 +1581,9 @@ class FDatepicker {
 
             const dayDate = new Date(this.focusedDate.getFullYear(), this.focusedDate.getMonth(), day);
 
-            // Add weekend class based on first day of week setting
+            // Add weekend class
             const dayOfWeek = dayDate.getDay();
-            const adjustedDayOfWeek = (dayOfWeek - this.options.firstDayOfWeek + 7) % 7;
-            if (adjustedDayOfWeek === 5 || adjustedDayOfWeek === 6) { // Saturday and Sunday relative to first day
+            if (dayOfWeek === 6 || dayOfWeek === 0) { // Saturday and Sunday
                 dayEl.classList.add('weekend');
             }
 
