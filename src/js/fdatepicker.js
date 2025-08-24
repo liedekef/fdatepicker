@@ -115,7 +115,8 @@ class FDatepicker {
             view: this.input.dataset.view || 'days',
             minDate: this.input.dataset.minDate ? new Date(this.input.dataset.minDate) : null,
             maxDate: this.input.dataset.maxDate ? new Date(this.input.dataset.maxDate) : null,
-            disabledDates: this.input.dataset.disabledDates ?  this.input.dataset.disabledDates.split(',').map(d => d.trim()) : [],
+            disabledDates: this.input.dataset.disabledDates ? this.input.dataset.disabledDates.split(',').map(d => d.trim()) : [],
+            weekendDays: this.input.dataset.weekendDays ? this.input.dataset.weekendDays.split(',').map(d => d.trim()) : [0,6],
             altField: this.input.dataset.altField || null,
             altFormat: this.input.dataset.altFormat || 'Y-m-d',
             range: this.input.dataset.range === 'true',
@@ -149,6 +150,10 @@ class FDatepicker {
         if (isNaN(this.options.maxMinutes)) this.options.maxMinutes=59;
         if (isNaN(this.options.minHours)) this.options.minHours = null;
         if (isNaN(this.options.maxHours)) this.options.maxHours = null;
+
+        if (!Array.isArray(this.options.weekendDays)) {
+            this.options.weekendDays = [0, 6]; // Default: Sun and Sat
+        }
 
         // get the default view to start with
         if (this.input.value || this.input.dataset.date) {
@@ -1583,7 +1588,7 @@ class FDatepicker {
 
             // Add weekend class
             const dayOfWeek = dayDate.getDay();
-            if (dayOfWeek === 6 || dayOfWeek === 0) { // Saturday and Sunday
+            if (this.options.weekendDays.includes(dayOfWeek)) {
                 dayEl.classList.add('weekend');
             }
 
