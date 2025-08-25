@@ -8,7 +8,7 @@ const FDATEPICKER_DEFAULT_MESSAGES = {
     clear: 'Clear',
     close: 'Close',
     format: 'm/d/Y h:i a',
-    firstDayOfWeek: 0,
+    firstDayOfWeek: 1,
     noDatesSelected: 'No dates selected',
     datesSelected: 'Selected dates ({0}):'
 }
@@ -108,6 +108,7 @@ class FDatepicker {
         this.isOpen = false;
         this.currentYear = new Date().getFullYear();
         this.focusedElement = null;
+        this.locale = FDATEPICKER_DEFAULT_MESSAGES;
 
         // Read options from input's dataset
         this.options = {
@@ -125,7 +126,7 @@ class FDatepicker {
             altFieldMultipleSeparator: this.input.dataset.altFieldMultipleSeparator || ',',
             multipleDisplaySelector: this.input.dataset.multipleDisplaySelector || '',
             autoClose: this.input.dataset.autoClose !== 'false', // default true
-            firstDayOfWeek: parseInt(this.input.dataset.firstDayOfWeek) || 0, // 0 = Sunday, 1 = Monday, etc.
+            firstDayOfWeek: this.input.dataset.firstDayOfWeek !== undefined ? parseInt(this.input.dataset.firstDayOfWeek) : null,
             todayButton: this.input.dataset.todayButton !== 'false',
             clearButton: this.input.dataset.clearButton !== 'false',
             closeButton: this.input.dataset.closeButton !== 'false',
@@ -142,14 +143,21 @@ class FDatepicker {
             ...options
         };
 
+
         // some validation
         if (isNaN(this.options.minutesStep)) this.options.minutesStep=1;
         if (isNaN(this.options.hoursStep)) this.options.hoursStep=1;
-        if (isNaN(this.options.firstDayOfWeek)) this.options.firstDayOfWeek=0;
         if (isNaN(this.options.minMinutes)) this.options.minMinutes=0;
         if (isNaN(this.options.maxMinutes)) this.options.maxMinutes=59;
         if (isNaN(this.options.minHours)) this.options.minHours = null;
         if (isNaN(this.options.maxHours)) this.options.maxHours = null;
+
+        if (isNaN(this.options.firstDayOfWeek)) {
+            this.options.firstDayOfWeek=this.locale.firstDayOfWeek;
+            if (isNaN(this.options.firstDayOfWeek)) {
+                this.options.firstDayOfWeek=1;
+            }
+        }
 
         if (!Array.isArray(this.options.weekendDays)) {
             this.options.weekendDays = [0, 6]; // Default: Sun and Sat
@@ -161,8 +169,6 @@ class FDatepicker {
         }
         this.view = this.options.view === 'years' ? 'years' :
             this.options.view === 'months' ? 'months' : 'days';
-
-        this.locale = FDATEPICKER_DEFAULT_MESSAGES;
 
         // Prevent autoClose if timeOnly is active
         // This ensures the popup stays open so the user can interact with the timepicker.
