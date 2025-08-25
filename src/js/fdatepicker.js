@@ -152,10 +152,17 @@ class FDatepicker {
         if (isNaN(this.options.minHours)) this.options.minHours = null;
         if (isNaN(this.options.maxHours)) this.options.maxHours = null;
 
-        if (isNaN(this.options.firstDayOfWeek)) {
-            this.options.firstDayOfWeek=this.locale.firstDayOfWeek;
-            if (isNaN(this.options.firstDayOfWeek)) {
-                this.options.firstDayOfWeek=1;
+        if (
+            this.options.firstDayOfWeek === null ||
+            this.options.firstDayOfWeek === undefined ||
+            isNaN(this.options.firstDayOfWeek)
+        ) {
+            this.options.firstDayOfWeek = this.locale.firstDayOfWeek;
+            if (
+                this.options.firstDayOfWeek == null ||
+                isNaN(this.options.firstDayOfWeek)
+            ) {
+                this.options.firstDayOfWeek = 1;
             }
         }
 
