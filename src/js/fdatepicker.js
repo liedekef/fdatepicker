@@ -187,8 +187,12 @@ class FDatepicker {
         if (!this.input.dataset.format && !this.options.format) {
             this.options.format = this.locale.format || 'm/d/Y';
         }
+        this.options.ampmuppercase = false;
         if (this.options.format.includes('a') || this.options.format.includes('A')) {
             this.options.ampm = true;
+            if (this.options.format.includes('A')) {
+                this.options.ampmuppercase = true;
+            }
         }
 
         this.boundHandlers = {
@@ -484,7 +488,10 @@ class FDatepicker {
                 const amButton = document.createElement('div');
                 amButton.className = `fdatepicker-time-ampm ${initialTime.isAM ? 'active' : ''}`;
                 amButton.dataset.ampm = 'AM';
-                amButton.textContent = 'AM';
+                if (this.options.ampmuppercase)
+                    amButton.textContent = 'AM';
+                else
+                    amButton.textContent = 'am';
                 amButton.tabIndex = 0; // Make it focusable
                 amButton.addEventListener('click', () => {
                     // Deactivate all and activate this one
@@ -504,7 +511,10 @@ class FDatepicker {
                 const pmButton = document.createElement('div');
                 pmButton.className = `fdatepicker-time-ampm ${!initialTime.isAM ? 'active' : ''}`;
                 pmButton.dataset.ampm = 'PM';
-                pmButton.textContent = 'PM';
+                if (this.options.ampmuppercase)
+                    pmButton.textContent = 'PM';
+                else
+                    pmButton.textContent = 'pm';
                 pmButton.tabIndex = 0; // Make it focusable
                 pmButton.addEventListener('click', () => {
                     // Deactivate all and activate this one
