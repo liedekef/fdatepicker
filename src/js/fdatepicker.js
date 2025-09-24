@@ -815,12 +815,14 @@ class FDatepicker {
         const month = this.focusedDate.getMonth();
         const day = this.focusedDate.getDate();
 
-        // Find the day element that matches current date and is not from other month
-        const dayElements = Array.from(this.popup.querySelectorAll('.fdatepicker-day:not(.other-month)'));
-        const targetDay = dayElements.find(el => parseInt(el.textContent) === day);
+        if (this.popup) {
+            // Find the day element that matches current date and is not from other month
+            const dayElements = Array.from(this.popup.querySelectorAll('.fdatepicker-day:not(.other-month)'));
+            const targetDay = dayElements.find(el => parseInt(el.textContent) === day);
 
-        if (targetDay) {
-            this.setFocus(targetDay);
+            if (targetDay) {
+                this.setFocus(targetDay);
+            }
         }
     }
 
@@ -829,27 +831,31 @@ class FDatepicker {
 
         this.clearFocus();
 
-        const month = this.focusedDate.getMonth();
-        const monthElement = this.popup.querySelector(`[data-month="${month}"]`);
+        if (this.popup) {
+            const month = this.focusedDate.getMonth();
+            const monthElement = this.popup.querySelector(`[data-month="${month}"]`);
 
-        if (monthElement) {
-            this.setFocus(monthElement);
+            if (monthElement) {
+                this.setFocus(monthElement);
+            }
         }
     }
 
     focusCurrentYear() {
         if (this.view !== 'years') return;
         this.clearFocus();
-        const year = this.focusedDate.getFullYear();
-        const startDecade = Math.floor(this.currentYear / 10) * 10;
-        const minYear = startDecade;
-        const maxYear = startDecade + 9;
+        if (this.popup) {
+            const year = this.focusedDate.getFullYear();
+            const startDecade = Math.floor(this.currentYear / 10) * 10;
+            const minYear = startDecade;
+            const maxYear = startDecade + 9;
 
-        // Only focus if year is in valid range
-        if (year >= minYear && year <= maxYear) {
-            const yearElement = this.popup.querySelector(`[data-year="${year}"]`);
-            if (yearElement) {
-                this.setFocus(yearElement);
+            // Only focus if year is in valid range
+            if (year >= minYear && year <= maxYear) {
+                const yearElement = this.popup.querySelector(`[data-year="${year}"]`);
+                if (yearElement) {
+                    this.setFocus(yearElement);
+                }
             }
         }
     }
@@ -868,9 +874,11 @@ class FDatepicker {
         // Range preview logic
         if (this.options.range && this.selectedDate && !this.selectedEndDate) {
             // Clear all 'in-range' classes first
-            this.popup.querySelectorAll('.fdatepicker-day.in-range').forEach(day => {
-                day.classList.remove('in-range');
-            });
+            if (this.popup) {
+                this.popup.querySelectorAll('.fdatepicker-day.in-range').forEach(day => {
+                    day.classList.remove('in-range');
+                });
+            }
             const day = parseInt(element.textContent);
             const month = this.focusedDate.getMonth();
             const year = this.focusedDate.getFullYear();
@@ -890,27 +898,31 @@ class FDatepicker {
             const start = startDate < endDate ? startDate : endDate;
             const end = startDate < endDate ? endDate : startDate;
 
-            // Get all day elements in the current view
-            const dayElements = Array.from(this.popup.querySelectorAll('.fdatepicker-day:not(.other-month)'));
+            if (this.popup) {
+                // Get all day elements in the current view
+                const dayElements = Array.from(this.popup.querySelectorAll('.fdatepicker-day:not(.other-month)'));
 
-            dayElements.forEach(dayEl => {
-                const dayNum = parseInt(dayEl.textContent);
-                const dayDate = new Date(year, month, dayNum);
+                dayElements.forEach(dayEl => {
+                    const dayNum = parseInt(dayEl.textContent);
+                    const dayDate = new Date(year, month, dayNum);
 
-                // Check if day is strictly between start and end
-                if (dayDate > start && dayDate < end) {
-                    dayEl.classList.add('in-range');
-                }
-            });
+                    // Check if day is strictly between start and end
+                    if (dayDate > start && dayDate < end) {
+                        dayEl.classList.add('in-range');
+                    }
+                });
+            }
         }
     }
 
     clearFocus() {
-        this.popup.querySelectorAll('.fdatepicker-day, .fdatepicker-month, .fdatepicker-year').forEach(el => {
-            el.classList.remove('focus');
-            el.classList.remove('hover');
-            el.setAttribute('tabindex', '-1');
-        });
+        if (this.popup) {
+            this.popup.querySelectorAll('.fdatepicker-day, .fdatepicker-month, .fdatepicker-year').forEach(el => {
+                el.classList.remove('focus');
+                el.classList.remove('hover');
+                el.setAttribute('tabindex', '-1');
+            });
+        }
         this.focusedElement = null;
     }
 
