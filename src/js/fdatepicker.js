@@ -1192,6 +1192,7 @@ class FDatepicker {
         }
 
         // Update input, UI, and trigger onSelect
+        this.focusedDate = this.selectedDate; // make sure the popup shows a relevant date
         this.updateInput();
         this.render();
         this.focusCurrentDay();
