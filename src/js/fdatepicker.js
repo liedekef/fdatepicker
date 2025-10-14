@@ -117,6 +117,7 @@ class FDatepicker {
             minDate: this.input.dataset.minDate ? new Date(this.input.dataset.minDate) : null,
             maxDate: this.input.dataset.maxDate ? new Date(this.input.dataset.maxDate) : null,
             disabledDates: this.input.dataset.disabledDates ? this.input.dataset.disabledDates.split(',').map(d => d.trim()) : [],
+            disabledDays: this.input.dataset.disabledDays ? this.input.dataset.disabledDays.split(',').map(d => d.trim()) : [],
             weekendDays: this.input.dataset.weekendDays ? this.input.dataset.weekendDays.split(',').map(d => d.trim()) : [0,6],
             altField: this.input.dataset.altField || null,
             altFormat: this.input.dataset.altFormat || 'Y-m-d',
@@ -305,6 +306,7 @@ class FDatepicker {
         }
 
         const dateString = this.formatDate(date, 'Y-m-d');
+        const dayOfWeek = date.getDay();
 
         // Create normalized date for comparison (start of day)
         const normalizedDate = new Date(date.getFullYear(), date.getMonth(), date.getDate());
@@ -325,6 +327,10 @@ class FDatepicker {
 
         // Check disabled dates array
         if (this.options.disabledDates && this.options.disabledDates.includes(dateString)) {
+            return true;
+        }
+
+        if (this.options.disabledDays && this.options.disabledDays.includes(dayOfWeek)) {
             return true;
         }
 
