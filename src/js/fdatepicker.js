@@ -1145,7 +1145,7 @@ class FDatepicker {
 
         if (this.options.multiple) {
             date = this.selectedDates;
-            formattedDate = this.selectedDates.map(d => this.formatDate(d)).join(this.options.multipleDatesSeparator);
+            formattedDate = this.selectedDates.map(d => this.formatDate(d)).join(this.options.multipleSeparator);
         } else if (this.options.range) {
             date = [this.selectedDate, this.selectedEndDate].filter(Boolean);
             formattedDate = date.map(d => this.formatDate(d)).join(' - ');
