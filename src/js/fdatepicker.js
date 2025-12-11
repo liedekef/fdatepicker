@@ -1177,8 +1177,9 @@ class FDatepicker {
     /**
      * Public method to set the selected date(s)
      * @param {Date|Date[]|Array<Date>} date - Single Date, array of Dates (multiple), or [start, end] (range)
+     * @param boolean doTriggerOnSelect - if false, disables the triggerOnSelect when setting the date
      */
-    setDate(date) {
+    setDate(date, doTriggerOnSelect = true) {
         if (!date) {
             this.selectedDate = null;
             this.selectedEndDate = null;
@@ -1216,15 +1217,21 @@ class FDatepicker {
         // Update input, UI, and trigger onSelect
         this.focusedDate = this.selectedDate; // make sure the popup shows a relevant date
         this.updateInput();
-        this.render();
-        this.setDayFocus();
+ 
+        // Only update UI if popup is open
+        if (this.isOpen) {
+            this.render();
+            this.setDayFocus();
+        }
 
         // Auto-close if not using timepicker
         if (this.options.autoClose && !this.options.timepicker) {
             this.close();
         }
 
-        this.triggerOnSelect();
+        if (doTriggerOnSelect) {
+            this.triggerOnSelect();
+        }
     }
 
     selectDate(day) {
