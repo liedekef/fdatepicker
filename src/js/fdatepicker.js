@@ -940,6 +940,8 @@ class FDatepicker {
         } else if (this.view === 'years') {
             // Move by 10 years per navigation
             this.currentYear += direction * 10;
+            // Also update focusedDate for consistency
+            this.focusedDate.setFullYear(this.currentYear);
         }
         this.render();
     }
@@ -950,6 +952,28 @@ class FDatepicker {
 
     open() {
         if (this.isOpen) return;
+
+        // Reset focusedDate to selected date if available, otherwise use current date
+        if (this.selectedDate) {
+            this.focusedDate = new Date(this.selectedDate);
+            if (this.view === 'years') {
+                // For years view, set currentYear to the year of selected date
+                this.currentYear = this.selectedDate.getFullYear();
+            }
+        } else {
+            this.focusedDate = new Date();
+            if (this.view === 'years') {
+                this.currentYear = this.focusedDate.getFullYear();
+            }
+        }
+
+        // For multiple selection mode, use first selected date
+        if (this.options.multiple && this.selectedDates.length > 0) {
+            this.focusedDate = new Date(this.selectedDates[0]);
+            if (this.view === 'years') {
+                this.currentYear = this.focusedDate.getFullYear();
+            }
+        }
 
         // Create popup and attach it
         this.popup = this.createPopup();
