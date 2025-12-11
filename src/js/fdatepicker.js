@@ -276,7 +276,7 @@ class FDatepicker {
                         if (this.view === 'days') {
                             this.focusedDate.setDate(1);
                             this.render();
-                            this.focusCurrentDay();
+                            this.setDayFocus();
                         }
                         break;
 
@@ -285,7 +285,7 @@ class FDatepicker {
                             const lastDay = new Date(this.focusedDate.getFullYear(), this.focusedDate.getMonth() + 1, 0).getDate();
                             this.focusedDate.setDate(lastDay);
                             this.render();
-                            this.focusCurrentDay();
+                            this.setDayFocus();
                         }
                         break;
 
@@ -733,7 +733,7 @@ class FDatepicker {
                 this.focusedDate.setDate(this.focusedDate.getDate() + (direction * 7));
             }
             this.render();
-            this.focusCurrentDay();
+            this.setDayFocus();
         } else if (this.view === 'months') {
             const currentMonth = this.focusedDate.getMonth();
             let newMonth;
@@ -753,7 +753,7 @@ class FDatepicker {
                 this.focusedDate.setMonth(newMonth);
             }
             this.render();
-            this.focusCurrentMonth();
+            this.setMonthFocus();
         } else if (this.view === 'years') {
             if (orientation === 'horizontal') {
                 this.currentYear += direction;
@@ -761,7 +761,7 @@ class FDatepicker {
                 this.currentYear += direction * 3;
             }
             this.render();
-            this.focusCurrentYear();
+            this.setYearFocus();
         }
     }
 
@@ -796,32 +796,20 @@ class FDatepicker {
                 }
                 return;
             }
-            if (this.view === 'days') {
-                this.focusCurrentDay();
-                return;
-            }
-            if (this.view === 'months') {
-                this.focusCurrentMonth();
-                return;
-            }
-            if (this.view === 'years') {
-                this.focusCurrentYear();
-                return;
-            }
+            if (this.view === 'days') this.setDayFocus();
+            else if (this.view === 'months') this.setMonthFocus();
+            else if (this.view === 'years') this.setYearFocus();
         }, 0);
     }
 
-    focusCurrentDay() {
+    setDayFocus() {
         if (this.view !== 'days') return;
 
         // Remove existing focus
         this.clearFocus();
 
-        const year = this.focusedDate.getFullYear();
-        const month = this.focusedDate.getMonth();
-        const day = this.focusedDate.getDate();
-
         if (this.popup) {
+            const day = this.focusedDate.getDate();
             // Find the day element that matches current date and is not from other month
             const dayElements = Array.from(this.popup.querySelectorAll('.fdatepicker-day:not(.other-month)'));
             const targetDay = dayElements.find(el => parseInt(el.textContent) === day);
@@ -832,9 +820,10 @@ class FDatepicker {
         }
     }
 
-    focusCurrentMonth() {
+    setMonthFocus() {
         if (this.view !== 'months') return;
 
+        // Remove existing focus
         this.clearFocus();
 
         if (this.popup) {
@@ -847,9 +836,12 @@ class FDatepicker {
         }
     }
 
-    focusCurrentYear() {
+    setYearFocus() {
         if (this.view !== 'years') return;
+ 
+        // Remove existing focus
         this.clearFocus();
+
         if (this.popup) {
             const year = this.focusedDate.getFullYear();
             const startDecade = Math.floor(this.currentYear / 10) * 10;
@@ -1225,7 +1217,7 @@ class FDatepicker {
         this.focusedDate = this.selectedDate; // make sure the popup shows a relevant date
         this.updateInput();
         this.render();
-        this.focusCurrentDay();
+        this.setDayFocus();
 
         // Auto-close if not using timepicker
         if (this.options.autoClose && !this.options.timepicker) {
@@ -1294,7 +1286,7 @@ class FDatepicker {
             this.updateInput();
             this.render();
             this.updateMultipleDisplay();
-            this.focusCurrentDay();
+            this.setDayFocus();
 
         } else if (this.options.range) {
             // Range selection - fixed to stay open
@@ -1303,7 +1295,7 @@ class FDatepicker {
                 this.selectedDate = selectedDate;
                 this.selectedEndDate = null;
                 this.render();
-                this.focusCurrentDay();
+                this.setDayFocus();
             } else {
                 // Complete range
                 if (selectedDate < this.selectedDate) {
@@ -1319,7 +1311,7 @@ class FDatepicker {
                     }
                 } else {
                     this.render();
-                    this.focusCurrentDay();
+                    this.setDayFocus();
                 }
             }
         } else {
@@ -1336,7 +1328,7 @@ class FDatepicker {
                 }
             } else {
                 this.render();
-                this.focusCurrentDay();
+                this.setDayFocus();
             }
         }
         this.triggerOnSelect();
