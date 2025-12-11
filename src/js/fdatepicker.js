@@ -1177,9 +1177,9 @@ class FDatepicker {
     /**
      * Public method to set the selected date(s)
      * @param {Date|Date[]|Array<Date>} date - Single Date, array of Dates (multiple), or [start, end] (range)
-     * @param boolean doTriggerOnSelect - if false, disables the triggerOnSelect when setting the date
+     * @param boolean doTriggerOnSelect - if true, runs triggerOnSelect when setting the date
      */
-    setDate(date, doTriggerOnSelect = true) {
+    setDate(date, doTriggerOnSelect = false) {
         if (!date) {
             this.selectedDate = null;
             this.selectedEndDate = null;
