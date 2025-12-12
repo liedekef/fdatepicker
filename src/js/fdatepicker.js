@@ -1179,43 +1179,42 @@ class FDatepicker {
      * @param {Date|Date[]|Array<Date>} date - Single Date, array of Dates (multiple), or [start, end] (range)
      * @param boolean doTriggerOnSelect - if true, runs triggerOnSelect when setting the date
      */
-    setDate(date, doTriggerOnSelect = false) {
+    setDate(date, doTriggerOnSelect = true) {
+        // Helper function to safely create a Date
+        const safeDate = (d) => {
+            const dateObj = new Date(d);
+            return isNaN(dateObj.getTime()) ? null : dateObj;
+        };
+
         if (!date) {
             this.selectedDate = null;
             this.selectedEndDate = null;
             this.selectedDates = [];
         } else if (this.options.multiple) {
             if (Array.isArray(date)) {
-                this.selectedDates = date.map(d => d instanceof Date ? d : new Date(d));
+                this.selectedDates = date.map(safeDate).filter(d => d !== null);
             } else {
                 // Single date in multiple mode
-                this.selectedDates = [date instanceof Date ? date : new Date(date)];
+                this.selectedDates = [safeDate(date)].filter(d => d !== null);
             }
             this.selectedDate = null;
             this.selectedEndDate = null;
         } else if (this.options.range) {
             if (Array.isArray(date) && date.length >= 2) {
-                this.selectedDate = date[0] instanceof Date ? date[0] : new Date(date[0]);
-                this.selectedEndDate = date[1] instanceof Date ? date[1] : new Date(date[1]);
+                this.selectedDate = safeDate(date[0]);
+                this.selectedEndDate = safeDate(date[1]);
             } else {
-                this.selectedDate = date instanceof Date ? date : new Date(date);
+                this.selectedDate = safeDate(date);
                 this.selectedEndDate = null;
             }
         } else {
-            this.selectedDate = date instanceof Date ? date : new Date(date);
+            this.selectedDate = safeDate(date);
             this.selectedEndDate = null;
             this.selectedDates = [];
         }
 
-        // Ensure dates are valid
-        if (this.selectedDate && isNaN(this.selectedDate.getTime())) this.selectedDate = null;
-        if (this.selectedEndDate && isNaN(this.selectedEndDate.getTime())) this.selectedEndDate = null;
-        if (this.selectedDates) {
-            this.selectedDates = this.selectedDates.filter(d => d && !isNaN(d.getTime()));
-        }
-
         // Update input, UI, and trigger onSelect
-        this.focusedDate = this.selectedDate; // make sure the popup shows a relevant date
+        this.focusedDate = this.selectedDate ? new Date(this.selectedDate) : new Date(); // make sure the popup shows a relevant date
         this.updateInput();
  
         // Only update UI if popup is open
