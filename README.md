@@ -4,9 +4,9 @@
 
 Lightweight customizable cross-browser Vanilla JS datepicker.
 
-![Simple datepicker](https://github.com/liedekef/fdatepicker/raw/main/docs/img/simple.png)
-![Datepicker with range and time](https://github.com/liedekef/fdatepicker/raw/main/docs/img/rangepicker.png)
-![Multiple days and print selected](https://github.com/liedekef/fdatepicker/raw/main/docs/img/multiple.png)
+[![Simple datepicker](https://github.com/liedekef/fdatepicker/raw/main/docs/img/simple.png)](https://github.com/liedekef/fdatepicker/)
+[![Datepicker with range and time](https://github.com/liedekef/fdatepicker/raw/main/docs/img/rangepicker.png)](https://github.com/liedekef/fdatepicker/)]
+[![Multiple days and print selected](https://github.com/liedekef/fdatepicker/raw/main/docs/img/multiple.png)](https://github.com/liedekef/fdatepicker/)]
 
 ## Installation
 
