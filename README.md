@@ -10,7 +10,7 @@ Lightweight customizable cross-browser Vanilla JS datepicker.
 
 ## Installation
 
-Use one of the releases on github or download the files [directly](https://github.com/liedekef/fdatepicker/tree/master/dist)
+Use one of the releases on github or download the files [directly](https://github.com/liedekef/fdatepicker/tree/master)
 
 ## Usage
 
