@@ -1522,13 +1522,10 @@ class FDatepicker {
         let value = '';
 
         if (this.options.multiple) {
-            if (this.selectedDates.length > 0) {
+            const count = this.selectedDates.length;
+            if (count > 0) {
                 if (this.options.altField && this.options.multipleDisplaySelector) {
-                    const count = this.selectedDates.length;
-
-                    if (count === 0) {
-                        value = this.locale.noDatesSelected;
-                    } else if (count === 1) {
+                    if (count === 1) {
                         // Use the exact single date message
                         value = this.locale.singleDateSelected || '1 date selected';
                     } else {
