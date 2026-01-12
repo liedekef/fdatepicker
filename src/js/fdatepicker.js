@@ -1524,6 +1524,8 @@ class FDatepicker {
         if (this.options.multiple) {
             if (this.selectedDates.length > 0) {
                 if (this.options.altField && this.options.multipleDisplaySelector) {
+                    const count = this.selectedDates.length;
+
                     if (count === 0) {
                         value = this.locale.noDatesSelected;
                     } else if (count === 1) {
