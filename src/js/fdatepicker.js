@@ -706,18 +706,6 @@ class FDatepicker {
                         const validatedValue = this.validateTimeInput(type, value);
                         e.target.value = String(validatedValue).padStart(2, '0');
                     });
-
-                    // Add input event for real-time validation
-                    input.addEventListener('input', (e) => {
-                        const type = e.target.dataset.time;
-                        const value = parseInt(e.target.value);
-                        if (!isNaN(value)) {
-                            const validatedValue = this.validateTimeInput(type, value);
-                            if (validatedValue !== value) {
-                                e.target.value = String(validatedValue).padStart(2, '0');
-                            }
-                        }
-                    });
                 }
             });
         }
