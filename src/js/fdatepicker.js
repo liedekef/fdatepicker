@@ -698,14 +698,7 @@ class FDatepicker {
                         }
                     });
                     input.addEventListener('change', () => this.updateSelectedTime());
-
-                    // Add blur event for immediate validation
-                    input.addEventListener('blur', (e) => {
-                        const type = e.target.dataset.time;
-                        const value = parseInt(e.target.value) || 0;
-                        const validatedValue = this.validateTimeInput(type, value);
-                        e.target.value = String(validatedValue).padStart(2, '0');
-                    });
+                    input.addEventListener('blur', () => this.updateSelectedTime());
                 }
             });
         }
