@@ -10,6 +10,8 @@ const FDATEPICKER_DEFAULT_MESSAGES = {
     format: 'm/d/Y h:i a',
     firstDayOfWeek: 1,
     noDatesSelected: 'No dates selected',
+    singleDateSelected: '1 date selected',          // For exactly 1
+    multipleDatesSelected: '{count} dates selected', // For 2, 3, etc.
     datesSelected: 'Selected dates ({0}):'
 }
 
@@ -1522,8 +1524,16 @@ class FDatepicker {
         if (this.options.multiple) {
             if (this.selectedDates.length > 0) {
                 if (this.options.altField && this.options.multipleDisplaySelector) {
-                    // we have a multiple display selector, so we can be pretty here
-                    value = `${this.selectedDates.length} date${this.selectedDates.length !== 1 ? 's' : ''} selected`;
+                    if (count === 0) {
+                        value = this.locale.noDatesSelected;
+                    } else if (count === 1) {
+                        // Use the exact single date message
+                        value = this.locale.singleDateSelected || '1 date selected';
+                    } else {
+                        // Use the plural pattern with placeholder
+                        value = this.locale.multipleDatesSelected || '{count} dates selected';
+                        value = value.replace('{count}', count);
+                    }
                 } else {
                     value = this.selectedDates.map(date => this.formatDate(date)).join(this.options.multipleSeparator);
                 }
