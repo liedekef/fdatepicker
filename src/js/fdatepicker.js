@@ -907,9 +907,18 @@ class FDatepicker {
         this.focusedElement = null;
     }
 
+    getDaysInMonth(year, monthIndex) {
+        // MonthIndex 0 = Jan, 11 = Dec. Next month (monthIndex + 1) with day 0 = last day of target month.
+        return new Date(year, monthIndex + 1, 0).getDate();
+    }
+
     navigateView(direction) {
         if (this.view === 'days') {
-            this.focusedDate.setMonth(this.focusedDate.getMonth() + direction);
+            //this.focusedDate.setMonth(this.focusedDate.getMonth() + direction);
+            const targetMonth = this.focusedDate.getMonth() + direction;
+            const targetYear = this.focusedDate.getFullYear();
+            const maxDay = this.getDaysInMonth(targetYear, targetMonth);
+            this.focusedDate.setMonth(targetMonth,Math.min(this.focusedDate.getDate(), maxDay));
         } else if (this.view === 'months') {
             this.focusedDate.setFullYear(this.focusedDate.getFullYear() + direction);
         } else if (this.view === 'years') {
