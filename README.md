@@ -2,7 +2,7 @@
 
 ## Description
 
-Lightweight customizable cross-browser Vanilla JS datepicker.
+Lightweight customizable cross-browser Vanilla JS datepicker using PHP datetime format strings.
 
 [![Simple datepicker](https://github.com/liedekef/fdatepicker/raw/main/docs/img/simple.png)](https://github.com/liedekef/fdatepicker/)
 [![Datepicker with range and time](https://github.com/liedekef/fdatepicker/raw/main/docs/img/rangepicker.png)](https://github.com/liedekef/fdatepicker/)
