@@ -671,9 +671,15 @@ class FDatepicker {
                     // Before moving to next element, check if we're about to skip the grid
                     if (focusableArray[currentIndex].parentElement.classList.contains('fdatepicker-header') &&
                         focusableArray[nextIndex].parentElement.classList.contains('fdatepicker-buttons')) {
-                        // No element in grid has focus, set it again
+                        // No element in grid has focus, set it based on current view
                         e.preventDefault();
-                        this.setDayFocus();
+                        if (this.view === 'days') {
+                            this.setDayFocus();
+                        } else if (this.view === 'months') {
+                            this.setMonthFocus();
+                        } else if (this.view === 'years') {
+                            this.setYearFocus();
+                        }
                     }
                     if (currentIndex === focusableArray.length - 1) {
                         // At last element, wrap to first
@@ -776,6 +782,8 @@ class FDatepicker {
             } else {
                 this.currentYear += direction * 3;
             }
+            // Update focusedDate to match currentYear so setYearFocus works
+            this.focusedDate.setFullYear(this.currentYear);
             this.render();
             this.setYearFocus();
         }
@@ -869,6 +877,12 @@ class FDatepicker {
                 const yearElement = this.popup.querySelector(`[data-year="${year}"]`);
                 if (yearElement) {
                     this.setFocus(yearElement);
+                }
+            } else {
+                // Year is outside current decade, focus the first valid year (not disabled)
+                const firstValidYear = this.popup.querySelector(`.fdatepicker-year:not(.disabled):not(.other-decade)`);
+                if (firstValidYear) {
+                    this.setFocus(firstValidYear);
                 }
             }
         }
