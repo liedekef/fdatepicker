@@ -227,13 +227,6 @@ class FDatepicker {
                         this.input.focus();
                         break;
 
-                    case 'Tab':
-                        // Allow normal tab behavior within popup
-                        if (!this.popup.contains(e.target)) {
-                            this.close();
-                        }
-                        break;
-
                     case 'ArrowLeft':
                         this.keyboardNavigate(-1, 'horizontal');
                         break;
@@ -648,6 +641,36 @@ class FDatepicker {
                     cancelable: true
                 });
                 this.input.dispatchEvent(syntheticEvent);
+            }
+        });
+
+        // Handle Tab key for circular navigation within popup
+        this.popup.addEventListener('keydown', (e) => {
+            if (e.key === 'Tab') {
+                // Get all focusable elements in the popup
+                const focusableElements = this.popup.querySelectorAll(
+                    'button:not([disabled]), [tabindex="0"], input:not([disabled])'
+                );
+                const focusableArray = Array.from(focusableElements);
+                const currentIndex = focusableArray.indexOf(e.target);
+                
+                if (currentIndex === -1) return; // Not a focusable element we're tracking
+                
+                if (e.shiftKey) {
+                    // Shift+Tab: move backwards
+                    if (currentIndex === 0) {
+                        // At first element, wrap to last
+                        e.preventDefault();
+                        focusableArray[focusableArray.length - 1].focus();
+                    }
+                } else {
+                    // Tab: move forwards
+                    if (currentIndex === focusableArray.length - 1) {
+                        // At last element, wrap to first
+                        e.preventDefault();
+                        focusableArray[0].focus();
+                    }
+                }
             }
         });
 
