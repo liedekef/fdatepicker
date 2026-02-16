@@ -665,6 +665,16 @@ class FDatepicker {
                     }
                 } else {
                     // Tab: move forwards
+                    let nextIndex = currentIndex + 1;
+                    if (nextIndex >= focusableArray.length)
+                        nextIndex = 0;
+                    // Before moving to next element, check if we're about to skip the grid
+                    if (focusableArray[currentIndex].parentElement.classList.contains('fdatepicker-header') &&
+                        focusableArray[nextIndex].parentElement.classList.contains('fdatepicker-buttons')) {
+                        // No element in grid has focus, set it again
+                        e.preventDefault();
+                        this.setDayFocus();
+                    }
                     if (currentIndex === focusableArray.length - 1) {
                         // At last element, wrap to first
                         e.preventDefault();
