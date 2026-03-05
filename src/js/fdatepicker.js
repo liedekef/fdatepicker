@@ -366,6 +366,8 @@ class FDatepicker {
 
         this.bindInputEvents();
         this.updateInput();
+
+        this._reposition = () => this.setPosition();
     }
 
     initializePrefilledDates() {
@@ -1031,12 +1033,15 @@ class FDatepicker {
         this.setInitialFocus();
 
         this.setPosition();
+        window.addEventListener('scroll', this._reposition, true);
+        window.addEventListener('resize', this._reposition);
 
         if (this.options.onOpen && typeof this.options.onOpen === 'function') this.options.onOpen.call(this.input, this);
     }
 
     // Simplified positioning - let CSS and browser handle most of it
     setPosition() {
+        if (!this.isOpen) return;
         const inputRect = this.input.getBoundingClientRect();
         const inputBounds = this.input.getBoundingClientRect();
         const offset = 4;
@@ -1096,6 +1101,9 @@ class FDatepicker {
             this.popup.parentNode.removeChild(this.popup);
         }
 
+        window.removeEventListener('scroll', this._reposition, true);
+        window.removeEventListener('resize', this._reposition);
+
         // Null it out so a new one is created on next open
         this.popup = null;
 
@@ -1142,6 +1150,7 @@ class FDatepicker {
         this.selectedDates = [];
         this.options = null;
         this.locale = null;
+        this._reposition = null;
 
         // Remove from _openInstances in case close wasn't called
         FDatepicker._openInstances.delete(this);
