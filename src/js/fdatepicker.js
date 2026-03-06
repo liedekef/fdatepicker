@@ -368,6 +368,8 @@ class FDatepicker {
         this.updateInput();
 
         this._reposition = () => this.setPosition();
+        this._scrollHandler = (e) => { if (!this.popup?.contains(e.target)) this._reposition(); };
+        this._resizeObserver = new ResizeObserver(this._reposition);
     }
 
     initializePrefilledDates() {
@@ -1033,8 +1035,9 @@ class FDatepicker {
         this.setInitialFocus();
 
         this.setPosition();
-        window.addEventListener('scroll', this._reposition, true);
+        window.addEventListener('scroll', this._scrollHandler, true);
         window.addEventListener('resize', this._reposition);
+        this._resizeObserver.observe(this.input);
 
         if (this.options.onOpen && typeof this.options.onOpen === 'function') this.options.onOpen.call(this.input, this);
     }
@@ -1101,8 +1104,9 @@ class FDatepicker {
             this.popup.parentNode.removeChild(this.popup);
         }
 
-        window.removeEventListener('scroll', this._reposition, true);
+        window.removeEventListener('scroll', this._scrollHandler, true);
         window.removeEventListener('resize', this._reposition);
+        this._resizeObserver.unobserve(this.input);
 
         // Null it out so a new one is created on next open
         this.popup = null;
@@ -1151,6 +1155,9 @@ class FDatepicker {
         this.options = null;
         this.locale = null;
         this._reposition = null;
+        this._scrollHandler = null;
+        this._resizeObserver?.disconnect();
+        this._resizeObserver = null;
 
         // Remove from _openInstances in case close wasn't called
         FDatepicker._openInstances.delete(this);
