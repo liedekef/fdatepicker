@@ -210,6 +210,7 @@ class FDatepicker {
                 e.stopPropagation();
             },
             keydown: (e) => {
+                this._keyboardActive = true; // this gets cleared in mousemove (if mouse moves)
                 if (!this.isOpen && e.key !== 'Escape') {
                     if (['ArrowDown', ' ', 'Enter'].includes(e.key)) {
                         e.preventDefault();
@@ -370,6 +371,9 @@ class FDatepicker {
         this._reposition = () => this.setPosition();
         this._scrollHandler = (e) => { if (!this.popup?.contains(e.target)) this._reposition(); };
         this._resizeObserver = new ResizeObserver(this._reposition);
+
+        // this to keep track if navigation is done via mouse or keyboard
+        this._keyboardActive = false;
     }
 
     initializePrefilledDates() {
@@ -611,14 +615,15 @@ class FDatepicker {
     bindGridAndPopupEvents() {
         // Mouseover for hover/focus
         this.grid?.addEventListener('mouseover', (e) => {
-            if (e.target.classList.contains('fdatepicker-day')) {
-                if (e.target.classList.contains('other-month')) {
-                    e.target.classList.add('hover');
-                } else {
-                    this.setFocus(e.target);
-                }
-            } else if (e.target.classList.contains('fdatepicker-month') ||
-                e.target.classList.contains('fdatepicker-year')) {
+            if (this._keyboardActive) return;
+            if (e.target.classList.contains('fdatepicker-day') && !e.target.classList.contains('other-month')) {
+                this.focusedDate.setDate(parseInt(e.target.textContent));
+                this.setFocus(e.target);
+            } else if (e.target.classList.contains('fdatepicker-month')) {
+                this.focusedDate.setMonth(parseInt(e.target.dataset.month));
+                this.setFocus(e.target);
+            } else if (e.target.classList.contains('fdatepicker-year')) {
+                this.focusedDate.setFullYear(parseInt(e.target.dataset.year));
                 this.setFocus(e.target);
             }
         });
@@ -626,6 +631,11 @@ class FDatepicker {
         // Clear focus when mouse leaves the popup
         this.grid?.addEventListener('mouseleave', () => {
             this.clearFocus();
+        });
+
+        // Reset keyboard nav to false if mouse moves
+        this.grid?.addEventListener('mousemove', () => {
+            this._keyboardActive = false;
         });
  
         // Keyboard nav inside grid
