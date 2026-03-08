@@ -216,7 +216,7 @@ class FDatepicker {
                         e.preventDefault();
                         e.stopPropagation();
                         this.open();
-                    } else if (!e.ctrlKey && !e.metaKey && !e.altKey && e.key.length === 1) {
+                    } else if (!e.ctrlKey && !e.metaKey && !e.altKey && e.key!='Tab' ) {
                         // block printable characters
                         e.preventDefault();
                         e.stopPropagation();
