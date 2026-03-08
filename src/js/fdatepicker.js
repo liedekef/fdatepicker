@@ -211,11 +211,15 @@ class FDatepicker {
             },
             keydown: (e) => {
                 this._keyboardActive = true; // this gets cleared in mousemove (if mouse moves)
-                if (!this.isOpen && e.key !== 'Escape') {
+                if (!this.isOpen) {
                     if (['ArrowDown', ' ', 'Enter'].includes(e.key)) {
                         e.preventDefault();
                         e.stopPropagation();
                         this.open();
+                    } else if (!e.ctrlKey && !e.metaKey && !e.altKey && e.key.length === 1) {
+                        // block printable characters
+                        e.preventDefault();
+                        e.stopPropagation();
                     }
                     return;
                 }
@@ -225,7 +229,6 @@ class FDatepicker {
                         e.preventDefault();
                         e.stopPropagation();
                         this.close();
-                        this.input.focus();
                         break;
 
                     case 'ArrowLeft':
@@ -288,6 +291,10 @@ class FDatepicker {
                     case 'Enter':
                     case ' ':
                         this.keyboardHandleSelection();
+                        break;
+
+                    default:
+                        e.preventDefault();
                         break;
                 }
             }
@@ -745,7 +752,6 @@ class FDatepicker {
                             e.preventDefault(); // Prevent any default browser behavior
                             e.stopPropagation(); // Stop the event from bubbling and being handled elsewhere
                             this.close(); // Close the datepicker
-                            this.input.focus(); // Return focus to the original input
                             return;
                         }
                         if (['ArrowUp', 'ArrowDown'].includes(e.key)) {
@@ -1131,6 +1137,9 @@ class FDatepicker {
         }, 0);
 
         if (this.options.onClose && typeof this.options.onClose === 'function') this.options.onClose.call(this.input, this);
+
+        // Return focus to the original input
+        this.input.focus();
     }
 
     destroy() {
