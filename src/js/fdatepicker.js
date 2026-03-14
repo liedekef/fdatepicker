@@ -368,6 +368,8 @@ class FDatepicker {
         // Remove readonly so browser treats the field as properly interactive
         // This helps with HTML5 validation, focus, and accessibility
         this.input.removeAttribute('readonly');
+        this.input.setAttribute('aria-haspopup', 'dialog');
+        this.input.setAttribute('aria-expanded', 'false');
 
         // Handle pre-filled dates
         this.initializePrefilledDates();
@@ -431,12 +433,15 @@ class FDatepicker {
     createPopup() {
         const popup = document.createElement('div');
         popup.className = 'fdatepicker-popup';
+        popup.setAttribute('role', 'dialog');
+        popup.setAttribute('aria-modal', 'true');
+        popup.setAttribute('aria-label', 'Date picker');
 
         if (!this.options.timeOnly) {
             popup.innerHTML = `
         <div class="fdatepicker-header">
             <button class="fdatepicker-nav" data-action="prev" aria-label="Previous" tabindex="0">‹</button>
-            <div class="fdatepicker-title" tabindex="0"></div>
+            <div class="fdatepicker-title" tabindex="0" aria-live="polite" aria-atomic="true"></div>
             <button class="fdatepicker-nav" data-action="next" aria-label="Next" tabindex="0">›</button>
         </div>
         <div class="fdatepicker-content">
@@ -479,6 +484,7 @@ class FDatepicker {
             hoursInput.step = this.options.hoursStep;
             hoursInput.value = String(initialTime.hours).padStart(2, '0');
             hoursInput.tabIndex = 0; // Ensure it's focusable
+            hoursInput.setAttribute('aria-label', 'Hours');
             timeInputs.appendChild(hoursInput);
 
             // Add separator
@@ -497,6 +503,7 @@ class FDatepicker {
             minutesInput.step = this.options.minutesStep;
             minutesInput.value = String(initialTime.minutes).padStart(2, '0');
             minutesInput.tabIndex = 0; // Ensure it's focusable
+            minutesInput.setAttribute('aria-label', 'Minutes');
             timeInputs.appendChild(minutesInput);
 
             // --- Create AM/PM buttons as DOM elements and attach listeners ---
@@ -509,10 +516,15 @@ class FDatepicker {
                 else
                     amButton.textContent = 'am';
                 amButton.tabIndex = 0; // Make it focusable
+                amButton.setAttribute('role', 'button');
+                amButton.setAttribute('aria-label', 'AM');
+                amButton.setAttribute('aria-pressed', initialTime.isAM ? 'true' : 'false');
                 amButton.addEventListener('click', () => {
                     // Deactivate all and activate this one
                     amButton.classList.add('active');
+                    amButton.setAttribute('aria-pressed', 'true');
                     pmButton.classList.remove('active');
+                    pmButton.setAttribute('aria-pressed', 'false');
                     this.updateSelectedTime();
                 });
                 // Add keyboard support to AM button
@@ -532,10 +544,15 @@ class FDatepicker {
                 else
                     pmButton.textContent = 'pm';
                 pmButton.tabIndex = 0; // Make it focusable
+                pmButton.setAttribute('role', 'button');
+                pmButton.setAttribute('aria-label', 'PM');
+                pmButton.setAttribute('aria-pressed', !initialTime.isAM ? 'true' : 'false');
                 pmButton.addEventListener('click', () => {
                     // Deactivate all and activate this one
                     pmButton.classList.add('active');
+                    pmButton.setAttribute('aria-pressed', 'true');
                     amButton.classList.remove('active');
+                    amButton.setAttribute('aria-pressed', 'false');
                     this.updateSelectedTime();
                 });
                 // Add keyboard support to PM button
@@ -553,8 +570,6 @@ class FDatepicker {
             timepicker.appendChild(timeInputs);
             popup.appendChild(timepicker);
 
-            popup.setAttribute('role', 'application');
-            popup.setAttribute('aria-label', 'Date picker');
         }
 
         if (this.options.todayButton || this.options.clearButton || this.options.closeButton) {
@@ -1043,6 +1058,7 @@ class FDatepicker {
         FDatepicker._addGlobalListeners();
 
         this.isOpen = true;
+        this.input.setAttribute('aria-expanded', 'true');
         this.render();
 
         this.popup.classList.add('active');
@@ -1112,6 +1128,7 @@ class FDatepicker {
         if (!this.isOpen) return;
 
         this.isOpen = false;
+        this.input.setAttribute('aria-expanded', 'false');
         this.popup.classList.remove('active');
         this.clearFocus();
  
@@ -1683,28 +1700,39 @@ class FDatepicker {
 
     renderTitle() {
         let title = '';
+        let ariaLabel = '';
         if (this.view === 'days') {
             title = `${this.locale.months[this.focusedDate.getMonth()]} ${this.focusedDate.getFullYear()}`;
+            ariaLabel = `${title}, click to select month`;
         } else if (this.view === 'months') {
             title = this.focusedDate.getFullYear();
+            ariaLabel = `${title}, click to select year`;
         } else if (this.view === 'years') {
             const startDecade = Math.floor(this.currentYear / 10) * 10;
             const endDecade = startDecade + 9;
             title = `${startDecade} - ${endDecade}`;
+            ariaLabel = title;
         }
         this.title.textContent = title;
+        this.title.setAttribute('aria-label', ariaLabel);
     }
 
     renderDays() {
         this.grid.className = 'fdatepicker-grid';
+        this.grid.setAttribute('role', 'grid');
+        this.grid.setAttribute('aria-label', `${this.locale.months[this.focusedDate.getMonth()]} ${this.focusedDate.getFullYear()}`);
 
         // Build day headers based on first day of week
-        let headerHtml = '';
+        this.grid.innerHTML = '';
         for (let i = 0; i < 7; i++) {
             const dayIndex = (this.options.firstDayOfWeek + i) % 7;
-            headerHtml += `<div class="fdatepicker-day-header">${this.locale.daysMin[dayIndex]}</div>`;
+            const header = document.createElement('div');
+            header.className = 'fdatepicker-day-header';
+            header.setAttribute('role', 'columnheader');
+            header.setAttribute('aria-label', this.locale.days[dayIndex]);
+            header.textContent = this.locale.daysMin[dayIndex];
+            this.grid.appendChild(header);
         }
-        this.grid.innerHTML = headerHtml;
 
         const firstDayOfWeek = new Date(this.focusedDate.getFullYear(), this.focusedDate.getMonth(), 1);
         const lastDay = new Date(this.focusedDate.getFullYear(), this.focusedDate.getMonth() + 1, 0);
@@ -1719,6 +1747,8 @@ class FDatepicker {
             day.className = 'fdatepicker-day other-month';
             day.textContent = prevMonth.getDate() - i;
             day.setAttribute('tabindex', '-1');
+            day.setAttribute('role', 'gridcell');
+            day.setAttribute('aria-disabled', 'true');
             this.grid.appendChild(day);
         }
 
@@ -1728,8 +1758,10 @@ class FDatepicker {
             dayEl.className = 'fdatepicker-day';
             dayEl.textContent = day;
             dayEl.setAttribute('tabindex', '-1');
+            dayEl.setAttribute('role', 'gridcell');
 
             const dayDate = new Date(this.focusedDate.getFullYear(), this.focusedDate.getMonth(), day);
+            dayEl.setAttribute('aria-label', this.formatDate(dayDate, 'l, F j, Y'));
 
             // Add weekend class
             const dayOfWeek = dayDate.getDay();
@@ -1755,9 +1787,13 @@ class FDatepicker {
                 );
                 if (isSelected) {
                     dayEl.classList.add('multi-selected');
+                    dayEl.setAttribute('aria-selected', 'true');
+                } else {
+                    dayEl.setAttribute('aria-selected', 'false');
                 }
             } else {
                 // Single or range selection
+                dayEl.setAttribute('aria-selected', 'false');
                 if (this.selectedDate && dayDate.toDateString() === this.selectedDate.toDateString()) {
                     dayEl.classList.add(this.options.range ? 'range-start' : 'selected');
                     dayEl.setAttribute('aria-selected', 'true');
@@ -1789,6 +1825,7 @@ class FDatepicker {
             dayEl.className = 'fdatepicker-day other-month';
             dayEl.textContent = day;
             dayEl.setAttribute('tabindex', '-1');
+            dayEl.setAttribute('role', 'gridcell');
             dayEl.setAttribute('aria-disabled', 'true');
             this.grid.appendChild(dayEl);
         }
@@ -1796,6 +1833,8 @@ class FDatepicker {
 
     renderMonths() {
         this.grid.className = 'fdatepicker-grid months';
+        this.grid.setAttribute('role', 'grid');
+        this.grid.setAttribute('aria-label', String(this.focusedDate.getFullYear()));
         this.grid.innerHTML = '';
 
         for (let month = 0; month < 12; month++) {
@@ -1804,6 +1843,9 @@ class FDatepicker {
             monthEl.textContent = this.locale.monthsShort[month];
             monthEl.dataset.month = month;
             monthEl.setAttribute('tabindex', '-1');
+            monthEl.setAttribute('role', 'gridcell');
+            monthEl.setAttribute('aria-label', this.locale.months[month]);
+            monthEl.setAttribute('aria-selected', 'false');
 
             if (month === new Date().getMonth() && this.focusedDate.getFullYear() === new Date().getFullYear()) {
                 monthEl.classList.add('current');
@@ -1821,9 +1863,11 @@ class FDatepicker {
 
     renderYears() {
         this.grid.className = 'fdatepicker-grid years';
+        const startDecade = Math.floor(this.currentYear / 10) * 10; // e.g., 2020
+        this.grid.setAttribute('role', 'grid');
+        this.grid.setAttribute('aria-label', `${startDecade} – ${startDecade + 9}`);
         this.grid.innerHTML = '';
 
-        const startDecade = Math.floor(this.currentYear / 10) * 10; // e.g., 2020
         const years = [
             startDecade - 1, // Previous decade end (e.g., 2019)
             ...Array.from({ length: 10 }, (_, i) => startDecade + i), // 2020–2029
@@ -1836,6 +1880,9 @@ class FDatepicker {
             yearEl.textContent = year;
             yearEl.dataset.year = year;
             yearEl.setAttribute('tabindex', '-1');
+            yearEl.setAttribute('role', 'gridcell');
+            yearEl.setAttribute('aria-label', String(year));
+            yearEl.setAttribute('aria-selected', 'false');
 
             // Mark current year
             if (year === new Date().getFullYear()) {
