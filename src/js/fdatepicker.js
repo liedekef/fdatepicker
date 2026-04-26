@@ -371,6 +371,24 @@ class FDatepicker {
         this.input.setAttribute('aria-haspopup', 'dialog');
         this.input.setAttribute('aria-expanded', 'false');
 
+        // If altFormat is set but no altField is provided, create an internal hidden field
+        // so the caller doesn't need to add one manually (mirrors <input type="date"> behaviour).
+        if (this.options.altFormat && !this.options.altField) {
+            const hiddenId = (this.input.id ? this.input.id + '-fdp-alt' : 'fdp-alt-' + Math.random().toString(36).slice(2));
+            const hiddenInput = document.createElement('input');
+            hiddenInput.type = 'hidden';
+            hiddenInput.id = hiddenId;
+            // Forward name from the visible field to the hidden field, then remove it from
+            // the visible field so only the machine-readable value gets submitted.
+            if (this.input.name) {
+                hiddenInput.name = this.input.name;
+                this.input.removeAttribute('name');
+            }
+            this.input.insertAdjacentElement('afterend', hiddenInput);
+            this.options.altField = hiddenId;
+            this._autoCreatedAltField = hiddenInput; // keep a reference for destroy()
+        }
+
         // Handle pre-filled dates
         this.initializePrefilledDates();
 
@@ -1175,6 +1193,16 @@ class FDatepicker {
         this.input.removeEventListener('paste', this.boundHandlers.paste);
         this.input.removeEventListener('drop', this.boundHandlers.drop);
         this.input.removeEventListener('keydown', this.boundHandlers.keydown);
+
+        // Remove the auto-created hidden alt field if we created one
+        if (this._autoCreatedAltField) {
+            // Restore name to the visible input before removing the hidden one
+            if (this._autoCreatedAltField.name && this.input) {
+                this.input.setAttribute('name', this._autoCreatedAltField.name);
+            }
+            this._autoCreatedAltField.parentNode?.removeChild(this._autoCreatedAltField);
+            this._autoCreatedAltField = null;
+        }
 
         this.input = null;
         this.popup = null;
