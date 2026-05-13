@@ -185,7 +185,6 @@ class FDatepicker {
         if (this.options.timeOnly) {
             this.options.autoClose = false;
             this.options.todayButton = false;
-            this.options.clearButton = false;
         }
         if (!this.input.dataset.format && !this.options.format) {
             this.options.format = this.locale.format || 'm/d/Y';
