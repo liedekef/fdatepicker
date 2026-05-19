@@ -1707,10 +1707,8 @@ class FDatepicker {
         this.updateMultipleDisplay();
 
         // Trigger change event
-        if (!this.options.altField) {
-            this.input.dispatchEvent(new Event('change', { bubbles: true }));
-            this.input.dispatchEvent(new Event('input', { bubbles: true }));
-        }
+        this.input.dispatchEvent(new Event('change', { bubbles: true }));
+        this.input.dispatchEvent(new Event('input', { bubbles: true }));
     }
 
     render() {
