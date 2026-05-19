@@ -615,10 +615,7 @@ class FDatepicker {
                 clearBtn.textContent = this.locale.clear || 'Clear';
                 clearBtn.addEventListener('click', (e) => {
                     e.stopPropagation();
-                    this.selectedDate = null;
-                    this.selectedEndDate = null;
-                    this.selectedDates = [];
-                    this.updateInput();
+                    this.clear();
                     this.render();
                 });
                 buttonRow.appendChild(clearBtn);
@@ -1651,6 +1648,13 @@ class FDatepicker {
             case 3: return 'rd';
             default: return 'th';
         }
+    }
+
+    clear() {
+        this.selectedDate = null;
+        this.selectedEndDate = null;
+        this.selectedDates = [];
+        this.updateInput();
     }
 
     updateInput() {
