@@ -202,7 +202,7 @@ class FDatepicker {
             drop: (e) => e.preventDefault(),
             click: () => this.toggle(),
             input: (e) => {
-                if (this.input.value && !this.selectedDate) {
+                if (this.input.value && !this.selectedDate && !this.selectedDates.length) {
                     this.updateInput();
                 }
                 e.preventDefault();
