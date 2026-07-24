@@ -1,0 +1,53 @@
+<html>
+<head>
+<link href="../src/css/fdatepicker.min.css" rel="stylesheet" type="text/css">
+<style>
+input {
+    field-sizing: content;
+}
+</style>
+<script src="../fdatepicker.min.js"></script>
+</head>
+
+<body>
+&nbsp;&nbsp;Simple datepicker<br>
+&nbsp;<input type="text" class="fdatepicker-input" id="example" placeholder="Select a date" >
+<script>
+new FDatepicker(document.getElementById('example'), {
+    todayButton: true,
+    clearButton: true,
+    closeButton: true,
+    timepicker: false,
+    format: 'm/d/Y',
+});
+</script>
+<br>
+<br>
+&nbsp;&nbsp;Rangepicker with time<br>
+&nbsp;<input type="text" class="fdatepicker-input" id="example2" placeholder="Select a date" >
+<script>
+new FDatepicker(document.getElementById('example2'), {
+    todayButton: true,
+    clearButton: true,
+    closeButton: true,
+    timepicker: true,
+    fieldsizing: true,
+    range: true,
+});
+</script>
+<br>
+<br>
+&nbsp;&nbsp;Multiple date selection<br>
+&nbsp;<input type="text" class="fdatepicker-input" id="example3" placeholder="Select a date" >
+<script>
+new FDatepicker(document.getElementById('example3'), {
+    todayButton: true,
+    clearButton: true,
+    closeButton: true,
+    timepicker: true,
+    multiple: true,
+    fieldsizing: true,
+});
+</script>
+</body>
+</html>
