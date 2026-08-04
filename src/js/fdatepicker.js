@@ -108,6 +108,7 @@ class FDatepicker {
         this.selectedEndDate = null;
         this.selectedDates = [];
         this.isOpen = false;
+        this._timeDirty = false;
         this.currentYear = new Date().getFullYear();
         this.focusedElement = null;
         this.locale = FDATEPICKER_DEFAULT_MESSAGES;
@@ -1032,6 +1033,7 @@ class FDatepicker {
 
     open() {
         if (this.isOpen) return;
+        this._timeDirty = false;
 
         // Reset focusedDate to selected date if available, otherwise use current date
         if (this.selectedDate) {
@@ -1169,6 +1171,12 @@ class FDatepicker {
 
         if (this.options.onClose && typeof this.options.onClose === 'function') this.options.onClose.call(this.input, this);
 
+        // in case only the time changed, we need to trigger the onSelect here
+        // we can't do that in updateSelectedTime since that would trigger too much
+        if (this._timeDirty) {
+            this.triggerOnSelect();
+        }
+
         // Return focus to the original input
         this.input.focus();
     }
@@ -1269,6 +1277,9 @@ class FDatepicker {
     }
 
     triggerOnSelect() {
+        // prevent from firing twice in some cases
+        this._timeDirty = false;
+
         if (typeof this.options.onSelect !== 'function') return;
 
         let date = null;
@@ -1548,6 +1559,9 @@ class FDatepicker {
         });*/
         target.setHours(hours, minutes);
 
+        // set the flag to indicate the time changed
+        // based on this, we can trigger a triggerOnSelect when the popup closes
+        this._timeDirty = true;
         this.updateInput();
     }
 
@@ -1651,10 +1665,14 @@ class FDatepicker {
     }
 
     clear() {
+        const hadSelection = this.selectedDate || this.selectedEndDate || this.selectedDates.length > 0;
         this.selectedDate = null;
         this.selectedEndDate = null;
         this.selectedDates = [];
         this.updateInput();
+        if (hadSelection) {
+            this.triggerOnSelect();
+        }
     }
 
     updateInput() {
