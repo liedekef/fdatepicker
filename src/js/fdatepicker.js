@@ -1549,6 +1549,7 @@ class FDatepicker {
         target.setHours(hours, minutes);
 
         this.updateInput();
+        this.triggerOnSelect();
     }
 
     updateMultipleDisplay() {
