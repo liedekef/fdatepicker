@@ -587,6 +587,7 @@ class FDatepicker {
             timepicker.className = 'fdatepicker-timepicker';
             timepicker.appendChild(timeInputs);
             popup.appendChild(timepicker);
+            this.timepickerDiv = timepicker;
 
         }
 
@@ -697,6 +698,26 @@ class FDatepicker {
 
         // Handle Tab key for circular navigation within popup
         this.popup.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                this.close();
+            }
+            if (e.key === 'Enter') {
+                const action = e.target.dataset.action;
+                if (action === 'prev') {
+                    e.preventDefault();
+                    this.navigateView(-1);
+                }
+                if (action === 'next') {
+                    e.preventDefault();
+                    this.navigateView(1);
+                }
+                if (e.target.classList.contains('fdatepicker-title')) {
+                    if (this.view === 'days') this.view = 'months';
+                    else if (this.view === 'months') this.view = 'years';
+                    this.render();
+                }
+                this.markGridFocusable();
+            }
             if (e.key === 'Tab') {
                 // Get all focusable elements in the popup
                 const focusableElements = this.popup.querySelectorAll(
@@ -859,24 +880,30 @@ class FDatepicker {
         }
     }
 
-    setInitialFocus() {
+    markGridFocusable() {
+        this.setInitialFocus(false);
+    }
+
+    setInitialFocus(moveFocus = true) {
         setTimeout(() => {
             if (this.options.timeOnly) {
-                // Focus the hours input in timeOnly mode
-                if (this.hoursInput) {
-                    this.hoursInput.focus();
-                } else if (this.minutesInput) {
-                    this.minutesInput.focus();
+                if (moveFocus) {
+                    // Focus the hours input in timeOnly mode
+                    if (this.hoursInput) {
+                        this.hoursInput.focus();
+                    } else if (this.minutesInput) {
+                        this.minutesInput.focus();
+                    }
                 }
                 return;
             }
-            if (this.view === 'days') this.setDayFocus();
-            else if (this.view === 'months') this.setMonthFocus();
-            else if (this.view === 'years') this.setYearFocus();
+            if (this.view === 'days') this.setDayFocus(moveFocus);
+            else if (this.view === 'months') this.setMonthFocus(moveFocus);
+            else if (this.view === 'years') this.setYearFocus(moveFocus);
         }, 0);
     }
 
-    setDayFocus() {
+    setDayFocus(moveFocus = true) {
         if (this.view !== 'days') return;
 
         // Remove existing focus
@@ -889,12 +916,12 @@ class FDatepicker {
             const targetDay = dayElements.find(el => parseInt(el.textContent) === day);
 
             if (targetDay) {
-                this.setFocus(targetDay);
+                this.setFocus(targetDay, moveFocus);
             }
         }
     }
 
-    setMonthFocus() {
+    setMonthFocus(moveFocus = true) {
         if (this.view !== 'months') return;
 
         // Remove existing focus
@@ -905,12 +932,12 @@ class FDatepicker {
             const monthElement = this.popup.querySelector(`[data-month="${month}"]`);
 
             if (monthElement) {
-                this.setFocus(monthElement);
+                this.setFocus(monthElement, moveFocus);
             }
         }
     }
 
-    setYearFocus() {
+    setYearFocus(moveFocus = true) {
         if (this.view !== 'years') return;
  
         // Remove existing focus
@@ -926,19 +953,19 @@ class FDatepicker {
             if (year >= minYear && year <= maxYear) {
                 const yearElement = this.popup.querySelector(`[data-year="${year}"]`);
                 if (yearElement) {
-                    this.setFocus(yearElement);
+                    this.setFocus(yearElement, moveFocus);
                 }
             } else {
                 // Year is outside current decade, focus the first valid year (not disabled)
                 const firstValidYear = this.popup.querySelector(`.fdatepicker-year:not(.disabled):not(.other-decade)`);
                 if (firstValidYear) {
-                    this.setFocus(firstValidYear);
+                    this.setFocus(firstValidYear, moveFocus);
                 }
             }
         }
     }
 
-    setFocus(element) {
+    setFocus(element, moveFocus = true) {
         if (this.focusedElement) {
             this.focusedElement.setAttribute('tabindex', '-1');
             this.focusedElement.classList.remove('focus');
@@ -946,8 +973,11 @@ class FDatepicker {
 
         this.focusedElement = element;
         element.setAttribute('tabindex', '0');
-        element.classList.add('focus');
-        element.focus();
+
+        if (moveFocus) {
+            element.classList.add('focus');
+            element.focus();
+        }
 
         // Range preview logic
         if (this.options.range && this.selectedDate && !this.selectedEndDate) {
@@ -1066,6 +1096,7 @@ class FDatepicker {
         this.grid = this.popup.querySelector('.fdatepicker-grid');
         this.hoursInput = this.popup.querySelector('[data-time="hours"]');
         this.minutesInput = this.popup.querySelector('[data-time="minutes"]');
+        this.timepickerDiv = this.popup.querySelector('.fdatepicker-timepicker');
 
         this.bindGridAndPopupEvents();
 
@@ -1736,6 +1767,9 @@ class FDatepicker {
     render() {
         if (!this.popup || this.options.timeOnly) return;
         this.renderTitle();
+        if (this.timepickerDiv) {
+            this.timepickerDiv.style.display = this.view === 'days' ? '' : 'none';
+        }
         if (this.view === 'days') {
             this.renderDays();
         } else if (this.view === 'months') {
