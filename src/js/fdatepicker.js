@@ -125,6 +125,7 @@ class FDatepicker {
             altField: this.input.dataset.altField || null,
             altFormat: this.input.dataset.altFormat || 'Y-m-d',
             range: this.input.dataset.range === 'true',
+            fixedSixRows: this.input.dataset.fixedSixRows === 'true', // default false, no fixed 6 rows
             multiple: this.input.dataset.multiple === 'true',
             multipleSeparator: this.input.dataset.multipleSeparator || ',',
             altFieldMultipleSeparator: this.input.dataset.altFieldMultipleSeparator || ',',
@@ -587,8 +588,6 @@ class FDatepicker {
             timepicker.className = 'fdatepicker-timepicker';
             timepicker.appendChild(timeInputs);
             popup.appendChild(timepicker);
-            this.timepickerDiv = timepicker;
-
         }
 
         if (this.options.todayButton || this.options.clearButton || this.options.closeButton) {
@@ -780,8 +779,20 @@ class FDatepicker {
                 this.render();
                 this.setInitialFocus();
             }
-            if (e.target.classList.contains('fdatepicker-day') && !e.target.classList.contains('other-month')) {
-                this.selectDate(parseInt(e.target.textContent));
+            //if (e.target.classList.contains('fdatepicker-day') && !e.target.classList.contains('other-month')) {
+             //   this.selectDate(parseInt(e.target.textContent));
+            if (e.target.classList.contains('fdatepicker-day')) {
+                if (e.target.classList.contains('other-month') && !e.target.classList.contains('disabled')) {
+                    const offset = parseInt(e.target.dataset.monthOffset);
+                    const targetMonth = this.focusedDate.getMonth() + offset;
+                    const targetYear = this.focusedDate.getFullYear();
+                    const maxDay = this.getDaysInMonth(targetYear, targetMonth);
+                    this.focusedDate.setMonth(targetMonth, Math.min(this.focusedDate.getDate(), maxDay));
+                    this.render();
+                    this.selectDate(parseInt(e.target.textContent));
+                } else {
+                    this.selectDate(parseInt(e.target.textContent));
+                }
             }
 
             if (e.target.classList.contains('fdatepicker-month')) {
@@ -1468,10 +1479,8 @@ class FDatepicker {
                     this.selectedEndDate = selectedDate;
                 }
                 this.updateInput();
-                if (!this.options.timepicker) {
-                    if (this.options.autoClose) {
-                        this.close();
-                    }
+                if (this.options.autoClose && !this.options.timepicker) {
+                    this.close();
                 } else {
                     this.render();
                     this.setDayFocus();
@@ -1485,10 +1494,8 @@ class FDatepicker {
                 this.selectedDate = selectedDate;
             }
             this.updateInput();
-            if (!this.options.timepicker) {
-                if (this.options.autoClose) {
-                    this.close();
-                }
+            if (this.options.autoClose && !this.options.timepicker) {
+                this.close();
             } else {
                 this.render();
                 this.setDayFocus();
@@ -1824,13 +1831,21 @@ class FDatepicker {
         const prevMonth = new Date(this.focusedDate.getFullYear(), this.focusedDate.getMonth() - 1, 0);
 
         for (let i = prevMonthDays - 1; i >= 0; i--) {
-            const day = document.createElement('div');
-            day.className = 'fdatepicker-day other-month';
-            day.textContent = prevMonth.getDate() - i;
-            day.setAttribute('tabindex', '-1');
-            day.setAttribute('role', 'gridcell');
-            day.setAttribute('aria-disabled', 'true');
-            this.grid.appendChild(day);
+            const dayEl = document.createElement('div');
+            const day = prevMonth.getDate() - i;
+            const dayDate = new Date(this.focusedDate.getFullYear(), this.focusedDate.getMonth() - 1, day);
+            dayEl.className = 'fdatepicker-day other-month';
+            dayEl.textContent = day;
+            dayEl.setAttribute('tabindex', '-1');
+            dayEl.setAttribute('role', 'gridcell');
+            if (this.isDateDisabled(dayDate)) {
+                dayEl.classList.add('disabled');
+                dayEl.setAttribute('aria-disabled', 'true');
+            } else {
+                dayEl.setAttribute('aria-disabled', 'false');
+            }
+            dayEl.dataset.monthOffset = '-1';
+            this.grid.appendChild(dayEl);
         }
 
         // Days of current month
@@ -1897,17 +1912,24 @@ class FDatepicker {
 
         // Days from next month
         const cellsWithoutHeaders = this.grid.children.length - 7; // Remove 7 header cells
-        const hasSixRows = cellsWithoutHeaders > 35;
-        const totalCellsNeeded = hasSixRows ? 42 : 35; // put 42 to always have 6 rows
+        const needsSixRows = this.options.fixedSixRows || cellsWithoutHeaders > 35;
+        const totalCellsNeeded = needsSixRows ? 42 : 35; // put 42 to always have 6 rows
         const remainingCells = totalCellsNeeded - cellsWithoutHeaders;
 
         for (let day = 1; day <= remainingCells; day++) {
             const dayEl = document.createElement('div');
+            const dayDate = new Date(this.focusedDate.getFullYear(), this.focusedDate.getMonth() + 1, day);
             dayEl.className = 'fdatepicker-day other-month';
             dayEl.textContent = day;
             dayEl.setAttribute('tabindex', '-1');
             dayEl.setAttribute('role', 'gridcell');
-            dayEl.setAttribute('aria-disabled', 'true');
+            if (this.isDateDisabled(dayDate)) {
+                dayEl.classList.add('disabled');
+                dayEl.setAttribute('aria-disabled', 'true');
+            } else {
+                dayEl.setAttribute('aria-disabled', 'false');
+            }
+            dayEl.dataset.monthOffset = '1';
             this.grid.appendChild(dayEl);
         }
     }
