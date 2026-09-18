@@ -11,5 +11,10 @@ FDatepicker.setMessages({
     format: 'd.m.Y h:i a',
     firstDayOfWeek: 1,
     noDatesSelected: 'Дати не вибрано',
-    datesSelected: 'Вибрані дати ({0}):'
+    datesSelected: 'Вибрані дати ({0}):',
+    datePicker: 'Вибір дати',
+    previous: 'Попередній',
+    next: 'Наступний',
+    clickToSelectMonth: '{title}, натисніть, щоб вибрати місяць',
+    clickToSelectYear: '{title}, натисніть, щоб вибрати рік'
 });

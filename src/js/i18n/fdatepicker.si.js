@@ -11,5 +11,10 @@ FDatepicker.setMessages({
     format: 'Y-m-d h:i a',
     firstDayOfWeek: 1,
     noDatesSelected: 'තෝරාගත් දින නැත',
-    datesSelected: 'තෝරාගත් දින ({0}):'
+    datesSelected: 'තෝරාගත් දින ({0}):',
+    datePicker: 'දින තෝරන්නා',
+    previous: 'පෙර',
+    next: 'ඊළඟ',
+    clickToSelectMonth: '{title}, මාසය තේරීමට ක්ලික් කරන්න',
+    clickToSelectYear: '{title}, වර්ෂය තේරීමට ක්ලික් කරන්න'
 });

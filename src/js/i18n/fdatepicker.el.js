@@ -11,5 +11,10 @@ FDatepicker.setMessages({
     format: 'd/m/Y h:i a',
     firstDayOfWeek: 1,
     noDatesSelected: 'Δεν επιλέχθηκαν ημερομηνίες',
-    datesSelected: 'Επιλεγμένες ημερομηνίες ({0}):'
+    datesSelected: 'Επιλεγμένες ημερομηνίες ({0}):',
+    datePicker: 'Επιλογή ημερομηνίας',
+    previous: 'Προηγούμενο',
+    next: 'Επόμενο',
+    clickToSelectMonth: '{title}, κάντε κλικ για να επιλέξετε μήνα',
+    clickToSelectYear: '{title}, κάντε κλικ για να επιλέξετε έτος'
 });

@@ -11,5 +11,10 @@ FDatepicker.setMessages({
     format: 'd.m.Y H:i',
     firstDayOfWeek: 1,
     noDatesSelected: 'Nicio dată selectată',
-    datesSelected: 'Date selectate ({0}):'
+    datesSelected: 'Date selectate ({0}):',
+    datePicker: 'Selector de dată',
+    previous: 'Anterior',
+    next: 'Următor',
+    clickToSelectMonth: '{title}, faceți clic pentru a selecta luna',
+    clickToSelectYear: '{title}, faceți clic pentru a selecta anul'
 });

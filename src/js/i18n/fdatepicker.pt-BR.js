@@ -11,5 +11,10 @@ FDatepicker.setMessages({
     format: 'd/m/Y H:i',
     firstDayOfWeek: 0,
     noDatesSelected: 'Nenhuma data selecionada',
-    datesSelected: 'Datas selecionadas ({0}):'
+    datesSelected: 'Datas selecionadas ({0}):',
+    datePicker: 'Seletor de data',
+    previous: 'Anterior',
+    next: 'Próximo',
+    clickToSelectMonth: '{title}, clique para selecionar o mês',
+    clickToSelectYear: '{title}, clique para selecionar o ano'
 });

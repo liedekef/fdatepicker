@@ -11,5 +11,10 @@ FDatepicker.setMessages({
     format: 'd.m.Y H:i',
     firstDayOfWeek: 1,
     noDatesSelected: 'Ei valittuja päiviä',
-    datesSelected: 'Valitut päivät ({0}):'
+    datesSelected: 'Valitut päivät ({0}):',
+    datePicker: 'Päivämäärän valitsin',
+    previous: 'Edellinen',
+    next: 'Seuraava',
+    clickToSelectMonth: '{title}, valitse kuukausi napsauttamalla',
+    clickToSelectYear: '{title}, valitse vuosi napsauttamalla'
 });

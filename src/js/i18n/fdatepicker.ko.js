@@ -11,5 +11,10 @@ FDatepicker.setMessages({
     format: 'Y. m. d. h:i a',
     firstDayOfWeek: 0,
     noDatesSelected: '날짜가 선택되지 않음',
-    datesSelected: '선택된 날짜 ({0}):'
+    datesSelected: '선택된 날짜 ({0}):',
+    datePicker: '날짜 선택기',
+    previous: '이전',
+    next: '다음',
+    clickToSelectMonth: '{title}, 월을 선택하려면 클릭하세요',
+    clickToSelectYear: '{title}, 연도를 선택하려면 클릭하세요'
 });

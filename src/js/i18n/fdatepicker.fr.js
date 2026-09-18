@@ -13,5 +13,10 @@ FDatepicker.setMessages({
     noDatesSelected: 'Aucune date sélectionnée',
     singleDateSelected: '1 date sélectionnée',
     multipleDatesSelected: '{count} dates sélectionnées',
-    datesSelected: 'Dates sélectionnées ({0}):'
+    datesSelected: 'Dates sélectionnées ({0}):',
+    datePicker: 'Sélecteur de date',
+    previous: 'Précédent',
+    next: 'Suivant',
+    clickToSelectMonth: '{title}, cliquez pour sélectionner le mois',
+    clickToSelectYear: '{title}, cliquez pour sélectionner l\'année'
 });

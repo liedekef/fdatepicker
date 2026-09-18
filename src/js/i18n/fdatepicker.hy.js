@@ -11,5 +11,10 @@ FDatepicker.setMessages({
     format: 'd.m.Y H:i',
     firstDayOfWeek: 1,
     noDatesSelected: 'Ամսաթվեր նշված չեն',
-    datesSelected: 'Նշված ամսաթվեր ({0}):'
+    datesSelected: 'Նշված ամսաթվեր ({0}):',
+    datePicker: 'Ամսաթվի ընտրիչ',
+    previous: 'Նախորդ',
+    next: 'Հաջորդ',
+    clickToSelectMonth: '{title}, սեղմեք՝ ամիս ընտրելու համար',
+    clickToSelectYear: '{title}, սեղմեք՝ տարի ընտրելու համար'
 });

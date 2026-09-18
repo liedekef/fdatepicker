@@ -11,5 +11,10 @@ FDatepicker.setMessages({
     format: 'Y. m. d. h:i a',
     firstDayOfWeek: 1,
     noDatesSelected: 'Nincs kiválasztva dátum',
-    datesSelected: 'Kiválasztott dátumok ({0}):'
+    datesSelected: 'Kiválasztott dátumok ({0}):',
+    datePicker: 'Dátumválasztó',
+    previous: 'Előző',
+    next: 'Következő',
+    clickToSelectMonth: '{title}, kattintson a hónap kiválasztásához',
+    clickToSelectYear: '{title}, kattintson az év kiválasztásához'
 });

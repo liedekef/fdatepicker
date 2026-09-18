@@ -11,5 +11,10 @@ FDatepicker.setMessages({
     format: 'd.m.Y H:i',
     firstDayOfWeek: 1,
     noDatesSelected: 'Tarih seçilmedi',
-    datesSelected: 'Seçilen tarihler ({0}):'
+    datesSelected: 'Seçilen tarihler ({0}):',
+    datePicker: 'Tarih seçici',
+    previous: 'Önceki',
+    next: 'Sonraki',
+    clickToSelectMonth: '{title}, ay seçmek için tıklayın',
+    clickToSelectYear: '{title}, yıl seçmek için tıklayın'
 });

@@ -11,5 +11,10 @@ FDatepicker.setMessages({
     format: 'Y年m月d日 H:i',
     firstDayOfWeek: 1,
     noDatesSelected: '未选择日期',
-    datesSelected: '已选择日期 ({0}):'
+    datesSelected: '已选择日期 ({0}):',
+    datePicker: '日期选择器',
+    previous: '上一个',
+    next: '下一个',
+    clickToSelectMonth: '{title}，点击选择月份',
+    clickToSelectYear: '{title}，点击选择年份'
 });

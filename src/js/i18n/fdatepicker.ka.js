@@ -11,5 +11,10 @@ FDatepicker.setMessages({
     format: 'd.m.Y H:i',
     firstDayOfWeek: 1,
     noDatesSelected: 'თარიღები არ არის მონიშნული',
-    datesSelected: 'მონიშნული თარიღები ({0}):'
+    datesSelected: 'მონიშნული თარიღები ({0}):',
+    datePicker: 'თარიღის ამომრჩევი',
+    previous: 'წინა',
+    next: 'შემდეგი',
+    clickToSelectMonth: '{title}, დააჭირეთ თვის ასარჩევად',
+    clickToSelectYear: '{title}, დააჭირეთ წლის ასარჩევად'
 });

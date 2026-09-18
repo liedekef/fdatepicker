@@ -11,5 +11,10 @@ FDatepicker.setMessages({
     format: 'd/m/Y h:i a',
     firstDayOfWeek: 0,
     noDatesSelected: 'لم يتم تحديد تواريخ',
-    datesSelected: 'التواريخ المحددة ({0}):'
+    datesSelected: 'التواريخ المحددة ({0}):',
+    datePicker: 'منتقي التاريخ',
+    previous: 'السابق',
+    next: 'التالي',
+    clickToSelectMonth: '{title}، انقر لتحديد الشهر',
+    clickToSelectYear: '{title}، انقر لتحديد السنة'
 });

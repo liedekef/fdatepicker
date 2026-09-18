@@ -12,7 +12,12 @@ const FDATEPICKER_DEFAULT_MESSAGES = {
     noDatesSelected: 'No dates selected',
     singleDateSelected: '1 date selected',          // For exactly 1
     multipleDatesSelected: '{count} dates selected', // For 2, 3, etc.
-    datesSelected: 'Selected dates ({0}):'
+    datesSelected: 'Selected dates ({0}):',
+    datePicker: 'Date picker',
+    previous: 'Previous',
+    next: 'Next',
+    clickToSelectMonth: '{title}, click to select month',
+    clickToSelectYear: '{title}, click to select year'
 }
 
 class FDatepicker {
@@ -454,14 +459,14 @@ class FDatepicker {
         popup.className = 'fdatepicker-popup';
         popup.setAttribute('role', 'dialog');
         popup.setAttribute('aria-modal', 'true');
-        popup.setAttribute('aria-label', 'Date picker');
+        popup.setAttribute('aria-label', this.locale.datePicker);
 
         if (!this.options.timeOnly) {
             popup.innerHTML = `
         <div class="fdatepicker-header">
-            <button class="fdatepicker-nav" data-action="prev" aria-label="Previous" tabindex="0">‹</button>
+            <button class="fdatepicker-nav" data-action="prev" aria-label="${this.locale.previous}" tabindex="0">‹</button>
             <div class="fdatepicker-title" tabindex="0" aria-live="polite" aria-atomic="true"></div>
-            <button class="fdatepicker-nav" data-action="next" aria-label="Next" tabindex="0">›</button>
+            <button class="fdatepicker-nav" data-action="next" aria-label="${this.locale.next}" tabindex="0">›</button>
         </div>
         <div class="fdatepicker-content">
             <div class="fdatepicker-grid">
@@ -1791,10 +1796,10 @@ class FDatepicker {
         let ariaLabel = '';
         if (this.view === 'days') {
             title = `${this.locale.months[this.focusedDate.getMonth()]} ${this.focusedDate.getFullYear()}`;
-            ariaLabel = `${title}, click to select month`;
+            ariaLabel = this.locale.clickToSelectMonth.replace(/\{title\}/g, title);
         } else if (this.view === 'months') {
             title = this.focusedDate.getFullYear();
-            ariaLabel = `${title}, click to select year`;
+            ariaLabel = this.locale.clickToSelectYear.replace(/\{title\}/g, title);
         } else if (this.view === 'years') {
             const startDecade = Math.floor(this.currentYear / 10) * 10;
             const endDecade = startDecade + 9;

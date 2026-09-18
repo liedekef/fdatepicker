@@ -11,6 +11,11 @@ FDatepicker.setMessages({
     format: 'm/d/Y H:i a',
     firstDayOfWeek: 0,
     noDatesSelected: 'No dates selected',
-    datesSelected: 'Selected dates ({0}):'
+    datesSelected: 'Selected dates ({0}):',
+    datePicker: 'Date picker',
+    previous: 'Previous',
+    next: 'Next',
+    clickToSelectMonth: '{title}, click to select month',
+    clickToSelectYear: '{title}, click to select year'
 });
 

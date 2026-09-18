@@ -11,5 +11,10 @@ FDatepicker.setMessages({
     format: 'd.m.Y H:i',
     firstDayOfWeek: 1,
     noDatesSelected: 'Žiadne dátumy nie sú vybrané',
-    datesSelected: 'Vybrané dátumy ({0}):'
+    datesSelected: 'Vybrané dátumy ({0}):',
+    datePicker: 'Výber dátumu',
+    previous: 'Predchádzajúci',
+    next: 'Ďalší',
+    clickToSelectMonth: '{title}, kliknutím vyberte mesiac',
+    clickToSelectYear: '{title}, kliknutím vyberte rok'
 });
