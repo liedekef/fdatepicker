@@ -1,6 +1,6 @@
 {
   "name": "@liedekef/fdatepicker",
-  "version": "3.0.49",
+  "version": "3.0.50",
   "description": "Lightweight customizable cross-browser Vanilla JS datepicker using PHP datetime format strings.",
   "main": "fdatepicker.js",
   "module": "fdatepicker.esm.js",
