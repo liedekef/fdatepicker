@@ -990,8 +990,8 @@ class FDatepicker {
         this.focusedElement = element;
         element.setAttribute('tabindex', '0');
 
+        element.classList.add('focus');
         if (moveFocus) {
-            element.classList.add('focus');
             element.focus();
         }
 
